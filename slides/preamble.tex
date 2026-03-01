@@ -1,0 +1,56 @@
+% Shared preamble for all section files.
+% Each section file should begin with:
+%   \documentclass[aspectratio=169, 14pt]{beamer}
+%   \input{preamble}
+
+\usetheme{TJO}
+
+% --- Packages ---
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=tjo@darkteal,
+  urlcolor=tjo@cyan,
+}
+
+% --- TikZ styles ---
+\tikzset{
+  tjo box/.style={
+    draw=tjo@darkteal,
+    line width=1.5pt,
+    rounded corners=6pt,
+    minimum width=3.5cm,
+    minimum height=1.2cm,
+    font=\large,
+    align=center,
+  },
+  tjo box fill/.style={
+    tjo box,
+    fill=tjo@lightgrey,
+  },
+  tjo arrow/.style={
+    -Stealth,
+    line width=1.5pt,
+    color=tjo@darkteal,
+  },
+  tjo label/.style={
+    font=\normalsize,
+    color=tjo@black,
+    midway,
+    above,
+  },
+}
+
+% --- Math shortcuts ---
+\newcommand{\Prob}{\mathrm{P}}
+\newcommand{\given}{\,|\,}
+
+% --- Metadata (override per section as needed) ---
+\author{Tobias J. Osborne}
+\institute{}
+\date{}

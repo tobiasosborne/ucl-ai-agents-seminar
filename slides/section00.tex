@@ -1,0 +1,151 @@
+\documentclass[aspectratio=169, 14pt]{beamer}
+\input{preamble}
+
+\title{AI Coding Agents}
+\subtitle{A reductive account for physicists}
+
+\begin{document}
+
+% --- Slide 1: Title ---
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% --- Slide 2: Section divider ---
+\sectiondivider{Why this talk?}
+
+% --- Slide 3: Timeline ---
+\begin{frame}{Three moments}
+  \vfill
+  \centering
+  \begin{tikzpicture}[
+    event/.style={
+      tjo box,
+      minimum width=3.2cm,
+      minimum height=1.8cm,
+      font=\normalsize,
+      align=center,
+    },
+  ]
+    % Timeline axis
+    \draw[tjo@black!20, line width=2pt] (-5.5,0) -- (5.5,0);
+
+    % Event 1: ChatGPT
+    \node[event, fill=tjo@lightgrey] (gpt) at (-4,0) {%
+      {\bfseries\color{tjo@darkteal} Nov 2022}\\[3pt]
+      ChatGPT\\launches
+    };
+
+    % Event 2: Claude Code
+    \node[event, fill=tjo@lightgrey] (cc) at (0,0) {%
+      {\bfseries\color{tjo@darkteal} Q1 2025}\\[3pt]
+      Claude Code,\\Cursor, Copilot
+    };
+
+    % Event 3: Models get good
+    \node[event, fill=tjo@lightgrey] (good) at (4,0) {%
+      {\bfseries\color{tjo@darkteal} Q4 2025}\\[3pt]
+      Models cross\\a threshold
+    };
+
+    % Dots on timeline
+    \foreach \x in {-4,0,4} {
+      \fill[tjo@cyan] (\x,-0.85) circle (5pt);
+    }
+  \end{tikzpicture}
+  \vfill
+\end{frame}
+
+% --- Slide 4: Audience poll ---
+\begin{frame}{Quick survey}
+  \vfill
+  \centering
+  {\fontsize{22}{28}\selectfont
+    Raise your hand if you have\ldots
+
+    \vskip1.5em
+    \begin{tabular}{l}
+      \color{tjo@cyan}$\bullet$\quad used ChatGPT or Claude \\[0.8em]
+      \color{tjo@cyan}$\bullet$\quad used it to write code \\[0.8em]
+      \color{tjo@cyan}$\bullet$\quad used Claude Code, Cursor, or Copilot \\[0.8em]
+      \color{tjo@cyan}$\bullet$\quad built something serious with it \\
+    \end{tabular}
+  }
+  \vfill
+\end{frame}
+
+% --- Slide 5: Skeptic ---
+\statementslide{I was a skeptic.}
+
+% --- Slide 6: The alarm ---
+\begin{frame}{The problem}
+  \vfill
+  \centering
+  {\fontsize{20}{26}\selectfont
+    \textit{``LLMs are \textbf{incredibly capable}}
+
+    \vskip0.5em
+    \textit{but \textbf{maximally untrustworthy}.''}
+  }
+
+  \vskip2em
+  Seductively correct equations that are nonsense.
+
+  \medskip
+  Push back on a valid proof and it finds a ``bug'' that isn't there.
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries I got burnt. Then I got curious.}
+  \vfill
+\end{frame}
+
+% --- Slide 7: 1000+ hours ---
+\statementslide{1000+ hours of deliberate practice.\\[0.8em]
+  {\fontsize{20}{26}\selectfont\mdseries Nov 2025\,--\,today.}}
+
+% --- Slide 8: Project showcase (page 1) ---
+\begin{frame}{What I built}
+  \vfill
+  \centering
+  \renewcommand{\arraystretch}{1.3}
+  {\fontsize{13}{17}\selectfont
+  \begin{tabular}{l@{\hspace{1.2em}}l@{\hspace{1.2em}}l}
+    \textbf{\color{tjo@darkteal}vibefeld}
+      & Go, 112k lines
+      & adversarial proof verification \\
+    \textbf{\color{tjo@darkteal}Lyr.jl}
+      & Julia
+      & volume renderer, GR ray tracing \\
+    \textbf{\color{tjo@darkteal}af-tests}
+      & Lean\,4, 0 sorries
+      & formal proofs in operator algebras \\
+    \textbf{\color{tjo@darkteal}convexfeld}
+      & C, 37k lines
+      & LP solver from scratch \\
+    \textbf{\color{tjo@darkteal}Nano MIPS}
+      & Verilog
+      & pipelined CPU on \$10 FPGA \\
+    \textbf{\color{tjo@darkteal}PicoGPT.jl}
+      & Julia
+      & GPT with manual backprop {\color{tjo@cyan}(1 day)} \\
+    \textbf{\color{tjo@darkteal}vectorfeld}
+      & TypeScript + Rust
+      & vector graphics editor {\color{tjo@cyan}(1 day)} \\
+    \textbf{\color{tjo@darkteal}datapipeline}
+      & Python + DuckDB
+      & 3.7M research grants {\color{tjo@cyan}(5 days)} \\
+    \textbf{\color{tjo@darkteal}alethfeld}
+      & Clojure, 134\,\bigstar
+      & adversarial proofs (open source) \\
+  \end{tabular}
+  }
+  \vfill
+\end{frame}
+
+% --- Slide 9: The punchline ---
+\statementslide{All of this was built\\[0.5em] with AI coding agents.}
+
+% --- Slide 10: Transition ---
+\statementslide{Let me show you the entire trick.}
+
+\end{document}

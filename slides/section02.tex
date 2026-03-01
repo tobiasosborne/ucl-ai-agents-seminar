@@ -1,0 +1,98 @@
+\documentclass[aspectratio=169, 14pt]{beamer}
+\input{preamble}
+
+\title{The illusion of chat and memory}
+
+\begin{document}
+
+% --- Slide 1: Title ---
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% --- Slide 2: A single API call ---
+\begin{frame}{A single API call}
+  \vfill
+  \centering
+  \begin{tikzpicture}
+    \node[tjo box fill, minimum width=4cm] (client) {\textbf{Client}};
+    \node[tjo box fill, minimum width=4cm, right=7cm of client] (api) {\textbf{API}};
+
+    % Forward arrow (top)
+    \draw[tjo arrow] ([yshift=0.5cm]client.east) -- ([yshift=0.5cm]api.west)
+      node[midway, above, font=\normalsize] {prompt (string)};
+
+    % Return arrow (bottom)
+    \draw[tjo arrow] ([yshift=-0.5cm]api.west) -- ([yshift=-0.5cm]client.east)
+      node[midway, below, font=\normalsize] {completion (string)};
+  \end{tikzpicture}
+
+  \vskip1.5em
+  {\large One string in. One string out. That is the entire interaction.}
+  \vfill
+\end{frame}
+
+% --- Slide 3: The HTTP reality ---
+\begin{frame}[fragile]{The HTTP reality}
+  \vfill
+\begin{codeblock}
+POST /v1/messages
+{
+  "model": "claude-sonnet-4-6-20250627",
+  "messages": [
+    {"role": "user",
+     "content": "What is a quark?"}
+  ]
+}
+\end{codeblock}
+  \vfill
+\end{frame}
+
+% --- Slide 4: How chat works ---
+\begin{frame}[fragile]{How chat works}
+  \vfill
+\begin{codeblock}
+Turn 1:  [user_1]
+Turn 2:  [user_1, asst_1, user_2]
+Turn 3:  [user_1, asst_1, user_2, asst_2, user_3]
+\end{codeblock}
+
+  \vskip1.5em
+  The client re-sends the \textbf{entire} history every time.
+
+  \medskip
+  The LLM has no memory. The client maintains the illusion.
+  \vfill
+\end{frame}
+
+% --- Slide 5: The context window ---
+\begin{frame}{The context window}
+  \vfill
+  The input has a maximum length in tokens.
+
+  \vskip1em
+  When the conversation exceeds it, something must be dropped.
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries Typical sizes: 8k, 128k, 200k tokens.}
+  \vfill
+\end{frame}
+
+% --- Slide 6: The system prompt ---
+\begin{frame}{The system prompt}
+  \vfill
+  A hidden preamble prepended to every call.
+
+  \vskip1em
+  It shapes behaviour, persona, and constraints.
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries It is just more text.}
+  \vfill
+\end{frame}
+
+% --- Slide 7: Summary ---
+\statementslide{Chat is a loop.\\[0.8em]
+  Memory is an illusion\\[0.3em] maintained by the client.}
+
+\end{document}

@@ -1,0 +1,88 @@
+\mode<presentation>
+
+% ---- Title page ----
+\defbeamertemplate*{title page}{TJO}
+{%
+  \vbox{}%
+  \vfill
+  \begingroup
+    \centering
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}%
+    \ifx\insertsubtitle\@empty\else
+      \vskip0.8em
+      {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+    \fi
+    \vskip1.5em
+    {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor\par}%
+    \ifx\insertinstitute\@empty\else
+      \vskip0.5em
+      {\usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute\par}%
+    \fi
+  \endgroup
+  \vfill
+}
+
+% ---- Section divider ----
+% Usage: \sectiondivider{TITLE TEXT}
+% Produces a full-bleed dark teal slide with centered white ALL-CAPS text.
+\newcommand{\sectiondivider}[1]{%
+  {%
+    \setbeamercolor{background canvas}{bg=tjo@darkteal}%
+    \begin{frame}[plain,c]
+      \centering
+      {\usebeamerfont{section divider}\usebeamercolor[fg]{section divider}%
+       \MakeUppercase{#1}\par}%
+    \end{frame}%
+  }%
+}
+
+% ---- Statement slide ----
+% Usage: \statementslide{Bold phrase here}
+% Single bold phrase, large, centered on white background.
+\newcommand{\statementslide}[1]{%
+  \begin{frame}[plain,c]
+    \centering
+    {\fontsize{26}{32}\selectfont\bfseries\color{tjo@darkteal}#1\par}%
+  \end{frame}%
+}
+
+% ---- Code block (tcolorbox + listings) ----
+\RequirePackage[most]{tcolorbox}
+\tcbuselibrary{listings}
+
+\newtcblisting{codeblock}[1][]{%
+  enhanced,
+  listing only,
+  colback=tjo@codebg,
+  colframe=tjo@codebg,
+  boxrule=0pt,
+  borderline west={3pt}{0pt}{tjo@codeborder},
+  sharp corners,
+  left=12pt,
+  right=8pt,
+  top=8pt,
+  bottom=8pt,
+  listing options={
+    basicstyle=\ttfamily\normalsize,
+    columns=fullflexible,
+    keepspaces=true,
+    breaklines=false,
+    aboveskip=0pt,
+    belowskip=0pt,
+    xleftmargin=0pt,
+  },
+  #1
+}
+
+% Inline code
+\newcommand{\code}[1]{\texttt{#1}}
+
+% ---- Itemize: simple circle bullets in accent color ----
+\setbeamertemplate{itemize item}{\color{tjo@cyan}\raisebox{0.1em}{\small$\bullet$}}
+\setbeamertemplate{itemize subitem}{\color{tjo@cyan}\raisebox{0.1em}{\scriptsize$\bullet$}}
+
+% ---- Remove item indentation ----
+\setlength{\leftmargini}{1.2em}
+\setlength{\leftmarginii}{1em}
+
+\mode<all>

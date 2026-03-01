@@ -1,0 +1,83 @@
+\documentclass[aspectratio=169, 14pt]{beamer}
+\input{preamble}
+
+\title{What should we try?}
+\subtitle{Vote.}
+
+\begin{document}
+
+% --- Slide 1: Title ---
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% --- Slide 2: Option 1 ---
+\begin{frame}{Option 1: \LaTeX{} lint}
+  \vfill
+  Parse a \code{.tex} file.
+
+  \vskip1em
+  Find every undefined \code{\textbackslash ref} and \code{\textbackslash cite}.
+
+  \vskip1em
+  Report what is broken.
+  \vfill
+\end{frame}
+
+% --- Slide 3: Option 2 ---
+\begin{frame}{Option 2: Data to figure}
+  \vfill
+  Read a CSV. Fit a power law.
+
+  \vskip1em
+  Generate a publication-quality plot with error bars.
+
+  \vskip1em
+  Save as PDF.
+  \vfill
+\end{frame}
+
+% --- Slide 4: Option 3 ---
+\begin{frame}{Option 3: DOI to BibTeX}
+  \vfill
+  Given a list of DOIs, fetch metadata.
+
+  \vskip1em
+  Produce a consistently formatted \code{.bib} file.
+  \vfill
+\end{frame}
+
+% --- Slide 5: Option 4 ---
+\begin{frame}{Option 4: Seminar to calendar}
+  \vfill
+  Scrape a seminar schedule from a URL.
+
+  \vskip1em
+  Produce an \code{.ics} calendar file.
+  \vfill
+\end{frame}
+
+% --- Slide 6: Option 5 ---
+\begin{frame}{Option 5: Batch rename}
+  \vfill
+  I describe a naming convention in English.
+
+  \vskip1em
+  The agent renames 200 files to match.
+  \vfill
+\end{frame}
+
+% --- Slide 7: Option 6 ---
+\begin{frame}{Option 6: Dimensional analysis}
+  \vfill
+  Read a paper draft.
+
+  \vskip1em
+  Check that every equation is dimensionally consistent.
+  \vfill
+\end{frame}
+
+% --- Slide 8: Vote ---
+\statementslide{{\fontsize{36}{44}\selectfont Raise your hand.}}
+
+\end{document}

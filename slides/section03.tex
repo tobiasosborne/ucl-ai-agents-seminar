@@ -1,0 +1,102 @@
+\documentclass[aspectratio=169, 14pt]{beamer}
+\input{preamble}
+
+\title{From function to agent}
+
+\begin{document}
+
+% --- Slide 1: Section divider ---
+\sectiondivider{From function to agent}
+
+% --- Slide 2: The agent loop (code) ---
+\begin{frame}[fragile]{The agent loop}
+  \vfill
+\begin{codeblock}
+while not done:
+    response = llm(system_prompt + history)
+    tool_calls = parse(response)
+    results = execute(tool_calls)
+    history += [response, results]
+\end{codeblock}
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries
+    This is the complete architecture of every coding agent.}
+  \vfill
+\end{frame}
+
+% --- Slide 3: The agent loop (diagram) ---
+\begin{frame}{The agent loop}
+  \vfill
+  \centering
+  \begin{tikzpicture}[node distance=2.2cm, every node/.style={align=center}]
+    % System prompt + history at top
+    \node[tjo box, fill=tjo@darkteal, text=white, minimum width=4.5cm]
+      (sys) {System prompt\\[-2pt]{\small + History}};
+
+    % LLM
+    \node[tjo box fill, below=1.5cm of sys, minimum width=4.5cm]
+      (llm) {\textbf{LLM}\\[-2pt]{\small\code{f(s) $\to$ s}}};
+
+    % Parse
+    \node[tjo box, right=3.5cm of llm] (parse) {Parse\\tool calls};
+
+    % Execute
+    \node[tjo box, below=1.5cm of parse] (exec) {Execute\\tools};
+
+    % Arrows
+    \draw[tjo arrow] (sys) -- (llm);
+    \draw[tjo arrow] (llm) -- (parse)
+      node[midway, above, font=\small] {response};
+    \draw[tjo arrow] (parse) -- (exec)
+      node[midway, right, font=\small] {call};
+    \draw[tjo arrow] (exec.west) -| ([xshift=-1.5cm]llm.south) -- (llm.south)
+      node[near start, below, font=\small] {results};
+
+    % Feedback to history
+    \draw[tjo arrow, dashed, color=tjo@cyan]
+      ([xshift=-2cm]llm.south) |- ([yshift=-0.3cm]sys.west) -- (sys.west)
+      node[near end, above, font=\small, text=tjo@cyan] {append};
+  \end{tikzpicture}
+  \vfill
+\end{frame}
+
+% --- Slide 4: Tool definition ---
+\begin{frame}{Tool definition}
+  \vfill
+  You describe tools in the system prompt.
+
+  \vskip1em
+  The LLM generates structured text requesting a tool call.
+
+  \vskip1em
+  Your scaffolding parses and executes it.
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries The LLM never executes anything.}
+  \vfill
+\end{frame}
+
+% --- Slide 5: Two tools ---
+\begin{frame}[fragile]{Two tools}
+  \vfill
+  \centering
+\begin{codeblock}
+read_file(path)           -> contents
+write_file(path, content) -> ok
+\end{codeblock}
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries That is enough to do useful work.}
+  \vfill
+\end{frame}
+
+% --- Slide 6: Production equivalence ---
+\statementslide{Claude Code, Cursor, Copilot:\\[0.8em]
+  the same loop, more tools,\\[0.3em] better prompts.}
+
+% --- Slide 7: Live demo ---
+\statementslide{{\fontsize{36}{44}\selectfont LIVE DEMO}\\[1em]
+  {\fontsize{20}{26}\selectfont\mdseries Watch the agent work.}}
+
+\end{document}

@@ -1,0 +1,53 @@
+\mode<presentation>
+
+% ---- Font loading strategy ----
+% 1. luatex85 provides compat shims for mtpro2 under LuaTeX
+% 2. mtpro2 sets up math fonts via NFSS (Type1)
+% 3. fontspec[no-math] sets up text fonts (OTF) without touching math
+
+\RequirePackage{luatex85}
+\RequirePackage[lite]{mtpro2}
+\RequirePackage[no-math]{fontspec}
+
+% --- Sans serif: Whitney (primary text font in Beamer) ---
+\setsansfont{Whitney}[
+  Path           = /home/tobiasosborne/.local/share/fonts/Whitney/,
+  Extension      = .otf,
+  UprightFont    = Whitney-Book,
+  BoldFont       = Whitney-Semibold,
+  ItalicFont     = Whitney-BookItalic,
+  BoldItalicFont = Whitney-SemiboldItalic,
+]
+
+% --- Monospace: Iosevka Custom ---
+\setmonofont{IosevkaCustom}[
+  Path           = /home/tobiasosborne/.local/share/fonts/iosevka/,
+  Extension      = .ttf,
+  UprightFont    = iosevka-custom-regular,
+  BoldFont       = iosevka-custom-bold,
+  ItalicFont     = iosevka-custom-italic,
+  BoldItalicFont = iosevka-custom-bolditalic,
+  Scale          = MatchLowercase,
+]
+
+% --- Serif: Times LT Std (rarely used, fallback) ---
+\setmainfont{TimesLTStd}[
+  Path           = /home/tobiasosborne/.local/share/fonts/Times LT Std/,
+  Extension      = .otf,
+  UprightFont    = TimesLTStd-Roman,
+  BoldFont       = TimesLTStd-Bold,
+  ItalicFont     = TimesLTStd-Italic,
+  BoldItalicFont = TimesLTStd-BoldItalic,
+]
+
+% --- Beamer font assignments ---
+\setbeamerfont{title}{size=\LARGE, series=\bfseries}
+\setbeamerfont{subtitle}{size=\large}
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{frametitle}{size=\Large, series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{normal text}{size=\large}
+\setbeamerfont{section divider}{size=\LARGE, series=\bfseries}
+\setbeamerfont{footline}{size=\tiny}
+
+\mode<all>

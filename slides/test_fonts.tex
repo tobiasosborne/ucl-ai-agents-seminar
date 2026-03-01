@@ -1,0 +1,63 @@
+\documentclass[aspectratio=169, 14pt]{beamer}
+\input{preamble}
+
+\title{Font Test}
+\subtitle{Whitney + MathTime Pro 2 + Iosevka}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+\begin{frame}{Typography}
+  \vfill
+  \textbf{Whitney Semibold} --- Whitney Book regular --- \textit{Whitney Italic}
+
+  \vskip1em
+  \texttt{Iosevka monospace: 0123456789 -> f(x)}
+
+  \vskip1em
+  Inline math: $\alpha + \beta = \gamma$, \quad $\int_0^\infty e^{-x}\,dx = 1$
+
+  \vskip1em
+  Display math:
+  \[
+    P(\text{token}_i) = \frac{\exp(\ell_i / T)}{\displaystyle\sum_j \exp(\ell_j / T)}
+  \]
+  \vfill
+\end{frame}
+
+\sectiondivider{Section Divider Test}
+
+\statementslide{Statement slide test.\\[0.5em] One bold idea, centered.}
+
+\begin{frame}[fragile]{Code Block Test}
+  \vfill
+\begin{codeblock}
+while not done:
+    response = llm(system + history)
+    tool_calls = parse(response)
+    results = execute(tool_calls)
+    history += [response, results]
+\end{codeblock}
+  \vfill
+\end{frame}
+
+\begin{frame}{Color Palette}
+  \vfill
+  \centering
+  \foreach \name/\col in {
+    darkteal/tjo@darkteal,
+    cyan/tjo@cyan,
+    medblue/tjo@medblue,
+    brightcyan/tjo@brightcyan,
+    green/tjo@green,
+    teal/tjo@teal%
+  }{%
+    \colorbox{\col}{\makebox[4cm]{\color{white}\bfseries\name}}\quad
+  }
+  \vfill
+\end{frame}
+
+\end{document}

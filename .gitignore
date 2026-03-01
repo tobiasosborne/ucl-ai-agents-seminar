@@ -2,3 +2,13 @@
 __pycache__/
 *.pyc
 .claude-design/
+
+# LaTeX auxiliary files
+slides/*.aux
+slides/*.log
+slides/*.nav
+slides/*.out
+slides/*.snm
+slides/*.toc
+slides/*.vrb
+slides/test_fonts.pdf

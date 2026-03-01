@@ -1,0 +1,33 @@
+\mode<presentation>
+
+% ---- No headline ----
+\setbeamertemplate{headline}{}
+
+% ---- Frame title: left-aligned with thin accent line below ----
+\defbeamertemplate*{frametitle}{TJO}
+{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth, ht=2.5em, dp=0.8em, leftskip=1.5em]{frametitle}
+    \usebeamerfont{frametitle}\insertframetitle
+  \end{beamercolorbox}%
+  \nointerlineskip
+  {\color{tjo@cyan}\rule{\paperwidth}{2pt}}%
+  \vskip0.2em
+}
+
+% ---- Footline: slide number, right-aligned ----
+\setbeamertemplate{footline}{%
+  \hfill
+  {\usebeamerfont{footline}\usebeamercolor[fg]{footline}%
+   \insertframenumber\,/\,\inserttotalframenumber\hspace{1.5em}}%
+  \vskip0.6em
+}
+
+% ---- No navigation symbols ----
+\setbeamertemplate{navigation symbols}{}
+
+% ---- No sidebar ----
+\setbeamertemplate{sidebar left}{}
+\setbeamertemplate{sidebar right}{}
+
+\mode<all>

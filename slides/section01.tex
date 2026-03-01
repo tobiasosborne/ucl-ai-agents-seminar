@@ -1,0 +1,140 @@
+\documentclass[aspectratio=169, 14pt]{beamer}
+\input{preamble}
+
+\title{What is an LLM?}
+\subtitle{A reductive account for physicists}
+
+\begin{document}
+
+% --- Slide 1: Title ---
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% --- Slide 2: The observable interface ---
+\begin{frame}[fragile]{The observable interface}
+  \vfill
+  \centering
+\begin{codeblock}
+f : String -> String
+\end{codeblock}
+  \vskip1.5em
+  From outside the API boundary, this is the entire observable behaviour.
+
+  \medskip
+  No hidden state is carried between calls.
+  \vfill
+\end{frame}
+
+% --- Slide 3: Stateless ---
+\begin{frame}{Stateless}
+  \vfill
+  \centering
+  \begin{tikzpicture}
+    % Call 1
+    \node[tjo box fill] (c1) {Call 1};
+    \draw[tjo arrow] ([xshift=-2.5cm]c1.west) -- (c1.west)
+      node[tjo label] {input};
+    \draw[tjo arrow] (c1.east) -- ([xshift=2.5cm]c1.east)
+      node[tjo label] {output};
+
+    % Call 2
+    \node[tjo box fill, right=5cm of c1] (c2) {Call 2};
+    \draw[tjo arrow] ([xshift=-2.5cm]c2.west) -- (c2.west)
+      node[tjo label] {input};
+    \draw[tjo arrow] (c2.east) -- ([xshift=2.5cm]c2.east)
+      node[tjo label] {output};
+
+    % No connection
+    \draw[dashed, color=tjo@black!25, line width=1pt]
+      ([xshift=1.8cm]c1.east) -- ([xshift=-1.8cm]c2.west)
+      node[midway, font=\huge, text=red!70!black] {$\times$};
+  \end{tikzpicture}
+
+  \vskip1.5em
+  Each evaluation is independent. No memory between calls.
+  \vfill
+\end{frame}
+
+% --- Slide 4: Nondeterministic ---
+\begin{frame}{Nondeterministic}
+  \vfill
+  \centering
+  \begin{tikzpicture}
+    % Input
+    \node[tjo box fill, minimum width=4cm] (input) {\texttt{"What is spin?"}};
+
+    % Three outputs
+    \node[tjo box, right=5cm of input, yshift=1.8cm]  (o1) {\texttt{"Spin is..."}};
+    \node[tjo box, right=5cm of input]                 (o2) {\texttt{"Angular..."}};
+    \node[tjo box, right=5cm of input, yshift=-1.8cm] (o3) {\texttt{"In QM..."}};
+
+    % Fan-out arrows
+    \draw[tjo arrow] (input.east) -- (o1.west);
+    \draw[tjo arrow] (input.east) -- (o2.west);
+    \draw[tjo arrow] (input.east) -- (o3.west);
+  \end{tikzpicture}
+
+  \vskip1em
+  Same input, different outputs.
+  The model samples from $\Prob(\text{next token} \given \text{context})$.
+  \vfill
+\end{frame}
+
+% --- Slide 5: Temperature ---
+\begin{frame}{Temperature}
+  \vfill
+  \[
+    P(\text{token}_i) \;=\; \frac{\exp(\ell_i / T)}{\displaystyle\sum_j \exp(\ell_j / T)}
+  \]
+
+  \vskip1.5em
+  \begin{center}
+    $T \to 0$\;: deterministic \quad (ground state)
+
+    \medskip
+    $T \to \infty$\;: uniform \quad (infinite temperature)
+
+    \vskip1em
+    {\color{tjo@darkteal}\bfseries Direct analogy to the Boltzmann distribution.}
+  \end{center}
+  \vfill
+\end{frame}
+
+% --- Slide 6: Tokens ---
+\begin{frame}[fragile]{Tokens}
+  \vfill
+  Not characters. Not words.
+
+  \medskip
+  Subword chunks from a fixed vocabulary $V$ of ${\sim}100\text{k}$ entries.
+
+  \vskip1.5em
+\begin{codeblock}
+'theoretical physics'  ->  ['theor', 'etical', ' physics']
+\end{codeblock}
+  \vfill
+\end{frame}
+
+% --- Slide 7: Inference ---
+\statementslide{One forward pass through a frozen neural network.\\[0.8em]
+  No learning. No state mutation.}
+
+% --- Slide 8: Summary ---
+\begin{frame}{Summary}
+  \vfill
+  \centering
+  An LLM is a stateless, nondeterministic function
+
+  \vskip0.8em
+  \[ f : \text{String} \to \text{String} \]
+
+  \vskip0.8em
+  that samples from $\Prob(\text{next\_token} \given \text{context})$
+
+  \medskip
+  via a single forward pass through a frozen neural network.
+  \vfill
+\end{frame}
+
+\end{document}

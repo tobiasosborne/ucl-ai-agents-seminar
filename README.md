@@ -16,10 +16,17 @@ export ANTHROPIC_API_KEY=sk-ant-...
 ## Regenerate slides
 
 ```bash
-python build_slides.py
+make
 ```
 
-This produces four PDFs, one per section.
+This compiles all four LaTeX Beamer decks (via LuaLaTeX) and copies the
+PDFs to each section directory. Requires LuaLaTeX with Whitney, MathTime
+Pro 2, and Iosevka fonts installed.
+
+To build a single section: `make s01`, `make s02`, `make s03`, `make s04`.
+
+The slide source lives in `slides/` with a custom Beamer theme (`TJO`)
+matching the Whitney Teal design system.
 
 ## Structure
 
@@ -37,4 +44,7 @@ its demos and what the audience should observe.
 
 - Python 3.10+
 - An Anthropic API key (for the demo scripts)
-- reportlab (for slide generation)
+- LuaLaTeX (TeX Live 2023+) with Beamer, tcolorbox, TikZ
+- Whitney font family (OTF)
+- MathTime Pro 2 (Type 1)
+- Iosevka Custom (TTF, monospace)
