@@ -29,20 +29,24 @@ while not done:
 \begin{frame}{The agent loop}
   \vfill
   \centering
-  \begin{tikzpicture}[node distance=2.2cm, every node/.style={align=center}]
+  \begin{tikzpicture}[node distance=1.6cm, every node/.style={align=center}]
     % System prompt + history at top
-    \node[tjo box, fill=tjo@darkteal, text=white, minimum width=4.5cm]
-      (sys) {System prompt\\[-2pt]{\small + History}};
+    \node[tjo box, fill=tjo@darkteal, text=white, minimum width=4cm,
+          minimum height=1cm, font=\normalsize]
+      (sys) {System prompt + History};
 
     % LLM
-    \node[tjo box fill, below=1.5cm of sys, minimum width=4.5cm]
-      (llm) {\textbf{LLM}\\[-2pt]{\small\code{f(s) $\to$ s}}};
+    \node[tjo box fill, below=1.2cm of sys, minimum width=4cm,
+          minimum height=1cm, font=\normalsize]
+      (llm) {\textbf{LLM}\; {\small\code{f(s) $\to$ s}}};
 
     % Parse
-    \node[tjo box, right=3.5cm of llm] (parse) {Parse\\tool calls};
+    \node[tjo box, right=3cm of llm, minimum height=1cm, font=\normalsize]
+      (parse) {Parse tool calls};
 
     % Execute
-    \node[tjo box, below=1.5cm of parse] (exec) {Execute\\tools};
+    \node[tjo box, below=1.2cm of parse, minimum height=1cm, font=\normalsize]
+      (exec) {Execute tools};
 
     % Arrows
     \draw[tjo arrow] (sys) -- (llm);
@@ -64,18 +68,19 @@ while not done:
 % --- Slide 4: Tool definition ---
 \begin{frame}{Tool definition}
   \vfill
+  \centering
   You describe tools in the system prompt.
 
-  \vskip1em
+  \vskip1.5em
   The LLM generates structured text requesting a tool call.
 
-  \vskip1em
-  Your scaffolding parses and executes it.
-
   \vskip1.5em
-  {\color{tjo@darkteal}\bfseries The LLM never executes anything.}
+  Your scaffolding parses and executes it.
   \vfill
 \end{frame}
+
+% --- Slide 5: The key insight ---
+\statementslide{The LLM never executes anything.}
 
 % --- Slide 5: Two tools ---
 \begin{frame}[fragile]{Two tools}

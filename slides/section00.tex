@@ -60,7 +60,7 @@
 \begin{frame}{Quick survey}
   \vfill
   \centering
-  {\fontsize{22}{28}\selectfont
+  {\fontsize{20}{26}\selectfont
     Raise your hand if you have\ldots
 
     \vskip1.5em
@@ -77,24 +77,20 @@
 % --- Slide 5: Skeptic ---
 \statementslide{I was a skeptic.}
 
-% --- Slide 6: The alarm ---
-\begin{frame}{The problem}
+% --- Slide 6: The problem (quote) ---
+\statementslide{\textit{``LLMs are \textbf{incredibly capable}}\\[0.5em]
+  \textit{but \textbf{maximally untrustworthy}.''}}
+
+% --- Slide 7: The evidence ---
+\begin{frame}{The evidence}
   \vfill
   \centering
-  {\fontsize{20}{26}\selectfont
-    \textit{``LLMs are \textbf{incredibly capable}}
-
-    \vskip0.5em
-    \textit{but \textbf{maximally untrustworthy}.''}
-  }
-
-  \vskip2em
   Seductively correct equations that are nonsense.
 
-  \medskip
+  \vskip1.5em
   Push back on a valid proof and it finds a ``bug'' that isn't there.
 
-  \vskip1.5em
+  \vskip2em
   {\color{tjo@darkteal}\bfseries I got burnt. Then I got curious.}
   \vfill
 \end{frame}
@@ -103,12 +99,12 @@
 \statementslide{1000+ hours of deliberate practice.\\[0.8em]
   {\fontsize{20}{26}\selectfont\mdseries Nov 2025\,--\,today.}}
 
-% --- Slide 8: Project showcase (page 1) ---
+% --- Slide 9: Project showcase (page 1) ---
 \begin{frame}{What I built}
   \vfill
   \centering
-  \renewcommand{\arraystretch}{1.3}
-  {\fontsize{13}{17}\selectfont
+  \renewcommand{\arraystretch}{1.4}
+  {\fontsize{14}{19}\selectfont
   \begin{tabular}{l@{\hspace{1.2em}}l@{\hspace{1.2em}}l}
     \textbf{\color{tjo@darkteal}vibefeld}
       & Go, 112k lines
@@ -125,6 +121,18 @@
     \textbf{\color{tjo@darkteal}Nano MIPS}
       & Verilog
       & pipelined CPU on \$10 FPGA \\
+  \end{tabular}
+  }
+  \vfill
+\end{frame}
+
+% --- Slide 10: Project showcase (page 2) ---
+\begin{frame}{What I built \textit{\normalsize(continued)}}
+  \vfill
+  \centering
+  \renewcommand{\arraystretch}{1.4}
+  {\fontsize{14}{19}\selectfont
+  \begin{tabular}{l@{\hspace{1.2em}}l@{\hspace{1.2em}}l}
     \textbf{\color{tjo@darkteal}PicoGPT.jl}
       & Julia
       & GPT with manual backprop {\color{tjo@cyan}(1 day)} \\

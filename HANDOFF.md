@@ -21,14 +21,14 @@ the original reportlab-based `build_slides.py`.
 - **Build**: `make` at project root; `make s00` through `make s04` for
   individual sections
 
-### Sections (5 decks, 40 slides total)
+### Sections (5 decks, 45 slides total)
 
 | File | Slides | Content |
 |------|--------|---------|
-| `section00.tex` | 10 | WHY: timeline, audience poll, personal journey, project showcase |
-| `section01.tex` | 8 | LLM as stateless nondeterministic function |
-| `section02.tex` | 7 | Chat illusion, HTTP reality, context window |
-| `section03.tex` | 7 | Agent loop, tools, live demo |
+| `section00.tex` | 12 | WHY: timeline, audience poll, personal journey, project showcase (2 pages) |
+| `section01.tex` | 9 | LLM as stateless nondeterministic function, temperature formula + limits |
+| `section02.tex` | 8 | Chat illusion, HTTP reality, no-memory statement, context window |
+| `section03.tex` | 8 | Agent loop, tools, "LLM never executes" statement, live demo |
 | `section04.tex` | 8 | Audience vote on what to build next |
 
 ### Key files
@@ -56,12 +56,26 @@ build_slides.py               # Old reportlab system (kept for reference)
 
 ### Known issues
 
-1. **Section 00, slide 4** (survey): 4th bullet item clips at bottom.
-   Fix: reduce `\fontsize` from 22 to 20.
-2. **Section 00, slide 8** (projects): 9th table row (alethfeld) pushed
-   off bottom. Fix: reduce table font or drop to 8 rows.
-3. **Section 03, slide 3** (agent loop diagram): TikZ diagram slightly
-   clipped at bottom. Fix: reduce `node distance` or scale tikzpicture.
+All three previously reported clipping issues have been fixed:
+
+1. ~~Section 00, slide 4 (survey)~~: font reduced 22→20pt.
+2. ~~Section 00, slide 8 (projects)~~: split into two slides (5 + 4 rows),
+   font bumped 13→14pt.
+3. ~~Section 03, slide 3 (agent loop diagram)~~: node distance reduced,
+   boxes compacted.
+
+Additionally, dense slides were split per the style guide ("one idea per
+slide, max 3–4 short lines"):
+
+- **Section 00, slide 6** "The problem" → quote statement slide +
+  evidence slide
+- **Section 01, slide 5** "Temperature" → formula slide + limits slide
+- **Section 02, slide 4** "How chat works" → code block + "No memory"
+  statement slide
+- **Section 03, slide 4** "Tool definition" → explanation + "LLM never
+  executes" statement slide
+
+No known issues remain.
 
 ### Style guide
 
@@ -71,10 +85,9 @@ presentations and lives at `~/Projects/presentations/` (private repo
 
 ## What to do next
 
-- Fix the three minor clipping issues noted above
 - Consider adding screenshots/renders from actual projects (Lyr.jl
   volume renders, vectorfeld UI) to section 00 for visual impact
-- Rehearse with timing — 40 slides for 60 minutes is comfortable
+- Rehearse with timing — 45 slides for 60 minutes is comfortable
 - The old `build_slides.py` can be removed once the new system is stable
 
 ## Technical notes
@@ -85,3 +98,5 @@ presentations and lives at `~/Projects/presentations/` (private repo
 - Font loading order in `beamerfontthemeTJO.sty` is critical:
   `luatex85` → `mtpro2[lite]` → `fontspec[no-math]`
 - mtpro2 `[lite]` is used; `[complete]` may work with all 136 pfb files
+- Font paths in `beamerfontthemeTJO.sty` are absolute to
+  `/home/tobiasosborne/`; update if building on a different machine

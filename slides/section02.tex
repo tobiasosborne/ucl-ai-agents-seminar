@@ -59,13 +59,14 @@ Turn 3:  [user_1, asst_1, user_2, asst_2, user_3]
 
   \vskip1.5em
   The client re-sends the \textbf{entire} history every time.
-
-  \medskip
-  The LLM has no memory. The client maintains the illusion.
   \vfill
 \end{frame}
 
-% --- Slide 5: The context window ---
+% --- Slide 5: No memory ---
+\statementslide{The LLM has no memory.\\[0.8em]
+  The client maintains the illusion.}
+
+% --- Slide 6: The context window ---
 \begin{frame}{The context window}
   \vfill
   The input has a maximum length in tokens.
@@ -78,7 +79,7 @@ Turn 3:  [user_1, asst_1, user_2, asst_2, user_3]
   \vfill
 \end{frame}
 
-% --- Slide 6: The system prompt ---
+% --- Slide 7: The system prompt ---
 \begin{frame}{The system prompt}
   \vfill
   A hidden preamble prepended to every call.
@@ -91,7 +92,7 @@ Turn 3:  [user_1, asst_1, user_2, asst_2, user_3]
   \vfill
 \end{frame}
 
-% --- Slide 7: Summary ---
+% --- Slide 8: Summary ---
 \statementslide{Chat is a loop.\\[0.8em]
   Memory is an illusion\\[0.3em] maintained by the client.}
 
