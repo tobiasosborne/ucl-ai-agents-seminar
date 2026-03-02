@@ -1,8 +1,8 @@
-# Handoff: UCL AI Agents Seminar
+# Handoff: AI Agents Seminar
 
 ## What this is
 
-Materials for a 1-hour seminar at UCL Physics: "AI Coding Agents: A
+Materials for a 1-hour seminar: "AI Coding Agents: A
 Reductive Account for Physicists." Demystifies AI coding agents by
 reducing them to composable primitives physicists already have intuition
 for.

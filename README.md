@@ -1,14 +1,14 @@
 # AI Coding Agents: A Reductive Account for Physicists
 
-Materials for a 1-hour seminar at UCL Physics. The goal is to demystify
+Materials for a 1-hour seminar. The goal is to demystify
 AI coding agents by showing that every part of the stack reduces to
 simple, composable primitives that physicists already have intuition for.
 
 ## Setup
 
 ```bash
-git clone https://github.com/<you>/ucl-ai-agents-seminar.git
-cd ucl-ai-agents-seminar
+git clone https://github.com/<you>/ai-agents-seminar.git
+cd ai-agents-seminar
 pip install -r requirements.txt
 export ANTHROPIC_API_KEY=sk-ant-...
 ```
