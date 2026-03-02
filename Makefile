@@ -18,9 +18,13 @@ DEST_02 := 02-illusion-of-chat/slides.pdf
 DEST_03 := 03-primitive-agent/slides.pdf
 DEST_04 := 04-audience-vote/slides.pdf
 
-.PHONY: all clean dist s00 s01 s02 s03 s04
+.PHONY: all clean dist seminar s00 s01 s02 s03 s04
 
-all: dist
+all: seminar
+
+# Build the unified deck
+seminar: $(SRCDIR)/seminar.pdf
+	@echo "Unified deck built: $(SRCDIR)/seminar.pdf"
 
 # Compile each section (two passes for correct slide numbering)
 $(SRCDIR)/%.pdf: $(SRCDIR)/%.tex $(THEME)

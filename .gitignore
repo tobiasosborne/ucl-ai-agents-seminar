@@ -11,4 +11,9 @@ slides/*.out
 slides/*.snm
 slides/*.toc
 slides/*.vrb
+slides/*.listing
+slides/*.pdf
 slides/test_fonts.pdf
+
+# Claude Code
+.claude/

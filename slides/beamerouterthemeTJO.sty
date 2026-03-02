@@ -4,24 +4,21 @@
 \setbeamertemplate{headline}{}
 
 % ---- Frame title: left-aligned with thin accent line below ----
+% Title and rule sit within the text margins (no full-bleed needed
+% since frametitle bg is transparent).
 \defbeamertemplate*{frametitle}{TJO}
 {%
   \nointerlineskip
-  \begin{beamercolorbox}[wd=\paperwidth, ht=2.5em, dp=0.8em, leftskip=1.5em]{frametitle}
+  \begin{beamercolorbox}[ht=2.5em, dp=0.8em]{frametitle}
     \usebeamerfont{frametitle}\insertframetitle
   \end{beamercolorbox}%
   \nointerlineskip
-  {\color{tjo@cyan}\rule{\paperwidth}{2pt}}%
+  {\color{tjo@cyan}\rule{\linewidth}{2pt}}%
   \vskip0.2em
 }
 
-% ---- Footline: slide number, right-aligned ----
-\setbeamertemplate{footline}{%
-  \hfill
-  {\usebeamerfont{footline}\usebeamercolor[fg]{footline}%
-   \insertframenumber\,/\,\inserttotalframenumber\hspace{1.5em}}%
-  \vskip0.6em
-}
+% ---- Footline: empty (no slide numbers per style guide) ----
+\setbeamertemplate{footline}{}
 
 % ---- No navigation symbols ----
 \setbeamertemplate{navigation symbols}{}

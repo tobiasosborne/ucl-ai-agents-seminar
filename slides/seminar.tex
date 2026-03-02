@@ -1,0 +1,574 @@
+\documentclass[aspectratio=169, 14pt]{beamer}
+\input{preamble}
+
+\title{AI Coding Agents}
+\subtitle{A reductive account for physicists}
+
+\begin{document}
+
+% =====================================================================
+% TITLE
+% =====================================================================
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% =====================================================================
+% SECTION 0: WHY THIS TALK?
+% =====================================================================
+
+\sectiondivider{Why this talk?}
+
+% --- Timeline ---
+\begin{frame}{Three moments}
+  \vfill
+  \centering
+  \begin{tikzpicture}[
+    event/.style={
+      tjo box,
+      minimum width=3.2cm,
+      minimum height=1.8cm,
+      font=\normalsize,
+      align=center,
+    },
+  ]
+    % Timeline axis
+    \draw[tjo@black!20, line width=2pt] (-5.5,0) -- (5.5,0);
+
+    % Event 1: ChatGPT
+    \node[event, fill=tjo@lightgrey] (gpt) at (-4,0) {%
+      {\bfseries\color{tjo@darkteal} Nov 2022}\\[3pt]
+      ChatGPT\\launches
+    };
+
+    % Event 2: Claude Code
+    \node[event, fill=tjo@lightgrey] (cc) at (0,0) {%
+      {\bfseries\color{tjo@darkteal} Q1 2025}\\[3pt]
+      Claude Code,\\Cursor, Copilot
+    };
+
+    % Event 3: Models get good
+    \node[event, fill=tjo@lightgrey] (good) at (4,0) {%
+      {\bfseries\color{tjo@darkteal} Q4 2025}\\[3pt]
+      Models cross\\a threshold
+    };
+
+    % Dots on timeline
+    \foreach \x in {-4,0,4} {
+      \fill[tjo@cyan] (\x,-0.85) circle (5pt);
+    }
+  \end{tikzpicture}
+  \vfill
+\end{frame}
+
+% --- Audience poll ---
+\begin{frame}{Quick survey}
+  \vfill
+  \centering
+  {\fontsize{20}{26}\selectfont
+    Raise your hand if you have\ldots
+
+    \vskip1.5em
+    \begin{tabular}{l}
+      \color{tjo@cyan}$\bullet$\quad used ChatGPT or Claude \\[0.8em]
+      \color{tjo@cyan}$\bullet$\quad used it to write code \\[0.8em]
+      \color{tjo@cyan}$\bullet$\quad used Claude Code, Cursor, or Copilot \\[0.8em]
+      \color{tjo@cyan}$\bullet$\quad built something serious with it \\
+    \end{tabular}
+  }
+  \vfill
+\end{frame}
+
+% --- Skeptic ---
+\statementslide{I was a skeptic.}
+
+% --- The problem (quote) ---
+\statementslide{\textit{``LLMs are \textbf{incredibly capable}}\\[0.5em]
+  \textit{but \textbf{maximally untrustworthy}.''}}
+
+% --- The evidence ---
+\begin{frame}{The evidence}
+  \vfill
+  \centering
+  Seductively correct equations that are nonsense.
+
+  \vskip1.5em
+  Push back on a valid proof and it finds a ``bug'' that isn't there.
+
+  \vskip2em
+  {\color{tjo@darkteal}\bfseries I got burnt. Then I got curious.}
+  \vfill
+\end{frame}
+
+% --- 1000+ hours ---
+\statementslide{1000+ hours of deliberate practice.\\[0.8em]
+  {\fontsize{20}{26}\selectfont\mdseries Nov 2025\,--\,today.}}
+
+% --- Project showcase (page 1) ---
+\begin{frame}{What I built}
+  \vfill
+  \centering
+  \renewcommand{\arraystretch}{1.4}
+  {\fontsize{13}{18}\selectfont
+  \begin{tabular}{l@{\hspace{0.8em}}l@{\hspace{0.8em}}l}
+    \textbf{\color{tjo@darkteal}vibefeld}
+      & Go, 112k lines
+      & adversarial proof verification \\
+    \textbf{\color{tjo@darkteal}Lyr.jl}
+      & Julia
+      & volume renderer, GR ray tracing \\
+    \textbf{\color{tjo@darkteal}af-tests}
+      & Lean\,4, 0 sorries
+      & formal proofs in operator algebras \\
+    \textbf{\color{tjo@darkteal}convexfeld}
+      & C, 37k lines
+      & LP solver from scratch \\
+    \textbf{\color{tjo@darkteal}Nano MIPS}
+      & Verilog
+      & pipelined CPU on \$10 FPGA \\
+  \end{tabular}
+  }
+  \vfill
+\end{frame}
+
+% --- Project showcase (page 2) ---
+\begin{frame}{What I built \textit{\normalsize(continued)}}
+  \vfill
+  \centering
+  \renewcommand{\arraystretch}{1.4}
+  {\fontsize{13}{18}\selectfont
+  \begin{tabular}{l@{\hspace{0.8em}}l@{\hspace{0.8em}}l}
+    \textbf{\color{tjo@darkteal}PicoGPT.jl}
+      & Julia
+      & GPT with manual backprop {\color{tjo@cyan}(1 day)} \\
+    \textbf{\color{tjo@darkteal}vectorfeld}
+      & TypeScript + Rust
+      & vector graphics editor {\color{tjo@cyan}(1 day)} \\
+    \textbf{\color{tjo@darkteal}datapipeline}
+      & Python + DuckDB
+      & 3.7M research grants {\color{tjo@cyan}(5 days)} \\
+    \textbf{\color{tjo@darkteal}alethfeld}
+      & Clojure, 134\,\bigstar
+      & adversarial proofs (open source) \\
+  \end{tabular}
+  }
+  \vfill
+\end{frame}
+
+% --- The punchline ---
+\statementslide{All of this was built\\[0.5em] with AI coding agents.}
+
+% --- Transition ---
+\statementslide{Let me show you the entire trick.}
+
+% =====================================================================
+% SECTION 1: WHAT IS AN LLM?
+% =====================================================================
+
+\sectiondivider{What is an LLM?}
+
+% --- The observable interface ---
+\begin{frame}[fragile]{The observable interface}
+  \vfill
+  \centering
+\begin{codeblock}
+f : String -> String
+\end{codeblock}
+  \vskip1.5em
+  From outside the API boundary, this is the entire observable behaviour.
+
+  \medskip
+  No hidden state is carried between calls.
+  \vfill
+\end{frame}
+
+% --- Stateless ---
+\begin{frame}{Stateless}
+  \vfill
+  \centering
+  \begin{tikzpicture}
+    % Call 1
+    \node[tjo box fill] (c1) {Call 1};
+    \draw[tjo arrow] ([xshift=-1.5cm]c1.west) -- (c1.west)
+      node[tjo label] {input};
+    \draw[tjo arrow] (c1.east) -- ([xshift=1.5cm]c1.east)
+      node[tjo label] {output};
+
+    % Call 2
+    \node[tjo box fill, right=3cm of c1] (c2) {Call 2};
+    \draw[tjo arrow] ([xshift=-1.5cm]c2.west) -- (c2.west)
+      node[tjo label] {input};
+    \draw[tjo arrow] (c2.east) -- ([xshift=1.5cm]c2.east)
+      node[tjo label] {output};
+
+    % No connection
+    \draw[dashed, color=tjo@black!25, line width=1pt]
+      ([xshift=1cm]c1.east) -- ([xshift=-1cm]c2.west)
+      node[midway, font=\huge, text=red!70!black] {$\times$};
+  \end{tikzpicture}
+
+  \vskip1.5em
+  Each evaluation is independent. No memory between calls.
+  \vfill
+\end{frame}
+
+% --- Nondeterministic ---
+\begin{frame}{Nondeterministic}
+  \vfill
+  \centering
+  \begin{tikzpicture}
+    % Input
+    \node[tjo box fill, minimum width=3.5cm] (input) {\texttt{"What is spin?"}};
+
+    % Three outputs
+    \node[tjo box, right=4cm of input, yshift=1.8cm]  (o1) {\texttt{"Spin is..."}};
+    \node[tjo box, right=4cm of input]                 (o2) {\texttt{"Angular..."}};
+    \node[tjo box, right=4cm of input, yshift=-1.8cm] (o3) {\texttt{"In QM..."}};
+
+    % Fan-out arrows
+    \draw[tjo arrow] (input.east) -- (o1.west);
+    \draw[tjo arrow] (input.east) -- (o2.west);
+    \draw[tjo arrow] (input.east) -- (o3.west);
+  \end{tikzpicture}
+
+  \vskip1em
+  Same input, different outputs.
+  The model samples from $\Prob(\text{next token} \given \text{context})$.
+  \vfill
+\end{frame}
+
+% --- Temperature (formula) ---
+\begin{frame}{Temperature}
+  \vfill
+  \[
+    P(\text{token}_i) \;=\; \frac{\exp(\ell_i / T)}{\displaystyle\sum_j \exp(\ell_j / T)}
+  \]
+
+  \vskip1.5em
+  \centering
+  {\color{tjo@darkteal}\bfseries Direct analogy to the Boltzmann distribution.}
+  \vfill
+\end{frame}
+
+% --- Temperature limits ---
+\begin{frame}{Temperature limits}
+  \vfill
+  \centering
+  {\fontsize{24}{32}\selectfont
+    $T \to 0$\;: deterministic \quad (ground state)
+  }
+
+  \vskip2em
+  {\fontsize{24}{32}\selectfont
+    $T \to \infty$\;: uniform \quad (infinite temperature)
+  }
+  \vfill
+\end{frame}
+
+% --- Tokens ---
+\begin{frame}[fragile]{Tokens}
+  \vfill
+  Not characters. Not words.
+
+  \medskip
+  Subword chunks from a fixed vocabulary $V$ of ${\sim}100\text{k}$ entries.
+
+  \vskip1.5em
+\begin{codeblock}
+'theoretical physics'  ->  ['theor', 'etical', ' physics']
+\end{codeblock}
+  \vfill
+\end{frame}
+
+% --- Inference ---
+\statementslide{One forward pass through a frozen neural network.\\[0.8em]
+  No learning. No state mutation.}
+
+% --- Summary ---
+\begin{frame}{Summary}
+  \vfill
+  \centering
+  An LLM is a stateless, nondeterministic function
+
+  \vskip0.8em
+  \[ f : \text{String} \to \text{String} \]
+
+  \vskip0.8em
+  that samples from $\Prob(\text{next\_token} \given \text{context})$
+
+  \medskip
+  via a single forward pass through a frozen neural network.
+  \vfill
+\end{frame}
+
+% =====================================================================
+% SECTION 2: THE ILLUSION OF CHAT
+% =====================================================================
+
+\sectiondivider{The illusion of chat}
+
+% --- A single API call ---
+\begin{frame}{A single API call}
+  \vfill
+  \centering
+  \begin{tikzpicture}
+    \node[tjo box fill, minimum width=3.5cm] (client) {\textbf{Client}};
+    \node[tjo box fill, minimum width=3.5cm, right=5cm of client] (api) {\textbf{API}};
+
+    % Forward arrow (top)
+    \draw[tjo arrow] ([yshift=0.5cm]client.east) -- ([yshift=0.5cm]api.west)
+      node[midway, above, font=\normalsize] {prompt (string)};
+
+    % Return arrow (bottom)
+    \draw[tjo arrow] ([yshift=-0.5cm]api.west) -- ([yshift=-0.5cm]client.east)
+      node[midway, below, font=\normalsize] {completion (string)};
+  \end{tikzpicture}
+
+  \vskip1.5em
+  {\large One string in. One string out. That is the entire interaction.}
+  \vfill
+\end{frame}
+
+% --- The HTTP reality ---
+\begin{frame}[fragile]{The HTTP reality}
+  \vfill
+\begin{codeblock}
+POST /v1/messages
+{
+  "model": "claude-sonnet-4-6-20250627",
+  "messages": [
+    {"role": "user",
+     "content": "What is a quark?"}
+  ]
+}
+\end{codeblock}
+  \vfill
+\end{frame}
+
+% --- How chat works ---
+\begin{frame}[fragile]{How chat works}
+  \vfill
+\begin{codeblock}
+Turn 1:  [user_1]
+Turn 2:  [user_1, asst_1, user_2]
+Turn 3:  [user_1, asst_1, user_2, asst_2, user_3]
+\end{codeblock}
+
+  \vskip1.5em
+  The client re-sends the \textbf{entire} history every time.
+  \vfill
+\end{frame}
+
+% --- No memory ---
+\statementslide{The LLM has no memory.\\[0.8em]
+  The client maintains the illusion.}
+
+% --- The context window ---
+\begin{frame}{The context window}
+  \vfill
+  The input has a maximum length in tokens.
+
+  \vskip1em
+  When the conversation exceeds it, something must be dropped.
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries Typical sizes: 8k, 128k, 200k tokens.}
+  \vfill
+\end{frame}
+
+% --- The system prompt ---
+\begin{frame}{The system prompt}
+  \vfill
+  A hidden preamble prepended to every call.
+
+  \vskip1em
+  It shapes behaviour, persona, and constraints.
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries It is just more text.}
+  \vfill
+\end{frame}
+
+% --- Summary ---
+\statementslide{Chat is a loop.\\[0.8em]
+  Memory is an illusion\\[0.3em] maintained by the client.}
+
+% =====================================================================
+% SECTION 3: FROM FUNCTION TO AGENT
+% =====================================================================
+
+\sectiondivider{From function to agent}
+
+% --- The agent loop (code) ---
+\begin{frame}[fragile]{The agent loop}
+  \vfill
+\begin{codeblock}
+while not done:
+    response = llm(system_prompt + history)
+    tool_calls = parse(response)
+    results = execute(tool_calls)
+    history += [response, results]
+\end{codeblock}
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries
+    This is the complete architecture of every coding agent.}
+  \vfill
+\end{frame}
+
+% --- The agent loop (diagram) ---
+\begin{frame}{The agent loop}
+  \vfill
+  \centering
+  \begin{tikzpicture}[node distance=1.6cm, every node/.style={align=center}]
+    % System prompt + history at top
+    \node[tjo box, fill=tjo@darkteal, text=white, minimum width=4cm,
+          minimum height=1cm, font=\normalsize]
+      (sys) {System prompt + History};
+
+    % LLM
+    \node[tjo box fill, below=1.2cm of sys, minimum width=4cm,
+          minimum height=1cm, font=\normalsize]
+      (llm) {\textbf{LLM}\; {\small\code{f(s) $\to$ s}}};
+
+    % Parse
+    \node[tjo box, right=3cm of llm, minimum height=1cm, font=\normalsize]
+      (parse) {Parse tool calls};
+
+    % Execute
+    \node[tjo box, below=1.2cm of parse, minimum height=1cm, font=\normalsize]
+      (exec) {Execute tools};
+
+    % Arrows
+    \draw[tjo arrow] (sys) -- (llm);
+    \draw[tjo arrow] (llm) -- (parse)
+      node[midway, above, font=\small] {response};
+    \draw[tjo arrow] (parse) -- (exec)
+      node[midway, right, font=\small] {call};
+    \draw[tjo arrow] (exec.west) -| ([xshift=-1.5cm]llm.south) -- (llm.south)
+      node[near start, below, font=\small] {results};
+
+    % Feedback to history
+    \draw[tjo arrow, dashed, color=tjo@cyan]
+      ([xshift=-2cm]llm.south) |- ([yshift=-0.3cm]sys.west) -- (sys.west)
+      node[near end, above, font=\small, text=tjo@cyan] {append};
+  \end{tikzpicture}
+  \vfill
+\end{frame}
+
+% --- Tool definition ---
+\begin{frame}{Tool definition}
+  \vfill
+  \centering
+  You describe tools in the system prompt.
+
+  \vskip1.5em
+  The LLM generates structured text requesting a tool call.
+
+  \vskip1.5em
+  Your scaffolding parses and executes it.
+  \vfill
+\end{frame}
+
+% --- The key insight ---
+\statementslide{The LLM never executes anything.}
+
+% --- Two tools ---
+\begin{frame}[fragile]{Two tools}
+  \vfill
+  \centering
+\begin{codeblock}
+read_file(path)           -> contents
+write_file(path, content) -> ok
+\end{codeblock}
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries That is enough to do useful work.}
+  \vfill
+\end{frame}
+
+% --- Production equivalence ---
+\statementslide{Claude Code, Cursor, Copilot:\\[0.8em]
+  the same loop, more tools,\\[0.3em] better prompts.}
+
+% --- Live demo ---
+\statementslide{{\fontsize{36}{44}\selectfont LIVE DEMO}\\[1em]
+  {\fontsize{20}{26}\selectfont\mdseries Watch the agent work.}}
+
+% =====================================================================
+% SECTION 4: AUDIENCE VOTE
+% =====================================================================
+
+\sectiondivider{What should we try?}
+
+% --- Option 1 ---
+\begin{frame}{Option 1: \LaTeX{} lint}
+  \vfill
+  Parse a \code{.tex} file.
+
+  \vskip1em
+  Find every undefined \code{\textbackslash ref} and \code{\textbackslash cite}.
+
+  \vskip1em
+  Report what is broken.
+  \vfill
+\end{frame}
+
+% --- Option 2 ---
+\begin{frame}{Option 2: Data to figure}
+  \vfill
+  Read a CSV. Fit a power law.
+
+  \vskip1em
+  Generate a publication-quality plot with error bars.
+
+  \vskip1em
+  Save as PDF.
+  \vfill
+\end{frame}
+
+% --- Option 3 ---
+\begin{frame}{Option 3: DOI to BibTeX}
+  \vfill
+  Given a list of DOIs, fetch metadata.
+
+  \vskip1em
+  Produce a consistently formatted \code{.bib} file.
+  \vfill
+\end{frame}
+
+% --- Option 4 ---
+\begin{frame}{Option 4: Seminar to calendar}
+  \vfill
+  Scrape a seminar schedule from a URL.
+
+  \vskip1em
+  Produce an \code{.ics} calendar file.
+  \vfill
+\end{frame}
+
+% --- Option 5 ---
+\begin{frame}{Option 5: Batch rename}
+  \vfill
+  I describe a naming convention in English.
+
+  \vskip1em
+  The agent renames 200 files to match.
+  \vfill
+\end{frame}
+
+% --- Option 6 ---
+\begin{frame}{Option 6: Dimensional analysis}
+  \vfill
+  Read a paper draft.
+
+  \vskip1em
+  Check that every equation is dimensionally consistent.
+  \vfill
+\end{frame}
+
+% --- Vote ---
+\statementslide{{\fontsize{36}{44}\selectfont Raise your hand.}}
+
+\end{document}
