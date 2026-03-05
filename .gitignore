@@ -26,5 +26,9 @@ slides/assets/Logo-Paket.zip
 # Demo scripts (may contain API keys)
 02-illusion-of-chat/curl_call.sh
 
+# FeO demo — venv and intermediate results
+feo_venv/
+05-live-demo-feo/feo_pec_results/
+
 # Claude Code
 .claude/

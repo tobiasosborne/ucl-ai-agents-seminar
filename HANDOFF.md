@@ -28,6 +28,7 @@ from v2 annotations (annotated PDF + two voice memo transcripts).
 | 02: The illusion of chat | 10 | Single API call, cURL reality, HTTP reality, how chat works, no memory, context window (bar chart), context rot, system prompt, closing statement |
 | 03: From function to agent | 11 | Two ways in (web vs terminal), coding agents intro, agent loop (code + diagram), tools (+ Thorsten Ball ref), LLM never executes, two tools, production equivalence, live demo |
 | 04: Beyond the loop | 8 | Real workflow, bash polling loop, multi-agent orchestration, natural endpoint, limitations (3 points), automation spectrum (Labour→Cognition) |
+| 05: Live demo — FeO | — | Audience challenge: compute FeO potential energy curves (see `05-live-demo-feo/README.md`) |
 | Freestyle | 1 | "Let's try something / No promises" |
 
 ### Key files
@@ -68,6 +69,9 @@ notes/
 - `03-*/agent.py` — 124-line agent with read/write tools
 - `03-*/tools.py` — Sandboxed file tools
 - `03-*/workspace/data.csv` — Sample data file for agent demo
+- `05-*/smoke_test_feo.py` — Single-point CASSCF+NEVPT2 validation
+- `05-*/compute_feo_pec.py` — Production PEC scan (SA-CASSCF(12,12) + SC-NEVPT2, X2C, DK basis)
+- `05-*/plot_feo_pec.py` — PEC plotting and spectroscopic constants extraction
 
 ### Changes in v2 (from v1)
 

@@ -36,6 +36,7 @@ matching the Whitney Teal design system.
 | `02-illusion-of-chat/` | Chat is a client-side loop. Memory is an illusion. |
 | `03-primitive-agent/` | The agent loop: LLM + tools + history |
 | `04-audience-vote/` | Live audience vote on what to build next |
+| `05-live-demo-feo/` | Audience challenge: FeO potential energy curves with PySCF |
 
 Each section directory has its own README with instructions for running
 its demos and what the audience should observe.
