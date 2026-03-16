@@ -1,0 +1,478 @@
+\documentclass[aspectratio=169, 14pt]{beamer}
+\input{preamble}
+
+\title{Accelerating Physics Discovery\\with Machine Intelligence}
+\subtitle{1st Grand Challenge Conference --- Berlin University Alliance}
+
+\begin{document}
+
+% =====================================================================
+% TITLE
+% =====================================================================
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% =====================================================================
+% PART 1: THE LANDSCAPE
+% =====================================================================
+
+\sectiondivider{The landscape}
+
+% --- GPT-5.2 headline ---
+\begin{frame}[plain]
+  \vfill
+  \centering
+  \includegraphics[width=0.78\textwidth]{assets/gpt52pr.PNG}
+
+  \vskip1em
+  {\small\color{tjo@black!60}%
+    arXiv:2602.12176 \quad---\quad
+    IAS, Harvard, Cambridge, Vanderbilt, OpenAI \quad---\quad
+    February 2026}
+  \vfill
+\end{frame}
+
+% --- Timeline ---
+\begin{frame}{Three moments}
+  \vfill
+  \centering
+  \begin{tikzpicture}[
+    event/.style={
+      tjo box,
+      minimum width=2.6cm,
+      minimum height=1.5cm,
+      font=\footnotesize,
+      align=center,
+    },
+  ]
+    \draw[tjo@black!20, line width=2pt] (-6.5,0) -- (6.5,0);
+
+    \node[event, fill=tjo@lightgrey] (gpt) at (-5,0) {%
+      {\bfseries\small\color{tjo@darkteal} Nov 2022}\\[3pt]
+      ChatGPT\\launches
+    };
+
+    \node[event, fill=tjo@lightgrey] (cc) at (0,0) {%
+      {\bfseries\small\color{tjo@darkteal} Q1 2025}\\[3pt]
+      Claude Code,\\Cursor, Copilot
+    };
+
+    \node[event, fill=tjo@lightgrey] (good) at (5,0) {%
+      {\bfseries\small\color{tjo@darkteal} Q4 2025}\\[3pt]
+      Opus 4.5, GPT-5.2\\cross a threshold
+    };
+  \end{tikzpicture}
+  \vfill
+\end{frame}
+
+% --- Capable but untrustworthy ---
+\statementslide{LLMs are \textbf{incredibly capable}\\[0.5em]
+  but \textbf{maximally untrustworthy}}
+
+% --- The gap ---
+\begin{frame}[plain,c]
+  \centering
+  {\fontsize{22}{30}\selectfont\color{tjo@darkteal}
+    The gap between\\[0.6em]
+    {\bfseries ``I tried ChatGPT and it hallucinated''}\\[0.6em]
+    and\\[0.6em]
+    {\bfseries ``this is a powerful force multiplier''}\\[0.8em]
+  }
+  {\fontsize{20}{26}\selectfont\color{tjo@darkteal}
+    is not closed by better models\\[0.5em]
+    It is closed by \textbf{technique} and \textbf{domain expertise}
+  }
+\end{frame}
+
+% =====================================================================
+% PART 2: WHAT IS AN LLM?
+% =====================================================================
+
+\sectiondivider{What is an LLM?}
+
+% --- From outside, looking in ---
+\begin{frame}[fragile]{From outside, looking in}
+  \vfill
+\begin{codeblock}
+f : String -> String
+\end{codeblock}
+  \vskip1.5em
+  \begin{flushleft}
+  \hspace{1.5em}Outside the API boundary, this is the observable behaviour
+
+  \medskip
+  \hspace{1.5em}No hidden state is carried between calls
+  \end{flushleft}
+  \vfill
+\end{frame}
+
+% --- Nondeterministic ---
+\begin{frame}{Nondeterministic}
+  \vfill
+  \centering
+  \begin{tikzpicture}
+    \node[tjo box fill, minimum width=3.5cm, font=\normalsize] (input) {\texttt{"What is spin?"}};
+
+    \node[tjo box, right=4cm of input, yshift=1.5cm, font=\normalsize]  (o1) {\texttt{"Spin is\ldots"}};
+    \node[tjo box, right=4cm of input, font=\normalsize]                 (o2) {\texttt{"Angular\ldots"}};
+    \node[tjo box, right=4cm of input, yshift=-1.5cm, font=\normalsize] (o3) {\texttt{"In QM\ldots"}};
+
+    \draw[tjo arrow] (input.east) -- (o1.west);
+    \draw[tjo arrow] (input.east) -- (o2.west);
+    \draw[tjo arrow] (input.east) -- (o3.west);
+  \end{tikzpicture}
+
+  \vskip0.8em
+  {\normalsize Same input, different outputs ---
+  the model samples from $\Prob(\text{next token} \given \text{context})$}
+  \vfill
+\end{frame}
+
+% --- Temperature (formula) ---
+\begin{frame}{Temperature}
+  \vfill
+  \[
+    P(\text{token}_i) \;=\; \frac{\exp(\ell_i / T)}{\displaystyle\sum_j \exp(\ell_j / T)}
+  \]
+
+  \vskip1.5em
+  \centering
+  {\color{tjo@darkteal}\bfseries Direct analogy to the Boltzmann distribution}
+  \vfill
+\end{frame}
+
+% --- Context window + context rot (merged) ---
+\begin{frame}{The context window}
+  \vfill
+  \centering
+  \begin{tikzpicture}
+    \fill[tjo@lightgrey] (0,0) rectangle (12,1.2);
+    \fill[tjo@darkteal!30] (0,0) rectangle (2,1.2);
+    \node[font=\small, text=tjo@darkteal, align=center] at (1,0.6) {system\\ prompt};
+    \fill[tjo@cyan!20] (2,0) rectangle (9.5,1.2);
+    \node[font=\small, align=center] at (5.75,0.6) {conversation history};
+    \fill[tjo@cyan!40] (9.5,0) rectangle (12,1.2);
+    \node[font=\small, align=center] at (10.75,0.6) {latest\\ message};
+    \draw[tjo@darkteal, line width=1pt] (0,0) rectangle (12,1.2);
+    \draw[decorate, decoration={brace, amplitude=8pt, mirror},
+          tjo@darkteal, line width=1pt]
+      (0,-0.3) -- (12,-0.3)
+      node[midway, below=10pt, font=\normalsize] {context window (tokens)};
+  \end{tikzpicture}
+
+  \vskip1em
+  As the context fills, older information gets buried
+
+  \vskip0.5em
+  {\color{tjo@darkteal}\bfseries
+    This is why chat interfaces silently ruin your results}
+  \vfill
+\end{frame}
+
+% --- Closing definition ---
+\begin{frame}[plain,c]
+  \centering
+  {\fontsize{18}{25}\selectfont\color{tjo@darkteal}
+  An LLM is a stateless, nondeterministic function
+
+  \vskip0.6em
+  \[ f : \text{String} \to \text{String} \]
+
+  \vskip0.6em
+  that samples from $\Prob(\text{next\_token} \given \text{context})$
+
+  \medskip
+  via a single forward pass through a frozen neural network
+  }
+\end{frame}
+
+% =====================================================================
+% PART 3: FROM FUNCTION TO AGENT
+% =====================================================================
+
+\sectiondivider{From function to agent}
+
+% --- The agent loop (code) ---
+\begin{frame}[fragile]{The agent loop}
+  \vfill
+\begin{codeblock}
+while not done:
+    response = llm(system_prompt + history)
+    tool_calls = parse(response)
+    results = execute(tool_calls)
+    history += [response, results]
+\end{codeblock}
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries
+    This is the complete architecture of every coding agent}
+  \vfill
+\end{frame}
+
+% --- The agent loop (diagram) ---
+\begin{frame}{The agent loop}
+  \vfill
+  \centering
+  \begin{tikzpicture}[node distance=1.6cm, every node/.style={align=center}]
+    \node[tjo box, fill=tjo@darkteal, text=white, minimum width=4cm,
+          minimum height=1cm, font=\normalsize]
+      (sys) {System prompt + History};
+
+    \node[tjo box fill, below=1.2cm of sys, minimum width=4cm,
+          minimum height=1cm, font=\normalsize]
+      (llm) {\textbf{LLM}\; {\small\code{f(s) $\to$ s}}};
+
+    \node[tjo box, right=3cm of llm, minimum height=1cm, font=\normalsize]
+      (parse) {Parse tool calls};
+
+    \node[tjo box, below=1.2cm of parse, minimum height=1cm, font=\normalsize]
+      (exec) {Execute tools};
+
+    \draw[tjo arrow] (sys) -- (llm);
+    \draw[tjo arrow] (llm) -- (parse)
+      node[midway, above, font=\small] {response};
+    \draw[tjo arrow] (parse) -- (exec)
+      node[midway, right, font=\small] {call};
+
+    \draw[tjo arrow] (exec.south) -- ++(0,-0.6) -| ([xshift=-0.5cm]llm.south)
+      node[near start, below, font=\small] {results};
+
+    \draw[tjo arrow, dashed, color=tjo@cyan]
+      ([xshift=0.5cm]llm.north) -- ([xshift=0.5cm]sys.south)
+      node[midway, right, font=\small, text=tjo@cyan] {append};
+  \end{tikzpicture}
+  \vfill
+\end{frame}
+
+% --- The key insight ---
+\statementslide{The LLM never executes anything\\[0.8em]
+  {\fontsize{20}{26}\selectfont\mdseries
+    It generates text --- your scaffolding acts on it}}
+
+% =====================================================================
+% PART 4: ACCELERATING DISCOVERY
+% =====================================================================
+
+\sectiondivider{Accelerating discovery}
+
+% --- Multi-agent for research ---
+\begin{frame}{Multi-agent orchestration for research}
+  \vfill
+  \centering
+  \begin{tikzpicture}[node distance=2cm, every node/.style={align=center}]
+    \node[tjo box, fill=tjo@darkteal, text=white,
+          minimum width=5cm, minimum height=1cm, font=\normalsize]
+      (sup) {\textbf{Supervisor}\\{\small orchestrates the pipeline}};
+
+    \node[tjo box fill, below left=1.5cm and 1cm of sup,
+          minimum width=3.5cm, font=\normalsize]
+      (a1) {\textbf{Conjecture}\\{\small generates hypotheses}};
+    \node[tjo box fill, below=1.5cm of sup,
+          minimum width=3.5cm, font=\normalsize]
+      (a2) {\textbf{Verifier}\\{\small checks proofs}};
+    \node[tjo box fill, below right=1.5cm and 1cm of sup,
+          minimum width=3.5cm, font=\normalsize]
+      (a3) {\textbf{Experimenter}\\{\small runs simulations}};
+
+    \draw[tjo arrow] (sup) -- (a1);
+    \draw[tjo arrow] (sup) -- (a2);
+    \draw[tjo arrow] (sup) -- (a3);
+
+    \draw[tjo arrow, dashed, color=tjo@cyan] (a1.east) -- (a2.west);
+    \draw[tjo arrow, dashed, color=tjo@cyan] (a2.east) -- (a3.west);
+  \end{tikzpicture}
+
+  \vskip1em
+  One agent conjectures --- another verifies --- a third experiments
+  \vfill
+\end{frame}
+
+% --- Formal verification ---
+\begin{frame}{Adversarial verification}
+  \vfill
+  \centering
+  \begin{tikzpicture}[node distance=2cm, every node/.style={align=center}]
+    \node[tjo box fill, minimum width=3cm] (prover) {%
+      \textbf{Prover}\\{\small constructs}};
+    \node[tjo box fill, right=2cm of prover, minimum width=3cm] (verifier) {%
+      \textbf{Verifier}\\{\small attacks}};
+    \node[tjo box, fill=tjo@darkteal, text=white,
+          right=2cm of verifier, minimum width=3cm] (formal) {%
+      \textbf{Formaliser}\\{\small Lean proof}};
+
+    \draw[tjo arrow] (prover) -- (verifier);
+    \draw[tjo arrow] (verifier) -- (formal);
+    \draw[tjo arrow, dashed, color=tjo@cyan, bend right=30]
+      (verifier.north) to node[above, font=\small, text=tjo@cyan] {reject} (prover.north);
+  \end{tikzpicture}
+
+  \vskip1.5em
+  {\color{tjo@darkteal}\bfseries
+    Natural language is an inadequate verification mechanism}
+
+  \vskip0.5em
+  {\small\color{tjo@black!60} Formal proof = compiler for mathematics}
+  \vfill
+\end{frame}
+
+% --- The convergence ---
+\begin{frame}{The convergence}
+  \vfill
+  \centering
+  \begin{tikzpicture}[
+    pillar/.style={
+      tjo box fill,
+      minimum width=3cm,
+      minimum height=2cm,
+      font=\small,
+    },
+  ]
+    \node[pillar] (ai) at (-4.2,0) {%
+      {\bfseries\color{tjo@darkteal} AI Agents}\\[4pt]
+      LLMs, multi-round\\reasoning, tool use
+    };
+
+    \node[pillar] (qc) at (0,0) {%
+      {\bfseries\color{tjo@darkteal} Quantum}\\[4pt]
+      QML, neural-guided\\algorithm design
+    };
+
+    \node[pillar] (fm) at (4.2,0) {%
+      {\bfseries\color{tjo@darkteal} Formal Methods}\\[4pt]
+      Lean, proof assistants,\\auto-verification
+    };
+
+    % Convergence arrows
+    \draw[tjo arrow, color=tjo@cyan] (ai.south) -- ++(0,-0.8)
+      -- (0,-1.8) node[below, font=\normalsize, text=tjo@darkteal]
+      {\bfseries Accelerated physics discovery};
+    \draw[tjo arrow, color=tjo@cyan] (qc.south) -- (0,-1.8);
+    \draw[tjo arrow, color=tjo@cyan] (fm.south) -- ++(0,-0.8) -- (0,-1.8);
+  \end{tikzpicture}
+  \vfill
+\end{frame}
+
+% --- Auto formalization ---
+\statementslide{Auto formalization is real\\[0.8em]
+  {\fontsize{20}{26}\selectfont\mdseries
+    Conjecture generation, proof verification,\\[0.3em]
+    experimental design --- all within reach}}
+
+% =====================================================================
+% PART 5: THE HARDER PROBLEM
+% =====================================================================
+
+\sectiondivider{The harder problem}
+
+% --- Why LLMs fail at research ---
+\begin{frame}{Why LLMs fail at research}
+  \vfill
+  \centering
+  \begin{tikzpicture}
+    % Two columns
+    \node[tjo box fill, minimum width=4cm, minimum height=2cm, font=\small] (undergrad) at (-4,0) {%
+      {\bfseries\normalsize\color{tjo@darkteal} Undergraduate}\\[4pt]
+      Every step spelled out\\[2pt]
+      Pedagogical structure\\[2pt]
+      {\color{tjo@cyan} LLMs excel}
+    };
+
+    \node[tjo box, minimum width=4cm, minimum height=2cm, font=\small] (research) at (4,0) {%
+      {\bfseries\normalsize\color{tjo@darkteal} Research}\\[4pt]
+      ``By standard arguments''\\[2pt]
+      Compressed communication\\[2pt]
+      {\color{red!70!black} LLMs fail}
+    };
+
+    \draw[tjo arrow, line width=2pt]
+      (undergrad.east) -- (research.west)
+      node[midway, above=10pt, font=\footnotesize, text=tjo@black!60] {phase transition};
+  \end{tikzpicture}
+
+  \vskip1em
+  {\normalsize\color{tjo@darkteal}\bfseries
+    Models reproduce the texture of expertise, not the logic beneath it}
+  \vfill
+\end{frame}
+
+% --- The real AI problem ---
+\begin{frame}{The real AI problem}
+  \vfill
+  \begin{flushleft}
+  \hspace{1.5em}The speculative fears distract from present harms
+
+  \vskip0.8em
+  \hspace{1.5em}Underpaid data labourers, unconsented data scraping
+
+  \vskip0.8em
+  \hspace{1.5em}Environmental costs of training and inference at scale
+
+  \vskip0.8em
+  \hspace{1.5em}Degradation of the information ecosystem
+  \end{flushleft}
+
+  \vskip1em
+  \centering
+  {\small\color{tjo@darkteal}\bfseries
+    Governance, transparency, and accountability --- not singularity narratives}
+  \vfill
+\end{frame}
+
+% --- Automation spectrum ---
+\begin{frame}{Automation}
+  \vfill
+  \centering
+  \begin{tikzpicture}
+    \draw[tjo@darkteal, line width=2pt] (-6,0) -- (6,0);
+    \shade[left color=tjo@lightgrey, right color=tjo@cyan!30]
+      (-0.5,-0.15) rectangle (0.5,0.15);
+    \node[above, font=\bfseries\normalsize, text=tjo@darkteal] at (-6,0.3) {Labour};
+    \node[above, font=\bfseries\normalsize, text=tjo@darkteal] at (6,0.3) {Cognition};
+    \fill[tjo@darkteal] (-4.5,0) circle (4pt);
+    \node[below=10pt, font=\footnotesize] at (-4.5,0) {Calculator};
+    \fill[tjo@darkteal] (-1.5,0) circle (4pt);
+    \node[below=10pt, font=\footnotesize] at (-1.5,0) {Computer algebra};
+    \fill[tjo@darkteal] (2,0) circle (4pt);
+    \node[below=10pt, font=\footnotesize] at (2,0) {Automated proving};
+    \fill[tjo@cyan] (5,0) circle (4pt);
+    \node[below=10pt, font=\footnotesize, text=tjo@darkteal] at (5,0) {\textbf{AI tools}};
+  \end{tikzpicture}
+  \vfill
+\end{frame}
+
+% --- Limitations ---
+\begin{frame}[plain,c]
+  \centering
+  {\fontsize{20}{28}\selectfont\color{tjo@darkteal}
+  Every layer we built today has failure modes
+
+  \vskip1.5em
+  Context rot, hallucination, tool misuse, prompt fragility
+
+  \vskip1.5em
+  The human in the loop is not optional
+  }
+\end{frame}
+
+% --- Summary ---
+\begin{frame}{Summary}
+  \vfill
+  \centering
+  {\fontsize{16}{24}\selectfont
+    \begin{tabular}{@{}l}
+      \color{tjo@darkteal}\bfseries LLMs are stateless functions
+        {\mdseries --- not magic, not minds} \\[1.2em]
+      \color{tjo@darkteal}\bfseries Agents are loops
+        {\mdseries --- scaffolding provides the action} \\[1.2em]
+      \color{tjo@darkteal}\bfseries Multi-agent + formal verification
+        {\mdseries --- the path forward} \\[1.2em]
+      \color{tjo@darkteal}\bfseries The human provides ground truth
+        {\mdseries --- technique over hype} \\
+    \end{tabular}
+  }
+  \vfill
+\end{frame}
+
+\end{document}

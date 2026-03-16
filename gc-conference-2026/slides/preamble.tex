@@ -1,0 +1,61 @@
+% Shared preamble for GC Conference 2026 talk.
+% Based on the ai-agents-seminar preamble; adapted for 30-minute format.
+
+\usetheme{TJO}
+
+% --- Margins: ~1.2cm on each side (style guide: ~80px at 1280x720) ---
+\setbeamersize{text margin left=1.2cm, text margin right=1.2cm}
+
+% --- Packages ---
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc, decorations.pathreplacing}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=tjo@darkteal,
+  urlcolor=tjo@cyan,
+}
+
+% --- TikZ styles ---
+\tikzset{
+  tjo box/.style={
+    draw=tjo@darkteal,
+    line width=1.5pt,
+    rounded corners=6pt,
+    minimum width=3.5cm,
+    minimum height=1.2cm,
+    font=\large,
+    align=center,
+  },
+  tjo box fill/.style={
+    tjo box,
+    fill=tjo@lightgrey,
+  },
+  tjo arrow/.style={
+    -Stealth,
+    line width=1.5pt,
+    color=tjo@darkteal,
+  },
+  tjo label/.style={
+    font=\normalsize,
+    color=tjo@black,
+    midway,
+    above,
+  },
+}
+
+% --- Math shortcuts ---
+\newcommand{\Prob}{\mathrm{P}}
+\newcommand{\given}{\,|\,}
+
+% --- Metadata ---
+\author{Tobias J. Osborne}
+\institute{Leibniz Universit\"at Hannover}
+\date{}
+
+% --- Logo paths ---
+\newcommand{\luhlogo}{assets/Logo-Paket/RGB/luh_logo_rgb_0_81_158.png}
+\newcommand{\innovailialogo}{assets/Innovailia_logo_2.png}
