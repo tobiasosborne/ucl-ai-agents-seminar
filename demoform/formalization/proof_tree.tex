@@ -1,0 +1,142 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+
+\title{Proof Export}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Node 1}
+
+\textbf{Statement:} For a 1D random brickwall quantum circuit of depth t encoding k=rN logical qudits into N physical qudits with local noise channels, the coherent information I\_c exhibits an error-correction phase transition governed by random-matrix universality at infinite depth. In Setup I (noiseless encoding + noise after), the Hashing bound H\_2 = g\_\{s,s\} - g\_\{s,e\} <= 1-r determines the critical noise rate, and finite-depth corrections scale as N*exp(-2t/τ) crossing over to exp(-t/τ). In Setup II (noisy encoding), the circuit fidelity parameter f\_2 = -(2/N)*log\_d(F-tilde) replaces the Hashing bound with critical value f\_2\textasciicircum{}crit = (1-r)(1+g\_\{s,e\}), and finite-depth corrections scale as O(1/t). Both setups reduce to 2D Ising-like statistical mechanics models via Weingarten calculus on replicated permutation degrees of freedom.
+
+\textbf{Type:} claim
+
+\textbf{Inference:} assumption
+
+\textbf{Status:} validated
+
+\textbf{Taint:} clean
+
+\begin{enumerate}
+\item \textbf{Node 1.1:} BACKGROUND: The coherent information I\_c(Λ) = S(ρ\_B) - S(ρ\_\{RB\}) for a random encoding channel Λ mapping k=rN logical qudits to N physical qudits can be computed via annealed 2nd-Rényi: I\_c = -log\_d E\_U[Tr(ρ\_B\textasciicircum{}2)] + log\_d E\_U[Tr(ρ\_\{RB\}\textasciicircum{}2)]. Using Weingarten calculus, the Haar-averaged replicated circuit maps to permutation operators σ ∈ S\_2 with noisy overlap matrix G̃(d,N). [Ground truth: Eqs.(1-5), main.tex lines 133-159]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\begin{enumerate}
+\item \textbf{Node 1.1.1:} DEF: Coherent information I\_c(Λ) = S(ρ\_B) - S(ρ\_\{RB\}) where ρ\_\{RB\} = (1\_R ⊗ Λ)(|φ\_+⟩⟨φ\_+|\textasciicircum{}\{⊗k\} ⊗ |0⟩⟨0|\textasciicircum{}\{⊗(N-k)\}). Ground truth: main.tex line 134 contains 'Ic(\textbackslash\{\}Lambda)=S(\textbackslash\{\}rho\_\{B\})-S(\textbackslash\{\}rho\_\{RB\})'. Verified by string match against local source.
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.1.2:} STEP: Replace von Neumann entropy S with 2nd Rényi S\_2(ρ) = -log Tr(ρ\textasciicircum{}2), and take annealed average over circuit realizations U, yielding I\_c = -log\_d E\_U[Tr(ρ\_B\textasciicircum{}2)] + log\_d E\_U[Tr(ρ\_\{RB\}\textasciicircum{}2)]. Ground truth: main.tex line 141 contains 'Ic=-\textbackslash\{\}log\_d\textbackslash\{\}Ex\_\{U\}\textbackslash\{\}Tr(\textbackslash\{\}rho\_B\textasciicircum{}\textbackslash\{\}nreplicas)+\textbackslash\{\}log\_d\textbackslash\{\}Ex\_\{U\}\textbackslash\{\}Tr(\textbackslash\{\}rho\_\{RB\}\textasciicircum{}\textbackslash\{\}nreplicas)' with nreplicas=2.
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.1.3:} STEP: Apply Weingarten calculus for Haar(q): E\_U[(U⊗U*)\textasciicircum{}\{⊗2\}] = Σ\_\{π,σ∈S\_2\} Wg\_\{π,σ\}(q)|π⟩⟩⟨⟨σ|. The Gram matrix is G\_\{π,σ\}(q) = ⟨⟨π|σ⟩⟩ with G = ((q\textasciicircum{}2,q),(q,q\textasciicircum{}2)), and Wg = G\textasciicircum{}\{-1\}. Ground truth: main.tex line 146 contains the formula with Wg\_\{\textbackslash\{\}pi,\textbackslash\{\}sigma\}(q)|\textbackslash\{\}pi\textbackslash\{\}rangle\textbackslash\{\}!\textbackslash\{\}rangle\textbackslash\{\}langle\textbackslash\{\}!\textbackslash\{\}langle\textbackslash\{\}sigma|.
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.1.4:} STEP: Define noisy overlap G̃(q,N)\_\{π,σ\} = ⟨⟨π|N\textasciicircum{}\{⊗2\}|σ⟩⟩. For depolarizing N(ρ)=(1-γ)ρ+γ1/d: G̃(d,N) = ((d\textasciicircum{}2, d), (d, 1+(d\textasciicircum{}2-1)(1-γ)\textasciicircum{}2)). Ground truth: main.tex line 158-160 defines G̃ and gives the depolarizing matrix.
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\end{enumerate}
+\item \textbf{Node 1.2:} SETUP I - RM PREDICTION: For global Haar U, the averaged purities are E\_U Tr(ρ\_B\textasciicircum{}2) = d\textasciicircum{}\{-(g\_\{s,e\}+1)N\} + d\textasciicircum{}\{-(g\_\{s,s\}+r)N\} and E\_U Tr(ρ\_\{RB\}\textasciicircum{}2) = d\textasciicircum{}\{-(g\_\{s,e\}+1+r)N\} + d\textasciicircum{}\{-g\_\{s,s\}N\}, giving I\_c/N = min(g\_\{s,e\}+1, g\_\{s,s\}+r) - min(g\_\{s,e\}+1+r, g\_\{s,s\}). The Hashing bound H\_2 = g\_\{s,s\} - g\_\{s,e\} ≤ 1-r determines the error-correction transition. [Ground truth: Eqs.(7-10), main.tex lines 173-200]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\begin{enumerate}
+\item \textbf{Node 1.2.1:} STEP: Start from Eq.(6): E\_U Tr(ρ\_\{B/RB\}\textasciicircum{}2) = ⟨⟨v\_0|E\_U[(U⊗U*)\textasciicircum{}\{⊗2\}]|v\_\{B/RB\}⟩⟩ ⊗ |0,0⟩\textasciicircum{}\{⊗2\}. For global Haar U, apply Eq.(3) to get two sums over S\_2. In large-N limit, only σ=π=e and σ=π=s contribute. Boundary vector: ⟨⟨v\_0| = ⟨⟨s|N\textasciicircum{}\{⊗2\} (noise at output). Bottom: |v\_B⟩⟩ = d\textasciicircum{}\{-2k\}|e⟩⟩ for B-purity, |v\_\{RB\}⟩⟩ = d\textasciicircum{}\{-2k\}|s⟩⟩ for RB-purity.
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.2.2:} STEP: Evaluate boundary overlaps. For B-purity: ⟨⟨e|v\_B⟩⟩ = 1, ⟨⟨s|v\_B⟩⟩ = d\textasciicircum{}\{-k\}. For RB-purity: ⟨⟨e|v\_\{RB\}⟩⟩ = d\textasciicircum{}\{-k\}, ⟨⟨s|v\_\{RB\}⟩⟩ = 1. Combined with G̃\_\{s,π\}\textasciicircum{}N factors from noise, this yields Eq.(7): E\_U Tr(ρ\_\{B/RB\}\textasciicircum{}2) = d\textasciicircum{}\{-2N\}(G̃\_\{s,e\}\textasciicircum{}N·⟨⟨e|v⟩⟩ + G̃\_\{s,s\}\textasciicircum{}N·⟨⟨s|v⟩⟩).
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.2.3:} STEP: Using g\_\{π,σ\} = log\_d G\_\{π,σ\} - log\_d G̃\_\{π,σ\} and k=rN, simplify to get Eq.(9): E\_U Tr(ρ\_B\textasciicircum{}2) = d\textasciicircum{}\{-(g\_\{s,e\}+1)N\} + d\textasciicircum{}\{-(g\_\{s,s\}+r)N\} and E\_U Tr(ρ\_\{RB\}\textasciicircum{}2) = d\textasciicircum{}\{-(g\_\{s,e\}+1+r)N\} + d\textasciicircum{}\{-g\_\{s,s\}N\}. Taking -log\_d of dominant terms: I\_c/N = min(g\_\{s,e\}+1, g\_\{s,s\}+r) - min(g\_\{s,e\}+1+r, g\_\{s,s\}). [Eq.(10), verified at line 196]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.2.4:} QED: The error-correction transition occurs when the two configurations become degenerate. For B-purity: g\_\{s,e\}+1 = g\_\{s,s\}+r, giving H\_2 = g\_\{s,s\}-g\_\{s,e\} = 1-r (Hashing bound). For unital noise, g\_\{s,e\}=0, so H\_2 = g\_\{s,s\} = 2-log\_d(1+(d\textasciicircum{}2-1)(1-γ)\textasciicircum{}2) for depolarizing. The transition at H\_2=1-r separates error-correcting phase (I\_c=k) from information-lost phase (I\_c<k).
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\end{enumerate}
+\item \textbf{Node 1.3:} SETUP I - FINITE DEPTH: For brickwall circuits, the Haar average maps to a 2D Ising model with permutation dofs. RG coarse-graining yields vertical domains with Thouless length L(t) = L\_0 e\textasciicircum{}\{t/τ\}. Bulk domain walls cost N/L(t)\textasciicircum{}2, boundary domain walls cost 1/L(t). Corrections scale as Ne\textasciicircum{}\{-2t/τ\} crossing to e\textasciicircum{}\{-t/τ\} when L(t) >> N. At criticality, corrections scale as Ne\textasciicircum{}\{-t/τ\}. [Ground truth: Eqs.(11-14), main.tex lines 212-234]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\begin{enumerate}
+\item \textbf{Node 1.3.1:} STEP: For a brickwall circuit of depth t, repeatedly applying the Weingarten formula Eq.(3) to each 2-site Haar gate yields a 2D classical Ising-like stat-mech model. Each spacetime site carries a permutation σ ∈ \{e,s\}. The Haar gates provide ferromagnetic interactions favoring aligned neighbors. The partition function is Z = Σ\_config exp(-H\_Ising).
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.3.2:} STEP: RG coarse-graining in the time direction maps the 2D model to a 1D chain of N spins. Only vertical domain configurations survive. The Thouless length L(t) = L\_0 e\textasciicircum{}\{t/τ\} with τ\textasciicircum{}\{-1\} = log((d\textasciicircum{}2+1)/(2d)) controls the domain wall cost. Each vertical DW in the bulk costs 1/L(t), and bulk domains contribute N/L(t)\textasciicircum{}2 (multiplicity × two DW costs). Boundary domains contribute 1/L(t) (single DW). [Ground truth: main.tex line 228, τ\textasciicircum{}\{-1\}=log((d\textasciicircum{}2+1)/(2d))]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.3.3:} STEP: In the protected phase (H\_2 < 1-r), the dominant config is all-s. Corrections come from: (i) bulk e-domains ∝ N·L(t)\textasciicircum{}\{-2\} = N·e\textasciicircum{}\{-2t/τ\}·L\_0\textasciicircum{}\{-2\}, and (ii) boundary e-domains ∝ L(t)\textasciicircum{}\{-1\} = e\textasciicircum{}\{-t/τ\}·L\_0\textasciicircum{}\{-1\}. When L(t)\textasciicircum{}2 << N (early time), bulk domains dominate: |δI\_c| ∝ Ne\textasciicircum{}\{-2t/τ\}. When L(t)\textasciicircum{}2 >> N (late time), boundary domains dominate: |δI\_c| ∝ e\textasciicircum{}\{-t/τ\}.
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.3.4:} QED: At criticality H\_2 = 1-r, the two bulk configs (all-e, all-s) are degenerate. A single domain wall can proliferate with weight ∝ N/L(t) = Ne\textasciicircum{}\{-t/τ\}/L\_0 (multiplicity N, single DW cost). This is confirmed by the data collapse in Fig.2(b): curves for different N collapse when plotting |I\_c\textasciicircum{}bw - I\_c\textasciicircum{}RM|/k vs t, showing Ne\textasciicircum{}\{-2t/τ\} at early times and Ne\textasciicircum{}\{-t/τ\} at criticality.
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\end{enumerate}
+\item \textbf{Node 1.4:} SETUP II - FIDELITY AND TRANSITION: With noise in the circuit, the average state fidelity F defines f\_2 = -(2/N)log\_d(F̃) where F̃ = F - d\textasciicircum{}\{-N\}. The purities become E\_U Tr(ρ\_B\textasciicircum{}2) = d\textasciicircum{}\{-(g\_\{s,e\}+1)N\} + d\textasciicircum{}\{-(f\_2+r(1+g\_\{s,e\}))N\} and the critical transition occurs at [f\_2]\_crit = (1-r)(1+g\_\{s,e\}). For weak noise γ \textasciitilde{} 1/t, corrections scale as O(1/t). [Ground truth: Eqs.(15-21), main.tex lines 243-288]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\begin{enumerate}
+\item \textbf{Node 1.4.1:} STEP: Define average state fidelity F = E\_U[Tr[Λ\_U(|0⟩⟨0|) U|0⟩⟨0|U†]]. Using the swap trick: F = ⟨⟨s|∏\_i (N\_i⊗1)E\_\{U\_i\}[(U\_i⊗U\_i*)\textasciicircum{}\{⊗2\}]|0,0⟩\textasciicircum{}\{⊗2\}. This is an Ising model with top BC = s (swap), bottom BC = |0,0⟩, and in-circuit noise on one replica only. [Eq.(15), main.tex line 246]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.4.2:} STEP: In large-t limit, F has two contributions: (i) all-e bulk → d\textasciicircum{}\{-N\} (cost of top s-vs-e interface), (ii) all-s bulk → F̃ (depends on accumulated circuit noise). Define f\_2 = -(2/N)log\_d(F̃) where F̃ = F - d\textasciicircum{}\{-N\}. This f\_2 measures effective errors per qudit. [Eq.(17), main.tex line 254]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.4.3:} STEP: For purities with noise IN the circuit: E\_U Tr(ρ\_B\textasciicircum{}2) has noise appearing in BOTH replicas (circled ⊕ signs). The bulk s-contribution is F̃\textasciicircum{}2 (square of fidelity's s-contribution). With boundary corrections from noise: E\_U Tr(ρ\_B\textasciicircum{}2) = d\textasciicircum{}\{-(g\_\{s,e\}+1)N\} + d\textasciicircum{}\{-(f\_2+r(1+g\_\{s,e\}))N\}. Similarly for ρ\_\{RB\}. [Eq.(20), main.tex line 275-276]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.4.4:} QED: The error-correction transition at [f\_2]\_crit = (1-r)(1+g\_\{s,e\}). Since f\_2 grows linearly with depth t (errors accumulate), maintaining fixed f\_2 requires γ \textasciitilde{} 1/t. This means the critical noise rate decreases as 1/t, and achieving perfect recovery requires t = ω(N). For weak unital noise: F ≈ e\textasciicircum{}\{-γNt\}, so γ ≤ log d(1-r)/(2t). Finite-depth corrections scale as O(1/t), confirmed by Fig.2(d). [Eq.(21), main.tex line 282]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\end{enumerate}
+\item \textbf{Node 1.5:} END MATTER: (a) Classical information χ(Λ) = Holevo info shows same Hashing bound and scaling. (b) Higher replicas α > 2: H\_α(γ) generalizes the Hashing bound; finite-depth corrections scale identically. (c) Amplitude damping: same correction scaling with K\_0 = diag(1,√(1-γ)), K\_1 = ((0,√γ),(0,0)). (d) Frame potential ΔF\textasciicircum{}(α) scales as Ne\textasciicircum{}\{-2t/τ\}, matching Setup I corrections. (e) For Pauli channels, H\_2 = -log\_2(Σp\_i\textasciicircum{}2) = 2-Rényi entropy. [Ground truth: Eqs.(22-32), main.tex lines 330-441]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\begin{enumerate}
+\item \textbf{Node 1.5.1:} HOLEVO INFO: χ(Λ) = S(Σ p\_i Λ(|ψ\_i⟩⟨ψ\_i|)) - Σ p\_i S(Λ(|ψ\_i⟩⟨ψ\_i|)). For annealed 2-Rényi with Haar circuits: χ = -log\_d E\_U Tr(Λ\_U(1/d\textasciicircum{}N)\textasciicircum{}2) + log\_d E\_U Tr(Λ\_U(|0⟩⟨0|)\textasciicircum{}2). First term equals Tr(ρ\_B\textasciicircum{}2). Same Hashing bound, same finite-depth scaling. χ/N = min(g\_\{s,e\}+1, g\_\{s,s\}+r) - min(g\_\{s,e\}+1, g\_\{s,s\}). [Eqs.(22-24), main.tex lines 331-345]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.5.2:} HIGHER REPLICAS: For depolarizing noise, dominant permutations in large-N limit are identity e and cycle s for any α. H\_α(γ) = (1-α)\textasciicircum{}\{-1\} log\_d[(1-(d\textasciicircum{}2-1)γ/d\textasciicircum{}2)\textasciicircum{}α + (d\textasciicircum{}2-1)(γ/d\textasciicircum{}2)\textasciicircum{}α]. Finite-depth corrections scale identically for all α. For Setup II: f\_α = -α/((α-1)N) log\_d F̃ = 1-r gives the transition. [Eqs.(25-27), main.tex lines 359-387]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.5.3:} AMPLITUDE DAMPING: N(ρ) = K\_0ρK\_0† + K\_1ρK\_1† with K\_0 = diag(1,√(1-γ)), K\_1 = ((0,√γ),(0,0)). Non-unital channel, so g\_\{s,e\} ≠ 0. However, the finite-depth correction scaling (Ne\textasciicircum{}\{-2t/τ\} for Setup I, 1/t for Setup II) is unchanged. H\_2(γ) = -log\_d[1-(2-γ)γ/2] + log\_d[1+γ\textasciicircum{}2]. [Eq.(28), Fig.5, main.tex lines 396-405]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.5.4:} FRAME POTENTIAL: ΔF\textasciicircum{}(α) = F\textasciicircum{}(α)/F\textasciicircum{}(α)\_Haar - 1 where F\textasciicircum{}(α) = E\_\{ψ,ψ'\}[|⟨ψ'|ψ⟩|\textasciicircum{}\{2α\}] and F\textasciicircum{}(α)\_Haar = D\textasciicircum{}\{-2α\}·α!. For noiseless brickwall circuits: ΔF\textasciicircum{}(α)/N ∝ e\textasciicircum{}\{-2t/τ\}. This matches Setup I corrections (domain walls in the design-time problem). [Eqs.(29-30), Fig.6, main.tex lines 416-427]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\item \textbf{Node 1.5.5:} HASHING BOUND DERIVATION: For Pauli channels N(ρ) = Σ\_i p\_i·σ\_i·ρ·σ\_i: H\_2 = 2 - log\_2 Σ\_\{i,j\} Tr[N(|i⟩⟨j|)N(|j⟩⟨i|)] = -log\_2(p\_0\textasciicircum{}2+p\_1\textasciicircum{}2+p\_2\textasciicircum{}2+p\_3\textasciicircum{}2) = 2-Rényi entropy of (p\_0,p\_1,p\_2,p\_3). For depolarizing: H\_2 = 2-log\_d(1+(d\textasciicircum{}2-1)(1-γ)\textasciicircum{}2). For amp. damping: H\_2 = -log\_d[1-(2-γ)γ/2]+log\_d[1+γ\textasciicircum{}2]. [Eqs.(31-32), main.tex lines 430-441]
+
+  Type: claim, Inference: assumption, Status: validated, Taint: clean
+
+\end{enumerate}
+\end{enumerate}
+
+\end{document}

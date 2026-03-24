@@ -1,0 +1,1 @@
+{"type":"def_added","timestamp":"2026-03-24T07:15:37.672014028Z","definition":{"id":"f1b84a555c4de482","name":"g_notation","definition":"g_{π,σ} = log_d G_{π,σ}(d) - log_d G̃_{π,σ}(d,N), measuring the noise-induced cost in the overlap matrix. [Ref: Eq.(8) of Sauliere2026, line 181]","created":"2026-03-24T07:15:37.670737561Z"}}
