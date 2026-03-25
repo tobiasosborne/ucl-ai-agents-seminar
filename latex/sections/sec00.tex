@@ -1,0 +1,119 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 0 — Why This Talk?
+% ──────────────────────────────────────────────────────────────
+
+\section{Why this talk?}\label{sec:why}
+
+\subsection{The landscape has changed}
+
+It would be hard to ignore the fact that, in the past couple of years, AI
+has entered our lives in one way or another---whether we want it or not.
+Some of you are engaging proactively with these tools; others perhaps
+reluctantly.  The purpose of this talk is not to evangelise.  It is to
+take a sober look, as research scientists, at one question: \emph{are AI
+tools relevant for us, and should we take them seriously?}
+
+I spent the last quarter of 2025 going deep on this question.  My
+summary, and what I want to share with you today, is that I think we had
+better be engaging with these tools.  How you engage is up to you.  I am
+just going to share my journey and the things I found important to be
+aware of as we enter this new AI era.  They are not going to go away.
+
+\subsection{GPT-5.2 derives new results in theoretical physics}
+
+On 13 February 2026, a collaboration including researchers at the IAS,
+Harvard, Cambridge, Vanderbilt, and OpenAI published a paper
+(arXiv:2602.12176) claiming that GPT-5.2 had derived new results in
+theoretical physics.  Should we worry that a language model is now doing
+the job of high-energy theorists?
+
+The authors are not unknown---they are very serious scientists who
+successfully carried out a research result assisted by AI\@.  I am no fan
+of OpenAI and their press-release culture; the result is not as amazing
+as the press release suggests.  But the paper alone demonstrates that
+some of the world's greatest researchers are already engaged heavily with
+AI tools, especially in the US, and they find them helpful.
+
+\subsection{Three moments}
+
+I see three key moments in the development of LLMs that matter for
+research scientists:
+
+\begin{enumerate}[(1)]
+  \item \textbf{November 2022: ChatGPT launches.}  The utility of
+    ChatGPT was dramatically more than the previous GPTs.  Everyone
+    experimented with it.
+
+  \item \textbf{Q1 2025: Claude Code, Cursor, Copilot.}  Something
+    deeply significant happened: coding agents were released.  Claude
+    Code launched in February 2025 and was a definite inflection point in
+    the development of AI tools.
+
+  \item \textbf{Q4 2025: Opus 4.5, GPT-5.2 cross a threshold.}  The
+    next-generation frontier models were significantly better.  Even if
+    they never improved beyond this point, we would already have entered
+    a new era of utility.  The reality is they are getting better still.
+\end{enumerate}
+
+\subsection{Quick survey}
+
+\begin{audience}[Audience poll]
+  Raise your hand if you have used:
+  \begin{itemize}
+    \item ChatGPT, Claude, or Gemini?
+    \item An LLM in your IDE to write code?
+    \item Coding agents?
+  \end{itemize}
+\end{audience}
+
+\subsection{A skeptic's confession}
+
+If you tried chat in Q1 2025, you probably dismissed LLMs for research.
+I did.  I was a skeptic.  I experimented for research, and I am still
+annoyed at the models of Q1 2025.
+
+But here is the central tension:
+
+\begin{keyresult}[The paradox]
+  LLMs are \textbf{incredibly capable} but \textbf{maximally
+  untrustworthy}.
+\end{keyresult}
+
+The evidence is damning:
+\begin{itemize}
+  \item They produce seductively correct equations that are nonsense.
+  \item Push back on a valid proof and the LLM finds a ``bug'' that is
+    not there.
+  \item They lie, cheat, steal, and flatter.
+\end{itemize}
+All terrible qualities for reproducible science.
+
+\subsection{Mental model}
+
+\begin{intuition}[A good mental model]
+  Think of an LLM as a \emph{slightly unhinged, hypermotivated MSc
+  student}.  Extremely productive, occasionally brilliant, but you
+  would never trust them unsupervised with anything that matters.
+\end{intuition}
+
+\subsection{The gap}
+
+The gap between ``I tried ChatGPT and it hallucinated'' and ``this is a
+powerful force multiplier'' is \emph{not} closed by better models.  It is
+closed by \textbf{technique} and \textbf{domain expertise}.
+
+What it takes:
+\begin{enumerate}[(1)]
+  \item Deliberate practice---a different workflow.
+  \item A subscription---free chat is not enough.
+  \item A coding agent---Claude Code, Cline, or similar.
+\end{enumerate}
+
+\subsection{Auto-formalisation and research acceleration}
+
+Auto-formalisation is real.  Writing new science, with correct tooling
+and expert guidance, is now possible.  The human provides the ground
+truth.
+
+LLMs can be understood.  Let me rebuild the stack from first principles.

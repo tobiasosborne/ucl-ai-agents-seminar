@@ -18,6 +18,19 @@ slides/test_fonts.pdf
 
 # Large binary files
 notes/*.m4a
+transcripts/*.mp3
+transcripts/*.webm
+transcripts/*.wav
+
+# LaTeX build artifacts (script)
+latex/*.aux
+latex/*.log
+latex/*.out
+latex/*.toc
+latex/*.bbl
+latex/*.blg
+latex/*.pdf
+latex/*.synctex*
 notes/*:Zone.Identifier
 
 # Redundant archives

@@ -1,0 +1,121 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 2 — The Illusion of Chat
+% ──────────────────────────────────────────────────────────────
+
+\section{The illusion of chat}\label{sec:chat-illusion}
+
+\subsection{A single API call}
+
+You interact with an LLM via a single API call.  One string in, one
+string out---that is the entire interaction.
+
+\begin{center}
+\begin{tikzpicture}
+  \node[sysbox fill, minimum width=3.5cm] (client) {\textbf{Client}};
+  \node[sysbox fill, minimum width=3.5cm, right=6cm of client] (api) {\textbf{API}};
+
+  \draw[sysarrow] ([yshift=0.4cm]client.east) -- ([yshift=0.4cm]api.west)
+    node[midway, above, font=\small] {prompt (string)};
+  \draw[sysarrow] ([yshift=-0.4cm]api.west) -- ([yshift=-0.4cm]client.east)
+    node[midway, below, font=\small] {completion (string)};
+\end{tikzpicture}
+\end{center}
+
+At the protocol level, this is an HTTP POST request carrying a JSON
+payload:
+
+\begin{lstlisting}
+POST /v1/messages
+{
+  "model": "claude-sonnet-4-6",
+  "messages": [
+    {"role": "user",
+     "content": "What is a quark?"}
+  ]
+}
+\end{lstlisting}
+
+That is it.  There is no session, no connection state, no memory.
+
+\subsection{How chat works}
+
+The multi-turn ``conversation'' you experience in ChatGPT or Claude is
+an illusion maintained entirely by the \emph{client}.  The client
+re-sends the \textbf{entire} conversation history with every turn:
+
+\begin{lstlisting}
+Turn 1:  [user_1]
+Turn 2:  [user_1, asst_1, user_2]
+Turn 3:  [user_1, asst_1, user_2, asst_2, user_3]
+\end{lstlisting}
+
+Each turn is an independent function call.  The model receives the
+accumulated transcript as input and produces its next response as
+output.  It has no server-side memory of previous turns.
+
+\begin{keyresult}[Chat is a client-side loop]
+  The LLM has no memory.  The client maintains the illusion.  Chat is a
+  loop; memory is a fiction.
+\end{keyresult}
+
+\subsection{The context window}
+
+Every model has a finite \textbf{context window}---the maximum number of
+tokens it can process in a single call.
+
+\begin{center}
+\begin{tikzpicture}
+  \fill[isabelline] (0,0) rectangle (11,1);
+  \fill[cgblue!20] (0,0) rectangle (1.8,1);
+  \node[font=\scriptsize, text=spacecadet, align=center] at (0.9,0.5)
+    {system\\prompt};
+  \fill[munsell!15] (1.8,0) rectangle (8.5,1);
+  \node[font=\scriptsize, align=center] at (5.15,0.5)
+    {conversation history};
+  \fill[munsell!30] (8.5,0) rectangle (11,1);
+  \node[font=\scriptsize, align=center] at (9.75,0.5)
+    {latest\\message};
+  \draw[spacecadet, line width=0.8pt] (0,0) rectangle (11,1);
+  \draw[decorate, decoration={brace, amplitude=6pt, mirror},
+        spacecadet, line width=0.8pt]
+    (0,-0.2) -- (11,-0.2)
+    node[midway, below=8pt, font=\small] {context window (tokens)};
+\end{tikzpicture}
+\end{center}
+
+Typical sizes: $8\text{k}$ tokens for free chat, $128\text{k}$ to
+$200\text{k}$ for frontier models, and up to $1\text{M}$ tokens for the
+largest available context windows.  When the conversation exceeds the
+window, something must be dropped.
+
+\begin{remark}
+  A full PhD thesis fits comfortably in a $1\text{M}$-token context
+  window.  A thesis chapter fits in roughly $20\%$ of a
+  $200\text{k}$-token window.
+\end{remark}
+
+\subsection{Context rot}
+
+As the context fills, older information gets buried.  The model's
+effective attention degrades.  Your constraints, instructions, and
+earlier results silently disappear.
+
+\begin{keyresult}[Why chat fails]
+  This is why chat interfaces silently ruin your results.  Context rot
+  is the primary failure mode of naive LLM usage.
+\end{keyresult}
+
+\subsection{The system prompt}
+
+A hidden preamble is prepended to every call.  It shapes behaviour,
+persona, and constraints.  But it is \emph{just more text}---there is
+nothing magical about it.  Anthropic's system prompt has been published;
+it is plain English\footnote{%
+  \url{https://docs.anthropic.com/en/release-notes/system-prompts}}.
+
+\subsection{Summary}
+
+Chat is a loop.  Memory is an illusion maintained by the client.  The
+context window is finite and when it fills, your results degrade.  Every
+interaction with an LLM is, at bottom, one string in, one string out.

@@ -1,0 +1,124 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 4 — Beyond the Loop
+% ──────────────────────────────────────────────────────────────
+
+\section{Beyond the loop}\label{sec:beyond}
+
+\subsection{The real workflow}
+
+You do not sit and watch the agent type.  You launch it, walk away, and
+check the result.  The simplest orchestrator is a bash loop:
+
+\begin{lstlisting}
+while true; do
+    claude --prompt "Fix the failing tests" \
+           --output result.json
+    if tests_pass result.json; then
+        break
+    fi
+    sleep 10
+done
+\end{lstlisting}
+
+Infrastructure at its most essential is a \code{while} loop in bash.
+
+\subsection{Multi-agent orchestration}
+
+The natural extension of the single-agent loop is \textbf{multi-agent
+orchestration}: multiple LLM instances, each with a specialised role,
+coordinated by a supervisor.
+
+\begin{center}
+\begin{tikzpicture}[node distance=1.8cm, every node/.style={align=center}]
+  \node[sysbox, fill=spacecadet, text=white,
+        minimum width=4.5cm, minimum height=0.9cm, font=\small]
+    (sup) {\textbf{Supervisor}\\{\scriptsize orchestrates the pipeline}};
+
+  \node[sysbox fill, below left=1.2cm and 0.8cm of sup,
+        minimum width=3cm, font=\small]
+    (a1) {\textbf{Agent 1}\\{\scriptsize writes code}};
+  \node[sysbox fill, below=1.2cm of sup,
+        minimum width=3cm, font=\small]
+    (a2) {\textbf{Agent 2}\\{\scriptsize reviews code}};
+  \node[sysbox fill, below right=1.2cm and 0.8cm of sup,
+        minimum width=3cm, font=\small]
+    (a3) {\textbf{Agent 3}\\{\scriptsize runs tests}};
+
+  \draw[sysarrow] (sup) -- (a1);
+  \draw[sysarrow] (sup) -- (a2);
+  \draw[sysarrow] (sup) -- (a3);
+
+  \draw[sysarrow, dashed, color=munsell] (a1.east) -- (a2.west);
+  \draw[sysarrow, dashed, color=munsell] (a2.east) -- (a3.west);
+\end{tikzpicture}
+\end{center}
+
+One agent writes code, another reviews it, a third runs tests.  The
+supervisor decides when to iterate and when to stop.  This is useful
+because agents are only moderately good at reasoning, but they are
+\emph{much better at finding mistakes}.  By having a critique agent
+review a proposal, you get a probabilistic oracle for correctness that
+dramatically improves the output quality.
+
+\begin{remark}
+  Many frontier labs are reportedly running exactly this kind of
+  multi-agent critique behind the scenes.  When the model appears to
+  ``reason,'' part of that capability comes from automated
+  self-critique during generation.
+\end{remark}
+
+\subsection{The natural endpoint of the stack}
+
+The progression is clean:
+\[
+  \text{single function} \;\to\; \text{agent} \;\to\; \text{multi-agent}.
+\]
+Each layer adds orchestration on top of the same primitive:
+$f : \Str \to \Str$.
+
+\subsection{Limitations}
+
+Every layer we built today has failure modes:
+
+\begin{itemize}
+  \item \textbf{Context rot}---older information degrades as the context
+    fills.
+  \item \textbf{Hallucination}---the model confidently produces false
+    statements.
+  \item \textbf{Tool misuse}---the agent may call tools incorrectly or
+    in harmful ways.
+  \item \textbf{Prompt fragility}---small changes in phrasing can
+    produce wildly different results.
+\end{itemize}
+
+\begin{keyresult}[The human in the loop is not optional]
+  The human in the loop is not optional.  LLMs have no fidelity.  They
+  lie, they cheat, they steal, they flatter.  You need to give them
+  fidelity as the expert, as the source of ground truth, through
+  feedback.  The faster you can get your feedback loops, the better.
+\end{keyresult}
+
+\subsection{The automation spectrum}
+
+Where do AI tools sit in the history of cognitive automation?
+
+\begin{center}
+\begin{tikzpicture}
+  \draw[spacecadet, line width=1.5pt] (-5,0) -- (5,0);
+  \node[above, font=\bfseries\small, text=spacecadet] at (-5,0.2) {Labour};
+  \node[above, font=\bfseries\small, text=spacecadet] at (5,0.2) {Cognition};
+  \fill[spacecadet] (-3.8,0) circle (3pt);
+  \node[below=6pt, font=\small] at (-3.8,0) {Calculator};
+  \fill[spacecadet] (-1.2,0) circle (3pt);
+  \node[below=6pt, font=\small] at (-1.2,0) {Computer algebra};
+  \fill[spacecadet] (1.2,0) circle (3pt);
+  \node[below=6pt, font=\small] at (1.2,0) {Automated proving};
+  \fill[cgblue] (3.8,0) circle (3pt);
+  \node[below=6pt, font=\small, text=spacecadet] at (3.8,0)
+    {\textbf{AI tools}};
+\end{tikzpicture}
+\end{center}
+
+Every previous step on this spectrum was met with resistance and then
+became indispensable.  AI tools are the next step.

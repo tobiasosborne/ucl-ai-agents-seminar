@@ -1,0 +1,184 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{talk-style}[2026/03/25 LLM seminar talk script style]
+
+% ── Options ───────────────────────────────────────────────────
+% Pass [cmfonts] to use standard Computer Modern (no mtpro2/mathspec)
+\newif\iftalk@cmfonts
+\talk@cmfontstrue          % default to CM for portability
+\DeclareOption{cmfonts}{\talk@cmfontstrue}
+\DeclareOption{fullfonts}{\talk@cmfontsfalse}
+\ProcessOptions\relax
+
+% ── Geometry ──────────────────────────────────────────────────
+\RequirePackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+
+% ── Colour palette ──────────────────────────────────────────
+\RequirePackage{color}
+\RequirePackage[table]{xcolor}
+
+\definecolor{spacecadet}{HTML}{0D284C}
+\definecolor{munsell}{HTML}{008FA8}
+\definecolor{banana}{HTML}{FFD932}
+\definecolor{cgblue}{HTML}{007CA5}
+\definecolor{isabelline}{HTML}{EAEDEA}
+\definecolor{light-gray}{gray}{0.85}
+
+% ── Graphics and figures ──────────────────────────────────────
+\RequirePackage{graphicx}
+\RequirePackage{wrapfig}
+
+% ── Boxes (loaded early to avoid mathspec conflict) ──────────
+\RequirePackage[many]{tcolorbox}
+\RequirePackage[textsize=tiny]{todonotes}
+
+% ── Math fonts ────────────────────────────────────────────────
+\iftalk@cmfonts
+  \RequirePackage{amsmath}
+  \RequirePackage{amsthm}
+  \RequirePackage{mathtools}
+  \RequirePackage{amssymb}
+  \RequirePackage{mathrsfs}
+\else
+  \RequirePackage{amsmath}
+  \RequirePackage{amsthm}
+  \RequirePackage{mathtools}
+  \RequirePackage[mtphrb,mtpcal,mtpfrak]{mtpro2}
+  \RequirePackage{mathspec}
+  \RequirePackage{mathrsfs}
+  \setmathrm{Times LT Std}
+  \setmainfont[
+    BoldFont      = Times LT Std Bold,
+    ItalicFont    = Times LT Std Italic,
+    BoldItalicFont= Times LT Std Bold Italic,
+    Ligatures     = TeX
+  ]{Times LT Std}
+  \setsansfont[
+    BoldFont   = Whitney-Semibold.otf,
+    ItalicFont = Whitney-MediumItalic.otf,
+    Ligatures  = TeX
+  ]{Whitney-Medium.otf}
+  \setboldmathrm[BoldFont={Times LT Std Bold}]{Times LT Std Bold}
+\fi
+
+% ── Code listings ────────────────────────────────────────────
+\RequirePackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{isabelline},
+  frame=none,
+  breaklines=true,
+  columns=flexible,
+  keepspaces=true,
+  xleftmargin=1em,
+  xrightmargin=1em,
+  aboveskip=0.8em,
+  belowskip=0.8em,
+}
+
+% ── TikZ & pgfplots ──────────────────────────────────────────
+\RequirePackage{tikz}
+\usetikzlibrary{calc,arrows.meta,decorations.markings,patterns,
+  positioning,shapes.geometric,backgrounds,matrix,fit}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% ── Lists ─────────────────────────────────────────────────────
+\RequirePackage{enumerate}
+\RequirePackage{booktabs}
+
+% ── Hyperlinks ────────────────────────────────────────────────
+\RequirePackage[colorlinks=true,linkcolor=cgblue,citecolor=munsell,urlcolor=cgblue]{hyperref}
+
+% ── Section formatting ────────────────────────────────────────
+\makeatletter
+\def\@secnumfont{\bfseries}
+\def\section{\@startsection{section}{1}%
+  \z@{.7\linespacing\@plus\linespacing}{.5\linespacing}%
+  {\color{cgblue}\normalfont\sffamily\bfseries\large\centering}}
+\def\subsection{\@startsection{subsection}{2}%
+  \z@{.5\linespacing\@plus.7\linespacing}{-.5em}%
+  {\color{cgblue}\normalfont\sffamily\bfseries}}
+\def\subsubsection{\@startsection{subsubsection}{3}%
+  \z@{.5\linespacing\@plus.7\linespacing}{-.5em}%
+  {\color{cgblue}\normalfont\sffamily\itshape}}
+\makeatother
+
+% ── Theorem environments ──────────────────────────────────────
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem*{corollary}{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}{\color{cgblue}Definition}[section]
+\newtheorem{example}{\color{cgblue}Example}[section]
+\newtheorem{exercise}{\color{cgblue}Exercise}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{note}{Note}
+\newtheorem*{notation}{Notation}
+
+% ── Highlighted boxes ─────────────────────────────────────────
+% Key equation box (banana highlight)
+\def\eqbox#1{\tcboxmath[colback=banana,arc=0cm,frame hidden,enhanced]{#1}}
+
+% Standard grey box
+\newtcolorbox{greybox}[1][]{%
+  enhanced, breakable,
+  colback=isabelline, frame hidden,
+  arc=3pt,
+  left=8pt, right=8pt, top=8pt, bottom=6pt,
+  detach title, before upper={\textbf{\textsf{\color{spacecadet}#1}}\par\smallskip}}
+
+% Highlight box (yellow background, blue border)
+\newtcolorbox{highlightbox}[1][]{%
+  enhanced, breakable,
+  colback=banana!15, colframe=cgblue,
+  arc=3pt, boxrule=0.8pt,
+  left=8pt, right=8pt, top=8pt, bottom=6pt,
+  detach title, before upper={\textbf{\textsf{\color{cgblue}#1}}\par\smallskip}}
+
+% Semantic wrappers
+\newtcolorbox{keyresult}[1][]{%
+  enhanced, breakable,
+  colback=banana!15, colframe=cgblue,
+  arc=3pt, boxrule=0.8pt,
+  left=8pt, right=8pt, top=8pt, bottom=6pt,
+  detach title, before upper={\textbf{\textsf{\color{cgblue}#1}}\par\smallskip}}
+
+\newtcolorbox{intuition}[1][Physical intuition]{%
+  enhanced, breakable,
+  colback=isabelline, frame hidden,
+  arc=3pt,
+  left=8pt, right=8pt, top=8pt, bottom=6pt,
+  detach title, before upper={\textbf{\textsf{\color{spacecadet}#1}}\par\smallskip}}
+
+\newtcolorbox{historical}[1][Historical note]{%
+  enhanced, breakable,
+  colback=isabelline, frame hidden,
+  arc=3pt,
+  left=8pt, right=8pt, top=8pt, bottom=6pt,
+  detach title, before upper={\textbf{\textsf{\color{spacecadet}#1}}\par\smallskip}}
+
+\newtcolorbox{algorithmbox}[1][Algorithm]{%
+  enhanced, breakable,
+  colback=isabelline, frame hidden,
+  arc=3pt,
+  left=8pt, right=8pt, top=8pt, bottom=6pt,
+  detach title, before upper={\textbf{\textsf{\color{spacecadet}#1}}\par\smallskip}}
+
+% Audience interaction box
+\newtcolorbox{audience}[1][Audience interaction]{%
+  enhanced, breakable,
+  colback=cgblue!8, colframe=cgblue!40,
+  arc=3pt, boxrule=0.5pt,
+  left=8pt, right=8pt, top=8pt, bottom=6pt,
+  detach title, before upper={\textbf{\textsf{\color{cgblue}#1}}\par\smallskip}}
+
+% Figure placeholder
+\def\figbox{\begin{center}\tcboxmath[colback=isabelline,frame hidden,enhanced,sharp corners]{\parbox[c][3cm][c]{10cm}{\ }}\end{center}}
+
+\endinput

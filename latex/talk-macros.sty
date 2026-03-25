@@ -1,0 +1,46 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{talk-macros}[2026/03/25 LLM seminar macro library]
+
+% ══════════════════════════════════════════════════════════════
+%  LLM & AGENT NOTATION
+% ══════════════════════════════════════════════════════════════
+
+\newcommand{\llm}{\texttt{LLM}}
+\newcommand{\fn}{\texttt{f}}
+\newcommand{\Str}{\mathrm{String}}
+\newcommand{\Tok}{\mathrm{Token}}
+\newcommand{\Prob}{P}
+\newcommand{\given}{\mid}
+
+% ══════════════════════════════════════════════════════════════
+%  STANDARD MATH
+% ══════════════════════════════════════════════════════════════
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\DeclareMathOperator{\softmax}{softmax}
+
+% ══════════════════════════════════════════════════════════════
+%  CODE FORMATTING
+% ══════════════════════════════════════════════════════════════
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+% ══════════════════════════════════════════════════════════════
+%  TIKZ STYLES
+% ══════════════════════════════════════════════════════════════
+
+\tikzset{
+  % Box for system components
+  sysbox/.style={rectangle, draw=cgblue, fill=cgblue!10,
+    minimum height=2em, minimum width=3em,
+    font=\small, inner sep=6pt, rounded corners=2pt},
+  % Filled box
+  sysbox fill/.style={sysbox, fill=isabelline},
+  % Arrow style
+  sysarrow/.style={-{Stealth[length=5pt,width=4pt]}, thick, cgblue},
+  % Label style
+  syslabel/.style={font=\small, midway, above},
+}
+
+\endinput

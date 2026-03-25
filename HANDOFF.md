@@ -107,6 +107,32 @@ Applied from annotated slides PDF + two voice memo transcripts:
 
 A comprehensive style guide lives at `~/Projects/presentations/STYLE_GUIDE.md`.
 
+### LaTeX talk script
+
+A full written script of the talk, typeset as lecture notes using the
+same `amsart` + custom style template as `~/Projects/quantum-noise-and-decoherence/`.
+
+- **Engine**: pdfLaTeX (TeX Live 2023), Computer Modern fonts (portable)
+- **Master doc**: `latex/LLMSeminar.tex`
+- **Style**: `latex/talk-style.sty` (adapted from `qnd-style.sty` — same color palette, boxes, theorem environments, plus `audience` box and `listings` for code)
+- **Macros**: `latex/talk-macros.sty` (LLM-specific: `\Str`, `\Tok`, `\Prob`, TikZ component styles)
+- **Bibliography**: `latex/references.bib`
+- **Build**: `cd latex && pdflatex LLMSeminar && bibtex LLMSeminar && pdflatex LLMSeminar && pdflatex LLMSeminar`
+
+| Section file | Title | Content |
+|---|---|---|
+| `sections/sec00.tex` | Why this talk? | GPT-5.2, timeline, survey, skeptic's confession, the paradox, mental model, the gap, requirements |
+| `sections/sec01.tex` | What is an LLM? | f: String→String, stateless, nondeterministic, temperature/Boltzmann, tokens, inference, summary |
+| `sections/sec02.tex` | The illusion of chat | API calls, how chat works, context window, context rot, system prompt |
+| `sections/sec03.tex` | From function to agent | Agent loop, tools, key insight, feedback, live demo narrative |
+| `sections/sec04.tex` | Beyond the loop | Bash orchestration, multi-agent, limitations, automation spectrum |
+| `sections/sec05.tex` | Applications and discussion | Examples, FeO computation, Q&A highlights (lit reviews, security, reasoning, correctness, formalisation) |
+
+### Transcript
+
+YouTube auto-captions downloaded and cleaned: `transcripts/talk_clean.txt`
+(90 paragraphs, 87 minutes). Raw VTT at `transcripts/talk_audio.en.vtt`.
+
 ## What to do next
 
 - Provide auto-formalization screenshot and transformer architecture image

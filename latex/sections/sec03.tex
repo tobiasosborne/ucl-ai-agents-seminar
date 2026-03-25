@@ -1,0 +1,151 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 3 — From Function to Agent
+% ──────────────────────────────────────────────────────────────
+
+\section{From function to agent}\label{sec:agents}
+
+\subsection{Two ways in}
+
+There are two ways to interact with an LLM\@.  The first is through a
+web interface---ChatGPT, Claude.ai---where the chat UI hides the
+underlying API\@.  The second is through a terminal: cURL, Python, or a
+coding agent like Claude Code.  Both use the same API underneath.
+
+The web interface is convenient for casual queries, but it hides the
+mechanism.  To \emph{use} an LLM effectively for research, you need to
+understand and control that mechanism.
+
+\subsection{Coding agents}
+
+The critical development of 2025 was the emergence of \textbf{coding
+agents}: programs that empower LLMs with autonomous tool use.  Claude
+Code, Cursor, and Cline are the leading examples.
+
+The idea is simple.  Instead of a human reading the LLM's output and
+manually executing suggestions, a \emph{scaffolding program} does it
+automatically in a loop.
+
+\subsection{The agent loop}
+
+\begin{keyresult}[The agent loop]
+  The complete architecture of every coding agent is:
+  \begin{lstlisting}
+while not done:
+    response = llm(system_prompt + history)
+    tool_calls = parse(response)
+    results = execute(tool_calls)
+    history += [response, results]
+  \end{lstlisting}
+  That is it.  Claude Code, Cursor, Copilot---they all implement this
+  loop with more tools and better prompts, but the architecture is
+  identical.
+\end{keyresult}
+
+Let us unpack each step:
+
+\begin{enumerate}[(1)]
+  \item The scaffolding sends the system prompt and accumulated history
+    to the LLM as a single function call.
+  \item The LLM responds with text that may include structured
+    \emph{tool-call requests}: ``please read file \code{X}'' or ``please
+    execute command~\code{Y}.''
+  \item The scaffolding parses these requests and executes them locally.
+  \item The results are appended to the history, and the loop continues.
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[node distance=1.4cm, every node/.style={align=center}]
+  \node[sysbox, fill=spacecadet, text=white, minimum width=4cm,
+        minimum height=0.9cm, font=\small]
+    (sys) {System prompt + History};
+
+  \node[sysbox fill, below=1cm of sys, minimum width=4cm,
+        minimum height=0.9cm, font=\small]
+    (llm) {\textbf{LLM}\; {\scriptsize $f(s) \to s$}};
+
+  \node[sysbox, right=2.5cm of llm, minimum height=0.9cm, font=\small]
+    (parse) {Parse tool calls};
+
+  \node[sysbox, below=1cm of parse, minimum height=0.9cm, font=\small]
+    (exec) {Execute tools};
+
+  \draw[sysarrow] (sys) -- (llm);
+  \draw[sysarrow] (llm) -- (parse)
+    node[midway, above, font=\scriptsize] {response};
+  \draw[sysarrow] (parse) -- (exec)
+    node[midway, right, font=\scriptsize] {call};
+  \draw[sysarrow] (exec.south) -- ++(0,-0.5) -| ([xshift=-0.4cm]llm.south)
+    node[near start, below, font=\scriptsize] {results};
+  \draw[sysarrow, dashed, color=munsell]
+    ([xshift=0.4cm]llm.north) -- ([xshift=0.4cm]sys.south)
+    node[midway, right, font=\scriptsize, text=munsell] {append};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Tools}
+
+You describe tools in the system prompt.  The LLM generates structured
+text requesting a tool call.  Your scaffolding parses and executes it.
+
+\begin{keyresult}[The key insight]
+  The LLM never executes anything directly.  Your scaffolding acts on
+  its text.  The LLM is an oracle that emits instructions; the
+  scaffolding is the hands.
+\end{keyresult}
+
+Even two primitive tools suffice to do useful work:
+
+\begin{lstlisting}
+read_file(path)           -> contents
+write_file(path, content) -> ok
+\end{lstlisting}
+
+With just these two tools, an agent can read existing code, understand
+it, write new code, and iterate.  Production agents like Claude Code
+have many more tools---bash execution, web search, file
+manipulation---but the principle is the same.
+
+\begin{greybox}[Further reading]
+  Thorsten Ball, \emph{How to Build an Agent}---ampcode.com.  A clear,
+  practical guide to the agent loop.
+\end{greybox}
+
+\subsection{The feedback loop}
+
+\begin{audience}[Audience question]
+  \emph{Is writing a good initial prompt the most important thing?}
+
+  No.  Prompt engineering is dead.  The key to improving an LLM's output
+  is \textbf{feedback}.  Tighten the feedback loop.  Tell it what is
+  wrong so it can correct itself and try again.  The magic is not in the
+  prompt; it is in the iteration.
+
+  How does it correct itself?  It re-inputs the entire history---including
+  your correction---back into the function.
+\end{audience}
+
+\subsection{Live demonstration}
+
+At this point in the talk, we launched Claude Code live and asked an
+audience member for a research problem.  The challenge: compute the
+potential energy curves for approximately 25 electronic states of FeO
+(iron oxide).  Claude Code proceeded to:
+
+\begin{enumerate}[(1)]
+  \item Survey the system for available quantum-chemistry software.
+  \item Find none installed.
+  \item Propose to install PySCF (a Python-based quantum-chemistry
+    package).
+  \item Set up a virtual environment.
+  \item Write a smoke test for a small active space.
+  \item Design a production computation script using SA-CASSCF(12,12) +
+    SC-NEVPT2, with X2C relativistic corrections, a cc-pVTZ-DK basis
+    set, 35 bond lengths, and ${\sim}25$ electronic states.
+  \item Execute the computation in the background while the talk
+    continued.
+\end{enumerate}
+
+The entire process was autonomous.  The only human input was the initial
+problem statement and a ``yes'' when Claude asked permission to install
+software.

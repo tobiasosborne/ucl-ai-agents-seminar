@@ -1,0 +1,141 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 1 — What is an LLM?
+% ──────────────────────────────────────────────────────────────
+
+\section{What is an LLM?}\label{sec:what-is-llm}
+
+\subsection{From outside, looking in}
+
+Let us set aside everything you have heard about neural networks,
+training data, and alignment.  From outside the API boundary, the
+observable behaviour of a large language model is captured by a single
+type signature:
+
+\begin{definition}[LLM as a function]\label{def:llm-function}
+  A large language model is a function
+  \[
+    f : \Str \to \Str.
+  \]
+  It accepts a string and returns a string.  No hidden state is carried
+  between calls.
+\end{definition}
+
+That is the complete external specification.  Everything else---the
+transformer architecture, the training procedure, the reinforcement
+learning from human feedback---is implementation detail.  Important
+implementation detail, but detail nonetheless.
+
+\subsection{Stateless}
+
+Each call to the LLM is independent.  There is no server-side memory
+that persists between invocations.  Call~1 and Call~2 share nothing:
+
+\begin{center}
+\begin{tikzpicture}
+  \node[sysbox fill] (c1) {Call 1};
+  \draw[sysarrow] ([xshift=-2cm]c1.west) -- (c1.west)
+    node[syslabel] {input};
+  \draw[sysarrow] (c1.east) -- ([xshift=2cm]c1.east)
+    node[syslabel] {output};
+
+  \node[sysbox fill, right=4cm of c1] (c2) {Call 2};
+  \draw[sysarrow] ([xshift=-2cm]c2.west) -- (c2.west)
+    node[syslabel] {input};
+  \draw[sysarrow] (c2.east) -- ([xshift=2cm]c2.east)
+    node[syslabel] {output};
+
+  \draw[dashed, color=spacecadet!25, line width=1pt]
+    ([xshift=1.5cm]c1.east) -- ([xshift=-1.5cm]c2.west)
+    node[midway, font=\huge, text=red!70!black] {$\times$};
+\end{tikzpicture}
+\end{center}
+
+This is a crucial point.  When you close a chat window and open a new
+one, the model has genuinely forgotten everything.  It is not pretending.
+It is stateless.
+
+\subsection{Nondeterministic}
+
+The same input can produce different outputs.  This is not a bug---it is
+by design.  The model \emph{samples} from a probability distribution
+over possible next tokens:
+\[
+  f \;\text{samples from}\; \Prob(\text{next token} \given \text{context}).
+\]
+
+Feed the prompt \code{"What is spin?"} three times and you may receive
+three different explanations.  The model is a nondeterministic function.
+
+\subsection{Temperature}\label{subsec:temperature}
+
+The probability that the model selects token~$i$ is given by the
+softmax with a temperature parameter~$T$:
+
+\begin{keyresult}[Token sampling distribution]
+  \[
+    \Prob(\text{token}_i) \;=\; \frac{\exp(\ell_i / T)}
+      {\displaystyle\sum_j \exp(\ell_j / T)},
+  \]
+  where $\ell_i$ is the logit (raw score) for token~$i$.
+\end{keyresult}
+
+\begin{intuition}[Boltzmann analogy]
+  This is the Boltzmann distribution.  It is exactly the formula for the
+  probability of a microstate with energy~$-\ell_i$ at temperature~$T$
+  in statistical mechanics.  The two limits are:
+  \begin{itemize}
+    \item $T \to 0$: deterministic---the model always picks the
+      highest-scoring token (ground state).
+    \item $T \to \infty$: uniform---every token is equally likely
+      (infinite temperature).
+  \end{itemize}
+  The temperature knob is a dial between ``play it safe'' and
+  ``be creative.''
+\end{intuition}
+
+\subsection{Tokens}
+
+The atomic unit is not a character and not a word, but a \emph{token}:
+a subword chunk drawn from a fixed vocabulary~$V$ of approximately
+$100{,}000$ entries.
+
+\begin{example}[Tokenisation]
+  \begin{lstlisting}
+'theoretical physics'  ->  ['theor', 'etical', ' physics']
+  \end{lstlisting}
+\end{example}
+
+More precisely, the function signature is
+$f : \Tok^* \to \Tok^*$,
+where $\Tok^*$ denotes a finite sequence of tokens.
+
+\subsection{Inference}
+
+An LLM call is a single forward pass through a frozen neural
+network.  There is no learning and no state mutation during
+inference.  The weights are fixed at deployment time; the model does not
+update itself when you talk to it.
+
+The neural network inside is a \textbf{Transformer}
+\cite{vaswani2017attention}.
+
+\begin{greybox}[Further reading]
+  \begin{itemize}
+    \item Vaswani et al., \emph{Attention Is All You Need} (2017).
+    \item Andrej Karpathy, \emph{nanoGPT}---build a GPT from scratch.
+    \item Jay Alammar, \emph{The Illustrated Transformer}.
+    \item PicoGPT.jl---a minimal GPT implementation in Julia.
+  \end{itemize}
+\end{greybox}
+
+\subsection{Summary}
+
+\begin{keyresult}[Definition of an LLM]
+  An LLM is a \textbf{stateless, nondeterministic function}
+  \[
+    f : \Str \to \Str
+  \]
+  that samples from $\Prob(\text{next\_token} \given \text{context})$
+  via a single forward pass through a frozen neural network.
+\end{keyresult}

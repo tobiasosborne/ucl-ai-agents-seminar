@@ -1,0 +1,165 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 5 — Applications and Q\&A Highlights
+% ──────────────────────────────────────────────────────────────
+
+\section{Applications and discussion}\label{sec:applications}
+
+\subsection{What you can do with infinite cognition}
+
+If you have effectively infinite cognition at your disposal, what does
+that enable?  Here are several examples demonstrated during the talk,
+all produced autonomously by Claude Code:
+
+\begin{enumerate}[(1)]
+  \item \textbf{Meeting transcription and enrichment.}  A Zoom recording
+    of a blackboard discussion was processed end-to-end: Claude
+    transcribed the audio via Whisper, extracted screenshots of the
+    board from the video, recognised barely readable equations, wrote
+    \LaTeX\ of everything it saw, and enriched the notes with the
+    discussion context.  Fully automated, not a word typed by hand.
+
+  \item \textbf{Custom presentation software.}  A colleague wanted
+    presentation software that used Typst.  It did not exist, so he
+    asked Claude to write it.  In a weekend he had working software.
+
+  \item \textbf{Auto-formalisation.}  Mathematical results from research
+    papers formalised into Lean~4 proofs, checked by the compiler.
+
+  \item \textbf{Physically correct ray tracing.}  A ray tracer that
+    correctly represents the spontaneous emission of an excited hydrogen
+    atom in a magnetic field, using the full NLA equations and correct
+    probabilities.
+
+  \item \textbf{Analogue circuit design.}  Op-amp filter circuits
+    designed by Claude, built on a breadboard, and tested---they worked.
+
+  \item \textbf{Lecture notes from video.}  An entire 13-lecture course
+    auto-transcribed and typeset as a 43-page PDF with every equation
+    checked.
+\end{enumerate}
+
+\subsection{The FeO computation}
+
+Returning to the live demo: by the end of the talk, Claude Code had
+autonomously set up PySCF, written a production-quality computation
+script, and begun calculating the potential energy curves of FeO\@.  The
+workflow it produced:
+\begin{itemize}
+  \item SA-CASSCF(12,12) active space for 35 bond lengths.
+  \item SC-NEVPT2 correlation corrections with CASCI intermediates (a
+    subtlety it diagnosed itself when NEVPT2 on top of SA-CASSCF failed).
+  \item X2C relativistic Hamiltonian with cc-pVTZ-DK basis set.
+  \item Approximately 25 electronic states across multiple spin
+    multiplicities.
+\end{itemize}
+
+The audience member who posed the challenge had left by the time results
+appeared, but the computation was running and producing physically
+reasonable output.  This illustrates both the power and the limitation:
+the agent can \emph{execute}, but only a domain expert can
+\emph{evaluate}.
+
+\subsection{Highlights from the Q\&A}
+
+The discussion after the talk covered several themes that are worth
+recording.
+
+\subsubsection{Literature reviews}
+
+\begin{audience}[Q: Can agents do literature reviews?]
+  Definitely, but they hallucinate references.  The guard rail: force the
+  agent to \emph{download} every paper it cites to a local folder.
+  String-match the filenames against the citations.  If the agent claims
+  a paper exists that it has not downloaded, reject the citation.  This
+  converts a hallucination-prone task into one with a verifiable paper
+  trail.
+
+  For training: take a paper you are interested in, do a reverse
+  citation search, read through the results (bucket them---some are
+  garbage, some are not), and iterate.  Once you have done this two or
+  three times, it becomes an algorithm.  Then automate it.
+\end{audience}
+
+\subsubsection{Security and data privacy}
+
+\begin{audience}[Q: Does the data I upload get remembered and used?]
+  You have to assume it does.  Anthropic's business model depends on
+  companies trusting that their IP is not leaked, and a single provable
+  instance of data leaking would be an existential threat to their
+  value as a company.  But ultimately this is a trust decision, the same
+  kind you already make when you carry a phone in your pocket.
+
+  Practical advice: run agents on a machine you do not care about.  A
+  Mac Mini with nothing personal on it is the standard practice.  If it
+  has arbitrary code execution capabilities, it can do arbitrary code
+  execution.  There is no technical mitigation for that.
+\end{audience}
+
+\subsubsection{Reasoning capabilities}
+
+\begin{audience}[Q: How is mathematical reasoning compatible with the
+  model of a nondeterministic neural network?]
+  Two factors.  First, scaling: a bigger neural network with in-context
+  learning gets you $90\%$ of the way to reasoning-like capabilities.
+  Second, behind the scenes, frontier labs run multi-agent critique:
+  a proposer generates an argument, a critic finds flaws, and the
+  result is iterated.  LLMs are only moderately good at reasoning, but
+  they are much better at finding mistakes.  Combining the two gives an
+  effective probabilistic oracle for correctness.
+\end{audience}
+
+\subsubsection{Correctness and verification}
+
+\begin{audience}[Q: How do I know the agent understands what I am
+  telling it?]
+  There are several levels of correctness:
+  \begin{enumerate}[(1)]
+    \item \textbf{Formal proof}: every line is checked, the derivations
+      are valid.  This can be done programmatically (e.g.\ Lean~4).
+    \item \textbf{Compilation}: the code compiles, so it is at least
+      syntactically correct.
+    \item \textbf{Tests}: test-driven development is the primary
+      mechanism.  Write the tests first (or have the agent write them),
+      inspect the tests yourself as the source of truth, and then let
+      the agent run them after every change.
+    \item \textbf{Consensus}: peer review, replication, expert
+      evaluation.
+  \end{enumerate}
+  The agent responds best when it has tests.  The magic is not in skills
+  or special configuration---just tell it in natural language what you
+  want and insist on tests.
+\end{audience}
+
+\subsubsection{Publication and formalisation}
+
+\begin{audience}[Q: Should papers include formalisations?]
+  We have entered a reproducibility crisis of epic proportions.  People
+  can now one-shot a bad paper on the paid model of ChatGPT\@.  The
+  peer-review system cannot cope with the load.
+
+  If you can auto-formalise relatively painlessly, why not make it a
+  requirement of publication?  The referee no longer needs to verify
+  mathematical correctness---just semantic correctness and scientific
+  interest.  For anything that uses linear algebra or functional
+  analysis, there is no reason not to formalise it now.
+\end{audience}
+
+\subsection{Summary}
+
+The entire talk built one idea from first principles:
+
+\begin{keyresult}[The stack]
+  \begin{center}
+  \begin{tabular}{r@{\;$\to$\;}l}
+    String in, string out & the LLM primitive \\
+    Re-send history each turn & the illusion of chat \\
+    Parse tool calls in a loop & the coding agent \\
+    Multiple agents, one supervisor & multi-agent orchestration \\
+    Human domain expertise & the source of ground truth \\
+  \end{tabular}
+  \end{center}
+  Every component is simple and composable.  The gap between ``it
+  hallucinated'' and ``it is a force multiplier'' is closed by
+  technique and domain expertise, not by better models.
+\end{keyresult}
