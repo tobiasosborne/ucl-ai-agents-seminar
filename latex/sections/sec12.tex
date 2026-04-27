@@ -1,0 +1,216 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 12 — Appendix: Annotated reference coding agent
+% ──────────────────────────────────────────────────────────────
+
+\appendix
+\section{Annotated reference coding agent}\label{sec:appendix-agent}
+
+For completeness, we record here a pedagogically transparent
+implementation of the loop discussed in
+\S\ref{sec:agent-loop}.  The code is intended to be read,
+not optimised; production agents add many features (stream
+responses, retry on tool failure, manage context with
+summarisation, sandbox execution, log to disk) but none
+that change the core architecture.
+
+This implementation uses the Anthropic Python SDK and the
+\texttt{claude-sonnet-4-6} model; the structure is identical
+for OpenAI's or Google's APIs with minor adjustments to the
+schema names.
+
+\subsection{Tools schema}
+
+\begin{lstlisting}
+TOOLS = [
+  {
+    "name": "read_file",
+    "description": "Read a UTF-8 text file and return its contents.",
+    "input_schema": {
+      "type": "object",
+      "properties": { "path": { "type": "string" } },
+      "required": ["path"],
+    },
+  },
+  {
+    "name": "write_file",
+    "description": "Overwrite a UTF-8 text file with the given content.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "path":    { "type": "string" },
+        "content": { "type": "string" },
+      },
+      "required": ["path", "content"],
+    },
+  },
+]
+\end{lstlisting}
+
+Each tool is described by a name (the LLM will reference it
+by exactly this string), a one-sentence \texttt{description}
+(the model uses this to decide \emph{when} to call the tool),
+and a JSON-Schema \texttt{input\_schema} fixing the shape
+of the arguments.
+
+\subsection{Tool dispatcher}
+
+\begin{lstlisting}
+def run_tool(name, args):
+    if name == "read_file":
+        with open(args["path"], "r") as f:
+            return f.read()
+    if name == "write_file":
+        os.makedirs(os.path.dirname(args["path"]) or ".", exist_ok=True)
+        with open(args["path"], "w") as f:
+            f.write(args["content"])
+        return f"wrote {len(args['content'])} bytes to {args['path']}"
+    raise ValueError(f"unknown tool: {name}")
+\end{lstlisting}
+
+The dispatcher is plain Python.  No AI involvement; it does
+exactly what the agent asked, no more.
+
+\subsection{System prompt}
+
+\begin{lstlisting}
+SYSTEM = """
+You are a coding agent with read- and write-file tools.
+Your own source code lives at agent.py.  You may read and
+write it to improve yourself.  Changes take effect on next
+invocation.  Preserve the loop and tool plumbing in this
+script.
+"""
+\end{lstlisting}
+
+The system prompt establishes the agent's identity and the
+boundaries within which it should self-modify.  It is short
+on purpose.  Long system prompts in pedagogical examples
+encourage the wrong instinct---``promptcraft as central
+art''---when in fact the loop is what does the work.
+
+\subsection{The loop}
+
+\begin{lstlisting}
+def run_agent(user_input, max_turns=25):
+    messages = [{"role": "user", "content": user_input}]
+
+    for _ in range(max_turns):
+        response = client.messages.create(
+            model       = "claude-sonnet-4-6",
+            max_tokens  = 4096,
+            system      = SYSTEM,
+            tools       = TOOLS,
+            messages    = messages,
+        )
+
+        # 1. Append the assistant's reply to history.
+        messages.append({"role": "assistant", "content": response.content})
+
+        # 2. Stop if the model did not request any tool calls.
+        if response.stop_reason != "tool_use":
+            break
+
+        # 3. Otherwise, run each requested tool and append results.
+        tool_results = []
+        for block in response.content:
+            if block.type == "tool_use":
+                try:
+                    result = run_tool(block.name, block.input)
+                except Exception as e:
+                    result = f"ERROR: {e}"
+                tool_results.append({
+                    "type": "tool_result",
+                    "tool_use_id": block.id,
+                    "content": result,
+                })
+
+        messages.append({"role": "user", "content": tool_results})
+
+    return messages
+
+if __name__ == "__main__":
+    run_agent("Read your own source code and improve yourself.")
+\end{lstlisting}
+
+\subsection{Reading the listing}
+
+A few features are worth dwelling on.
+
+\paragraph{The \texttt{role} key.}
+Every message has a \texttt{role}---\texttt{user},
+\texttt{assistant}, or, when bundling tool outputs, \texttt{user}
+again with structured \texttt{tool\_result} blocks inside.
+The role is what allows the LLM to predict the next token in
+context.  Without it, the model would have to guess; with it,
+training-time conditioning takes over and the model behaves
+as expected.
+
+\paragraph{The \texttt{tool\_use\_id}.}
+When the LLM emits a tool call it is given a unique
+\texttt{tool\_use\_id}; the corresponding result must reference
+the same id.  This pairing lets the LLM line up requests and
+answers when there are several tool calls in flight.
+
+\paragraph{The \texttt{stop\_reason}.}
+The vendor returns a discriminator indicating why the model
+stopped generating.  Values include \texttt{end\_turn} (the
+model is finished), \texttt{tool\_use} (it has emitted a
+tool-call), \texttt{max\_tokens} (it ran out of budget).  The
+loop dispatches on this.
+
+\paragraph{The cap \texttt{max\_turns}.}
+A safety latch.  Without one, an agent given a vague task
+will gladly recurse for hours and consume significant API
+credit.  Twenty-five turns is enough for almost any
+self-bootstrapping experiment; raise it deliberately.
+
+\subsection{Self-improvement, observed}
+
+Running this agent with the prompt
+\emph{``read your own source code and improve yourself''}
+produces a recognisable trajectory.  In one run observed in
+preparation:
+
+\begin{enumerate}[(1)]
+  \item The agent reads \texttt{agent.py}.
+  \item It writes a comment-rich version of itself, adds a
+    docstring, and refactors \texttt{run\_tool} into a dict
+    dispatch.
+  \item It declares an \texttt{exec\_bash} tool, including
+    its JSON schema.
+  \item It writes back \texttt{agent.py}.
+  \item On the next invocation, it has bash; it then asks
+    what to do, and proposes useful self-experiments.
+\end{enumerate}
+
+Total wall clock: under ten minutes.  Total API cost: a few
+euros.
+
+\begin{remark}
+  This experiment is genuinely worth running.  It is the
+  shortest path from understanding the loop on paper to
+  understanding what it feels like to be a participant in
+  the loop in the wild.  The \emph{strangeness} of seeing an
+  agent declare a new capability for itself, write the code,
+  and then exercise it---this is the lived form of the
+  technical content of \S\ref{sec:agent-loop}--%
+  \S\ref{sec:self-improvement}.
+\end{remark}
+
+\subsection{Cost and safety}
+
+\begin{itemize}
+  \item Run in a Docker container or a fresh user account.
+    A read/write/exec agent given network access can do
+    surprising things, and ``surprising'' includes
+    ``destructive.''
+  \item Set a hard quota on API spend.  All vendors offer
+    this in their billing dashboard.
+  \item Log the full message stream to disk.  Reading a
+    transcript afterwards is the most efficient way to learn
+    what your agent is actually doing.
+  \item Resist the urge to over-engineer the system prompt.
+    The loop, the tools, and feedback are what produce
+    capability; the prompt mostly steers.
+\end{itemize}

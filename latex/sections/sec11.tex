@@ -1,0 +1,236 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 11 — The Bitter Lesson, Local Models, and Energy
+% ──────────────────────────────────────────────────────────────
+
+\section{The Bitter Lesson, local models, and the energy question}%
+\label{sec:bitter-lesson}
+
+We close the lecture with three pieces of homework.  They are
+easy to do, individually small, and together they form a
+calibration check for the rest of the seminar series.
+
+\subsection{Homework 1: read \emph{The Bitter Lesson}}
+
+\begin{keyresult}[Sutton's Bitter Lesson, in one sentence]
+  ``The biggest lesson that can be read from $70$ years of AI
+  research is that general methods that leverage computation
+  are ultimately the most effective, and by a large margin.''
+  \quad ---R.~Sutton, 2019~\cite{sutton2019bitter}.
+\end{keyresult}
+
+The essay is a single page.  Read it, then read it four more
+times.  You should come out of it not entirely happy.
+
+\paragraph{The thesis, in expanded form.}
+Across seven decades of artificial-intelligence research, the
+recurring pattern has been the following:
+
+\begin{enumerate}[(i)]
+  \item A research community decides that general methods
+    are not enough and that progress requires baking in
+    \emph{human insight}---hand-engineered features, expert
+    knowledge bases, formal grammars, structured priors.
+  \item Such systems achieve respectable, sometimes
+    impressive, results.
+  \item A few years pass.  Computers get larger.
+  \item Someone runs a more general method---more search,
+    more learning, less prior structure---at much greater
+    scale, and outperforms the hand-engineered system by a
+    margin that closes the case.
+\end{enumerate}
+
+The pattern repeats: in chess (Deep Blue), in Go (AlphaGo),
+in speech recognition, in computer vision, in protein
+folding, and---above all---in language modelling.  The bitter
+content is this: the things people built lovingly with
+domain knowledge ended up looking, in retrospect, like
+detours.
+
+\begin{intuition}[Why ``bitter'']
+  The lesson is bitter because researchers naturally enjoy
+  encoding their domain knowledge into systems; that is what
+  expertise feels like in motion.  The empirical record is
+  that the systems that win are those that resist the urge
+  and let scale do the work.  Sutton's piece is uncomfortable
+  reading for anyone who has spent a career on hand-built
+  features.
+\end{intuition}
+
+\begin{remark}
+  ``The bitter lesson'' is not the same as ``human insight is
+  worthless.''  Sutton is careful: the insight that is durable
+  is at the level of \emph{architecture for general
+  computation}---what to learn, what to search, how to compose
+  the two.  What does not survive is encoded prior knowledge
+  about the specific domain.  The boundary is subtle and
+  contested; argue with the essay seriously.
+\end{remark}
+
+\subsection{Homework 2: install Ollama and run a local model}
+
+The second homework is concrete and physical: get a model
+onto your own machine.  Ollama~\cite{ollama} is the easiest
+on-ramp at the time of writing.  Download it, install it,
+pull a model that fits in your memory, and have a brief
+conversation.
+
+\begin{algorithmbox}[Local-model setup, concretely]
+  \begin{enumerate}[(1)]
+    \item Visit \url{https://ollama.com}; install for your OS.
+    \item Pick a model that fits your machine.  Rough rule:
+      a model in $4$-bit quantisation occupies about half its
+      parameter count in gigabytes of RAM (or VRAM).
+      \begin{itemize}
+        \item $\le 8$\,GB RAM: a $1$--$2$\,B parameter model
+          (\texttt{qwen3:1.5b}, small \texttt{gemma3} variants).
+          Useful for very small text tasks; do not expect
+          arithmetic or careful reasoning.
+        \item $16$--$32$\,GB RAM: $7$--$13$\,B models, e.g.\
+          \texttt{qwen3}, \texttt{gemma3}, \texttt{llama3.x}.
+          Begin to be useful for summarisation.
+        \item $24$\,GB VRAM (e.g.\ a single RTX~3090):
+          $13$--$30$\,B models comfortably; the larger ones run
+          but are slow.
+        \item $40$--$80$\,GB VRAM (e.g.\ A100/H100):
+          frontier-class open-source models like
+          \texttt{deepseek-r1}, \texttt{qwen3:72b}, large
+          mixture-of-experts variants.  These can drive a
+          coding agent.
+      \end{itemize}
+    \item Run \texttt{ollama run <model>} and interact.
+    \item Try at least one summarisation task on a transcript
+      or paragraph.
+  \end{enumerate}
+\end{algorithmbox}
+
+\begin{remark}[Local-model competence profile]
+  Local open-source models, even small ones, are reliably
+  good at:
+  \begin{itemize}
+    \item Text summarisation.
+    \item Cleaning up transcripts (especially Whisper output).
+    \item Light editing and paraphrasing.
+  \end{itemize}
+  They are notably \emph{worse} than frontier proprietary
+  models at:
+  \begin{itemize}
+    \item Arithmetic and quantitative reasoning---small
+      models can second-guess themselves into nonsense on
+      ``what is $1 + 1$?''
+    \item Long-context coherence.
+    \item Tool use, except for the specific models that have
+      been trained for it.
+  \end{itemize}
+  The right use case for a local model is offline,
+  text-heavy, low-stakes work---especially when the input is
+  sensitive (interview transcripts, internal documents,
+  patient discussions in medical settings) and must not
+  leave the machine.
+\end{remark}
+
+\begin{audience}[Why text summarisation is a delicate test]
+  Summarisation is unverifiable in the strict sense---to
+  check the summary you have to read the original, which was
+  the work the summary was supposed to save.  Nonetheless it
+  is a legitimate use because the asymmetry favours us:
+  \emph{producing} the summary takes longer than \emph{reading}
+  it, even if checking the summary takes the same time as
+  reading the source.  In practice, working from a summary
+  with occasional reference to the source is faster than
+  reading the source from cold.
+\end{audience}
+
+\subsection{Homework 3 (volunteer): the energy question}
+
+Almost no first-order reasoning about LLMs in society proceeds
+without someone asking what the things \emph{cost}, in energy
+and carbon.  The popular numbers vary by orders of magnitude,
+and few of them are well-sourced.  We need a careful look.
+
+\begin{keyresult}[Volunteer task]
+  Within a few weeks, a volunteer will produce a short
+  presentation (no slides required) covering:
+  \begin{enumerate}[(a)]
+    \item \textbf{Inference cost.}  Measure, on your own
+      laptop, the energy consumed by a typical query to a
+      local model.  Express in joules per token.
+    \item \textbf{Training cost.}  Find published figures
+      for the training of a frontier model and convert to a
+      reasonable amortisation per query, given typical
+      lifetime usage estimates.
+    \item \textbf{Carbon and water.}  Combine with average
+      grid carbon intensity and data-centre water usage.
+    \item \textbf{Social costs.}  The labour conditions of
+      data labellers, the provenance of training data, and
+      the dependence on unpaid (or under-paid) digital
+      labour.
+  \end{enumerate}
+\end{keyresult}
+
+\begin{remark}[Why this is non-trivial]
+  The honest answer involves more than the marginal cost
+  of a forward pass.  The accounting needs:
+  \begin{itemize}
+    \item training-time energy, amortised over the model's
+      deployment lifetime;
+    \item embodied energy in the GPU hardware
+      (manufacturing footprint of an A100/H100 is
+      substantial);
+    \item cooling overhead (the data-centre Power Usage
+      Effectiveness, or PUE);
+    \item the ongoing cost of supporting infrastructure.
+  \end{itemize}
+  Compare this with claims such as ``one hour of LLM use
+  costs the energy of a packet of crisps''---which may be
+  numerically defensible if one counts only inference, but
+  is not a complete accounting.
+\end{remark}
+
+\begin{historical}[A note on European efforts]
+  Europe is in the middle of building its own foundation
+  models under projects of which Zulfi (and the broader
+  EuroLLM line of work) is one example, with the explicit
+  goal of training on data sources whose provenance and
+  labour conditions are documented.  Whether the next
+  generation of European models is competitive on
+  capability remains to be seen.  Whether they will be
+  cleaner on the social-cost axis appears genuinely
+  plausible.
+\end{historical}
+
+\subsection{Looking forward}
+
+In the next seminar we will discuss two things.  First, the
+content of \emph{The Bitter Lesson}---we will return to it
+critically, with the experiments above as data.  Second,
+\emph{proof assistance with AI tools}: what coding agents,
+combined with the formal language Lean~4
+\cite{moura2021lean}, can do for mathematical proofs, what
+they cannot, and what the working pattern looks like.
+
+\begin{audience}[A closing data point]
+  An audience member reported, at the end of the seminar, a
+  small experiment of their own: lab instruments
+  (oscilloscope and waveform generator) connected to a
+  laptop, with a frontier coding agent asked to identify an
+  unknown circuit.  The agent designed a sequence of
+  excitation signals, drove the instruments, observed the
+  response, and correctly identified the device-under-test
+  as a passive filter.  No human hint was given.  The
+  remarkable feature, perhaps, is not that the agent
+  succeeded but the strangeness of watching it
+  \emph{actuate the physical world}---instrument relays
+  clicking, signals propagating---driven by a chain of
+  reasoning that lives entirely in tokens.
+\end{audience}
+
+\begin{intuition}[The unifying theme]
+  Across all the experiments we have discussed---transcribing
+  notes, building messengers, hijacking course schedules,
+  inferring rooms from sound, identifying circuits from
+  signals---the pattern is the same.  An agent's reach is set
+  by its tools.  Give it more tools, and it touches more of
+  the world.  The function~$f$ has not changed; only what
+  the harness lets the function do.
+\end{intuition}

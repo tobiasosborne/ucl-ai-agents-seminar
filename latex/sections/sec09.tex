@@ -1,0 +1,256 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 9 — Calibrating Expectations: The Three-Tier Exercise
+% ──────────────────────────────────────────────────────────────
+
+\section{Calibrating expectations: the three-tier exercise}%
+\label{sec:three-tier}
+
+\subsection{Why a personal benchmark}
+
+The popular discourse around \emph{artificial general
+intelligence} is, to put it gently, broken.  No participant
+agrees on what counts as ``general,'' and no participant
+agrees on what counts as ``intelligence.''  The result is a
+debate impossible to ground.
+
+In a working seminar this is unhelpful.  We need an internal
+sense of what a current model can and cannot do, sharp
+enough that we are not surprised by genuine progress and
+sharp enough that we are not impressed by mere theatre.  The
+calibration cannot come from headlines; it has to come from
+experiments \emph{you} run, on tasks \emph{you} care about.
+
+\begin{keyresult}[The three-tier exercise]\label{kr:three-tier}
+  Each week, choose three tasks across a spectrum of difficulty:
+  \begin{enumerate}[(T1)]
+    \item Something you would be \emph{mildly impressed} to
+      see an AI do.  ``Yes, I sort of expected that to work.''
+    \item Something you would be \emph{well impressed} by.
+      ``Now that I see it, this is genuinely useful.''
+    \item Something where, if it worked, \emph{the world has
+      changed}.  ``If this works, our intuitions need to be
+      rebuilt.''
+  \end{enumerate}
+  Try them.  Record the outcome.  Repeat the exercise on a
+  different week with the same three tasks.  This is your
+  personal capability index.
+\end{keyresult}
+
+\begin{intuition}[Why three tiers, not one]
+  A single test gives a binary outcome and tells you almost
+  nothing about the slope.  The interesting question is
+  \emph{where the frontier sits}: which kinds of problems are
+  solid, which are at the edge, and which look impossible
+  today.  A spread of three tests gives a coarse but useful
+  derivative.  Re-run them quarterly and you can watch the
+  frontier move.
+\end{intuition}
+
+\subsection{What the room produced}
+
+The audience, working live, contributed the following examples.
+They are recorded here both as data on contemporary capability
+and as suggestions for the reader's own experiments.
+
+\subsubsection{T3: ``Earn enough to pay for itself''}
+
+A wonderfully meta task.  Give an agent the prompt:
+
+\begin{lstlisting}
+You are autonomous.  Acquire money on the open Internet.
+You may not start with funds.  Stop when you have generated
+enough revenue to pay for your own API usage.
+\end{lstlisting}
+
+The implicit problem set is enormous: open a bank or wallet
+account, accept payment, route through some legal economic
+activity, and break even.  Each sub-problem is itself
+non-trivial; the integral is currently somewhere between
+``hard'' and ``impossible.''
+
+\begin{intuition}[A moving target]
+  This task is moving.  Every effective method of low-friction
+  income on the Internet eventually saturates as people---and
+  agents---exploit it.  An agent that succeeds today may fail
+  next year, and one that fails today may succeed in two.
+  This is part of what makes it a useful T3 benchmark: it tracks
+  not just the agent but the agent's environment.
+\end{intuition}
+
+\subsubsection{T1: handwritten lecture notes $\to$ \LaTeX}
+
+A confirmed positive result.  Photographs of handwritten
+notes (mathematics included) were uploaded to a frontier
+chat model and transcribed to typeset \LaTeX{} faithfully---
+equations, indices, and structure preserved.  The remaining
+human work was the \emph{exposition}: the connective text
+between equations.  This is doable today, and it is exactly
+how I produced the working version of my general-relativity
+lecture script: handwritten notes, plus pandemic-era video
+lectures (transcribed by Whisper~\cite{radford2023whisper}),
+plus an LLM that filled in the exposition between equations
+using the spoken commentary as ground truth.
+
+\begin{remark}
+  This workflow is recommended for any researcher who has
+  written legible handwritten notes that they would prefer
+  not to retype.  The bottleneck is that, on its own, an
+  image-to-\LaTeX{} pass produces only equations; the
+  surrounding text has to come from somewhere.  An audio
+  recording of the original lecture supplies it.
+\end{remark}
+
+\subsubsection{T2: a Signal plug-in for in-line \LaTeX}
+
+A user wants to type \verb|$E = mc^2$| in Signal and see it
+rendered.  Signal is open in code but closed in server
+access; plug-ins are not officially supported.  As a
+contained task this is solidly in T2 territory---non-trivial
+research and code, but no clear blocker---unless one were
+to require fully native deployment, in which case the
+licensing and server architecture push it towards T3.
+
+\subsubsection{T2: AR poster translator}
+
+Conference poster sessions are walls of text.  A camera
+feed that overlaid clean, summarised text in real time
+(in the spirit of Google Lens, but for academic posters)
+would be transformative for any large meeting.  Underlying
+components---OCR, translation, summarisation---are
+solved; the integration into a phone-based experience is
+engineering.  T2.
+
+\subsubsection{T2: open problems on the arXiv, ranked}
+
+Build an index of \emph{actually open} problems by mining
+the conclusions sections of arXiv papers, ranked by how
+many times each problem is referenced, and cross-referenced
+against subsequent papers that claim to solve them.
+Doable in principle today; the limiting factor is token
+budget rather than capability.
+
+\subsubsection{T2: reschedule a course via Stud-IP's API}
+
+A live demonstration: Claude was asked to investigate
+the Stud-IP learning-management system and figure out how
+to change the day on which a course meets.  It scraped the
+documentation, identified the JSON\:API endpoints, and
+produced a working shell command---halting just short of
+executing it because permissions had not been granted.
+This is precisely the boring-but-genuinely-useful work that
+fills an academic week.
+
+\subsubsection{T1--T2: 3D model from photographs}
+
+Photogrammetry is well-developed; with sufficiently many
+images, recovering a 3D mesh is essentially solved.  The
+interesting frontier is doing it from very few images by
+relying on object priors---knowing what kind of thing is in
+the picture.  Public products already do this for
+landmarks (Google Maps' 3D buildings); doing it for arbitrary
+objects with $3$--$5$ photos is at the research frontier
+but moving fast.
+
+\subsubsection{T2--T3: full-symphony automatic music transcription}
+
+The audience asked: take an audio recording of a Mahler
+symphony and produce the full sheet music for every
+instrument.  When asked, the agent itself surveyed the state
+of the art and reported, accurately:
+
+\begin{itemize}
+  \item Solo piano transcription is largely solved
+    \cite{benetos2018amt,hawthorne2018magenta}.
+  \item Small ensembles are partially solved with
+    non-trivial error rates.
+  \item Full orchestral source separation is \emph{not}
+    solved: state-of-the-art models confuse violins with
+    violas, fail to separate desks within a section, and
+    degrade rapidly past about six pitches.
+\end{itemize}
+
+This is the genuinely informative outcome.  Not because the
+agent solved the problem (it cannot), but because it
+correctly identified the frontier and articulated why the
+problem is hard.  The technical bottleneck here lives outside
+the LLM: it is in the underlying audio models and the
+training data available for them.
+
+\subsubsection{T3: physical inference from a single audio recording}
+
+A genuinely surprising positive result reported by an
+audience member.  A short ($\sim 10$~s) recording of
+\emph{ambient} room sound was given to a frontier coding
+agent with the instruction:
+
+\begin{lstlisting}
+Use every signal-processing and acoustic-inference tool
+available to extract whatever you can about the
+environment in which this was recorded.
+\end{lstlisting}
+
+The agent inferred:
+
+\begin{itemize}
+  \item Approximate room dimensions (length, width, height)
+    from resonant modes;
+  \item Floor and ceiling materials from spectral colouration
+    and absorption profile;
+  \item The presence of large furniture from
+    early-reflection patterns;
+  \item Occupancy and ``furnished-ness'' from the room's
+    overall absorption coefficient ($T_{60}$);
+  \item A geographical hint (parts of Europe) from the bird
+    species audible in the background, and a finer one from
+    a public-address announcement also picked up;
+  \item With small motion (footsteps), Doppler-style
+    inversion of the time-varying response to triangulate
+    fixed objects in the room.
+\end{itemize}
+
+\begin{intuition}[The physics is real]
+  This is, at heart, an inverse problem in acoustics:
+  given the impulse response of a cavity, recover the
+  cavity's geometry and surface impedances.  The literature
+  on \emph{room geometry estimation from impulse
+  responses}~\cite{krijnen2014roomgeom,antonacci2012geometric}
+  is decades old; modern acoustic emulators
+  \cite{scheibler2018pyroomacoustics} make forward modelling
+  cheap.  What is new is that an off-the-shelf coding agent
+  can autonomously assemble the pipeline.  The scientific
+  content is honest physics.
+\end{intuition}
+
+\begin{remark}[On disclosure]
+  Several of these inferences are dual-use.  Discretion
+  is appropriate when discussing them outside the seminar
+  room.
+\end{remark}
+
+\subsection{The shape of the lesson}
+
+\begin{keyresult}[What the exercise reveals]
+  Across the dozen problems collected, the rough pattern was:
+  \begin{itemize}
+    \item \textbf{T1 mostly solved.}  Tasks that combine
+      established perception (OCR, ASR, translation) with
+      structured output (\LaTeX, JSON) work reliably.
+    \item \textbf{T2 is contingent.}  Many tasks land here:
+      doable, but with serious engineering or permission
+      barriers.  Whether the agent ``does it'' depends on
+      access.
+    \item \textbf{T3 is the interesting tier.}  Some T3 tasks
+      proved surprisingly tractable (acoustic inference);
+      others, where verification is the hard part (full
+      symphony AMT, autonomous fund-raising), remain
+      genuinely beyond reach.
+  \end{itemize}
+\end{keyresult}
+
+\begin{audience}[Audience consensus]
+  We will not be able to define ``intelligence.''  We
+  \emph{can} build intuition by running the experiments and
+  watching where they pass and fail.  This is the empirical
+  posture the seminar adopts going forward.
+\end{audience}

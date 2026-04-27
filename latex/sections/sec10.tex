@@ -1,0 +1,199 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 10 — Towards Ambitious Science
+% ──────────────────────────────────────────────────────────────
+
+\section{Towards ambitious science}\label{sec:ambitious-science}
+
+\subsection{The lack-of-imagination problem}
+
+Spend any amount of time around the people most active in
+the agentic-AI space and a strange pattern is unmissable: the
+most obvious thing they all build is \emph{tooling for other
+people building agentic AI}.  Frameworks, dashboards,
+``observability platforms,'' marketplaces of agents.  The
+recursion is not accidental.  It is what one does when one
+has acquired a powerful tool but has not yet decided what
+the tool is \emph{for}.
+
+\begin{keyresult}[The bottleneck is taste, not capability]
+  At the present moment of the field, the rate-limiting step
+  in deploying these systems usefully is no longer engineering
+  power.  It is \emph{the choice of problem}: what is genuinely
+  worth doing, and what would be merely incremental?  Almost
+  everyone is under-ambitious here, including the people at
+  the frontier of the technology.
+\end{keyresult}
+
+The reason is simple.  Until recently, what one could attempt
+on a one-year timescale with a small group was rigidly
+bounded by the cost of specialist labour.  We learned what
+problems to consider \emph{tractable} by absorbing this
+boundary.  When the boundary moves, our learned sense of the
+tractable does not move with it; we keep proposing the same
+size of problem because that is what feels reasonable.  But
+the constraints have changed.
+
+\subsection{A reference scale: star formation}
+
+Consider a problem that, until recently, no group of fewer
+than several hundred physicists would have proposed to take
+on as a single project: a self-consistent, full-physics
+simulation of a star's formation, from the first
+gravitational instability of a cold molecular cloud to the
+ignition of nuclear burning.
+
+\begin{intuition}[All of physics, in one problem]
+  Star formation is a deliberately maximalist example
+  because the physics genuinely does span almost everything
+  taught in an undergraduate degree.  In approximate temporal
+  order it requires:
+  \begin{itemize}
+    \item gravitational collapse and self-gravitating
+      hydrodynamics;
+    \item magnetohydrodynamics of weakly ionised plasmas
+      (ambipolar diffusion in the cool phases);
+    \item molecular astro-chemistry and dust formation;
+    \item optical and infra-red radiative transfer
+      (cooling and heating);
+    \item rotational and turbulent angular-momentum
+      transport;
+    \item nuclear physics for the onset of burning;
+    \item and, if one is honest, weak-field general
+      relativity for the deepest potentials.
+  \end{itemize}
+  No single human researcher commands all of these to
+  publication standard.  Historically the projects that have
+  attempted it---FLASH, Athena++, MFM-based codes---have been
+  multi-decade, multi-institution efforts.
+\end{intuition}
+
+The thesis of this seminar is that the floor on ``what a
+small group with operational competency and good agents can
+attempt'' has moved closer to that ceiling.  Not all the
+way---that is part of why the question is open---but a long
+way.
+
+\begin{keyresult}[Vision for this seminar series]
+  We aim to identify a problem of \emph{ambitious} scientific
+  scope, attempt it as a group with the help of coding
+  agents, and document carefully where the agents accelerate
+  the work, where they fail, and what new failure modes
+  appear.  Whether or not we succeed, the experiment is
+  worth running.
+\end{keyresult}
+
+\subsection{An anti-example: $P$ vs $\textsf{NP}$}
+
+\begin{audience}[Audience question]
+  \emph{What about asking it to prove $P \neq \textsf{NP}$?}
+
+  This is a natural sceptical reflex: pose an
+  acknowledged-hard problem and watch the agent fail.  We
+  will encounter this kind of failure repeatedly, and the
+  failure mode is informative.  Two observations:
+  \begin{enumerate}[(1)]
+    \item A proof of $P \neq \textsf{NP}$ may simply not fit
+      in the model's context window.  This is the
+      Seminar~I limitation re-appearing in a new disguise:
+      the function $f$ has bounded input length, so very
+      long proofs cannot be expressed in a single forward
+      pass even if they could be discovered.
+    \item ``One-shotting'' such a problem---feeding the
+      statement and asking for a proof in a single
+      conversation---is the wrong workflow.  The interesting
+      programme is decomposition: \emph{how do we break
+      down a problem so that an agent can chip away at it
+      over many turns, with verification at every step?}
+      That decomposition is the technical question of
+      Seminar~III.
+  \end{enumerate}
+\end{audience}
+
+\subsection{Operational competency vs.\ domain expertise}
+
+A genuine objection arises here, and it deserves careful
+treatment.
+
+\begin{audience}[Audience objection (Martin)]
+  \emph{To trust an LLM's output you need deep domain
+  expertise, because the output is plausible-sounding even
+  when wrong.  Without expertise you cannot verify, and you
+  will spend more time chasing phantoms than you save.}
+\end{audience}
+
+This is a serious point.  The corresponding empirical
+observation came up in the room: a tutor in operator theory
+on Hilbert spaces fed an exercise to the chat model, and
+got a slightly wrong outline of a proof, identifiable as
+wrong only by someone who already understood the structure
+of symmetric hierarchies in the relevant calculus.  A
+non-expert, taking the output at face value, would have
+spent days on a dead end.
+
+The question, however, is whether ``expert'' and
+``non-expert'' is the correct binary.  I claim it is not.
+
+\begin{definition}[Operational competency]\label{def:opcomp}
+  We say a worker has \emph{operational competency} in a
+  domain when they can:
+  \begin{enumerate}[(i)]
+    \item read its primary literature without translation;
+    \item identify the standard objects and operations;
+    \item run small computations and verify each step against
+      a known case;
+    \item recognise when a result is suspicious.
+  \end{enumerate}
+  Operational competency falls short of full domain
+  expertise---one cannot, for instance, design a research
+  programme from first principles---but it is sufficient to
+  \emph{verify} much of what an LLM produces in the domain.
+\end{definition}
+
+\begin{intuition}[The verifier-prover asymmetry]
+  Many problems---in the technical sense, all of $\textsf{NP}$---are
+  asymmetric in difficulty: easy to verify a candidate
+  solution, hard to find one.  In such cases the worker
+  needs only enough domain skill to \emph{check} steps, not
+  to \emph{generate} them.  The LLM proposes; the operationally
+  competent human verifies; verification is exponentially
+  cheaper than generation when the asymmetry holds.
+\end{intuition}
+
+\begin{keyresult}[A working hypothesis]
+  Operational competency, plus an effective coding agent,
+  is enough to drive substantial progress in many domains
+  that previously required full domain expertise of every
+  participant.  The cases in which it is \emph{not} enough
+  are those where verification itself is hard: where a
+  wrong answer cannot be cheaply distinguished from a right
+  one.
+\end{keyresult}
+
+The unhappy converse follows: agents are most dangerous in
+exactly the domains where verification is opaque.  This is
+where Martin's objection genuinely applies and where the
+``half-assing it'' failure mode becomes serious.  An agent
+producing slightly-wrong physical intuition in a sub-field
+the user does not understand will quietly poison the
+project.
+
+\begin{keyresult}[Diagnostic: is verification cheap here?]
+  Before launching a serious agent-driven attack on a
+  problem, ask: \emph{can each step's output be cheaply
+  checked?}  If the answer is yes, operational competency
+  suffices and the project is likely to succeed.  If the
+  answer is no, real domain expertise must be at the table.
+\end{keyresult}
+
+\subsection{What we will try}
+
+The intent for the remainder of the seminar series is to
+take this hypothesis seriously: identify a substantial
+physics problem, decompose it under expert supervision into
+verifiable pieces, and let coding agents do the bulk of the
+implementation.  Candidate domains include large-scale
+simulation, formalisation of mathematical proofs (the Lean
+ecosystem being a natural fit, as verification is mechanical),
+and inverse problems with cheap forward models.  Concrete
+proposals from participants are welcome.

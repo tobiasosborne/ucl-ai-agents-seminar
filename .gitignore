@@ -45,3 +45,6 @@ feo_venv/
 
 # Claude Code
 .claude/
+
+# Local scratch / large recordings
+temp/

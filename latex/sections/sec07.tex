@@ -1,0 +1,316 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 7 — The Agent Loop
+% ──────────────────────────────────────────────────────────────
+
+\section{The agent loop}\label{sec:agent-loop}
+
+This is the technical heart of the seminar.  The thesis is the same
+one that appeared in compressed form in \S\ref{sec:agents}, but now
+we will state it carefully, write it down, examine it line by line,
+and convince ourselves that there is genuinely nothing missing.
+
+\subsection{The whole architecture, in five lines}
+
+\begin{keyresult}[Canonical agent loop]\label{kr:agent-loop}
+  \begin{lstlisting}
+while not done:
+    response   = llm(system_prompt + history)
+    tool_calls = parse(response)
+    results    = execute(tool_calls)
+    history   += [response, results]
+  \end{lstlisting}
+\end{keyresult}
+
+\begin{remark}
+  Every coding agent in production---Claude Code, Cursor, Cline,
+  Aider, the recently leaked source of Claude Code itself---is some
+  elaboration of this loop.  More tools, better prompts, sharper
+  parsing, smarter context management; but no extra ingredient at
+  the top of the recipe.  If you can write the five lines, you can
+  describe what every commercial coding agent is doing.  This
+  alone, on the latest software-engineering surveys, places you
+  in the top decile of working developers in 2026.
+\end{remark}
+
+\subsection{Reading the loop}
+
+Let us go through it slowly.
+
+\paragraph{Line 1: \texttt{while not done}.}
+The agent does not, in any non-trivial sense, decide on its own
+when to stop.  It runs until you stop it (Ctrl-C), or until the
+harness imposes a limit (a maximum number of turns, a budget cap,
+a time-out).  ``Done-ness'' is a property of the harness, not of
+the LLM.
+
+\paragraph{Line 2: \texttt{response = llm(...)}.}
+This is the only point at which any cognition happens.  The
+harness assembles a single string by concatenating the system
+prompt (which describes the agent's role and the tools available)
+with the running history, ships it to the LLM via an HTTP request,
+and receives a string in return.  The function call is stateless;
+all relevant context is packed into its input.  Inside the LLM is
+a forward pass through a frozen Transformer~\cite{vaswani2017attention}.
+
+\paragraph{Line 3: \texttt{tool\_calls = parse(response)}.}
+The response is, mostly, English text, but it can also include
+\emph{structured} sub-strings that follow the agreed tool-call
+schema.  The harness's job is to pull these out.  The parsing
+is an entirely local, non-AI computation: a finite-state matcher
+or a JSON parser.  Crucially, it is \emph{not} the LLM that runs
+this step---it is plain code on the client side.
+
+\paragraph{Line 4: \texttt{results = execute(tool\_calls)}.}
+For each requested tool call, the harness performs the action
+and collects a result.  Reading a file returns its contents;
+running a shell command returns stdout, stderr, and an exit
+code; querying a database returns rows.  None of this is AI.
+This step is just system code.
+
+\paragraph{Line 5: \texttt{history += [response, results]}.}
+The new response and the tool results are concatenated onto
+the running history, so that on the next iteration the LLM sees
+both what it said and what came back.  Context grows
+monotonically until either the task is done, the loop is
+killed, or the context window is exhausted---in which case the
+client must compress, summarise, or drop earlier turns
+(this is one of the failure modes we discussed in
+Seminar~I).
+
+\begin{audience}[Audience question]
+  \emph{How does the loop actually terminate?}
+
+  In practice, it doesn't---you give it a quota of turns
+  (e.g.\ 25), or you provide a tool such as \texttt{stop()} or
+  \texttt{submit\_answer()} that the LLM is encouraged to call
+  when satisfied.  Many production agents simply run until the
+  user interrupts.  The freedom is yours.
+\end{audience}
+
+\subsection{The flow, drawn}
+
+\begin{center}
+\begin{tikzpicture}[node distance=1.4cm, every node/.style={align=center}]
+  \node[sysbox, fill=spacecadet, text=white, minimum width=4.4cm,
+        minimum height=0.95cm, font=\small]
+    (sys) {System prompt $+$ history};
+
+  \node[sysbox fill, below=1.1cm of sys, minimum width=4.4cm,
+        minimum height=0.95cm, font=\small]
+    (llm) {\textbf{LLM}\; {\scriptsize $f : \Str \to \Str$}};
+
+  \node[sysbox, right=2.6cm of llm, minimum height=0.95cm, font=\small]
+    (parse) {Parse tool calls};
+
+  \node[sysbox, below=1.1cm of parse, minimum height=0.95cm, font=\small]
+    (exec) {Execute tools};
+
+  \draw[sysarrow] (sys) -- (llm);
+  \draw[sysarrow] (llm) -- (parse)
+    node[midway, above, font=\scriptsize] {response};
+  \draw[sysarrow] (parse) -- (exec)
+    node[midway, right, font=\scriptsize] {call};
+  \draw[sysarrow] (exec.south) -- ++(0,-0.5) -| ([xshift=-0.4cm]llm.south)
+    node[near start, below, font=\scriptsize] {results};
+  \draw[sysarrow, dashed, color=munsell]
+    ([xshift=0.4cm]llm.north) -- ([xshift=0.4cm]sys.south)
+    node[midway, right, font=\scriptsize, text=munsell] {append};
+\end{tikzpicture}
+\end{center}
+
+The dashed return arrow is the only ``magic'': by pasting the
+last response and the tool outputs back into the next prompt,
+the harness manufactures an illusion of memory and progress.
+Internally the function is still memoryless; the recurrence
+is provided by the client.
+
+\subsection{The tool-call protocol}
+
+A natural question is how the LLM communicates with the harness.
+The mechanism is purely textual.  The vendors---OpenAI,
+Anthropic, Google---have largely agreed on a shared schema, the
+gist of which is the following.
+
+\paragraph{(a) Tool declaration in the system prompt.}
+The harness tells the LLM which tools exist, what each one
+does, and what arguments it expects.  A typical declaration:
+
+\begin{lstlisting}
+{
+  "name": "read_file",
+  "description": "Read a UTF-8 text file.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "path": { "type": "string" }
+    },
+    "required": ["path"]
+  }
+}
+\end{lstlisting}
+
+\paragraph{(b) Structured tool request in the response.}
+When the model wishes to use a tool, it emits a fragment of
+JSON in a stylised form:
+
+\begin{lstlisting}
+{
+  "type": "tool_use",
+  "name": "read_file",
+  "input": { "path": "src/main.py" }
+}
+\end{lstlisting}
+
+The harness extracts this, calls \texttt{read\_file("src/main.py")}
+locally, and reports back to the LLM:
+
+\begin{lstlisting}
+{
+  "type": "tool_result",
+  "content": "<file contents here>"
+}
+\end{lstlisting}
+
+\begin{intuition}[The agreed language]
+  Tool use is a small protocol layered on top of natural-language
+  output.  It is nothing more than: ``if your output contains a
+  fragment of this shape, the harness promises to act on it.''
+  The vendors have spent considerable training effort teaching
+  models to emit this fragment reliably and at the right moments.
+\end{intuition}
+
+\begin{remark}[On reliability]
+  These structured emissions used to be unreliable---the
+  models would forget brackets, mis-quote keys, dribble JSON
+  into prose.  Modern models produce well-formed JSON with
+  high reliability.  Errors still occur, because the function
+  is nondeterministic, but they have become rare.  Robust
+  parsers (with retries and small repairs) handle the residual
+  noise.
+\end{remark}
+
+\subsection{The minimal toolkit}
+
+A genuinely surprising fact: \emph{two} tools suffice.
+
+\begin{keyresult}[Read and write are sufficient]
+  Given only \texttt{read\_file(path)} and \texttt{write\_file(path,
+  content)}, an agent can be made to do an extraordinary range of
+  useful work---including modifying the harness it itself runs
+  inside (\S\ref{sec:self-improvement}).
+\end{keyresult}
+
+The argument is the Unix one.  Anything you can compute, you
+can compute by reading and writing files; the file system is a
+universal substrate for state.  In particular, if the harness's
+own source is a file, the agent can read it, write a modified
+copy, and---on the next invocation---execute the modification.
+We will return to this in the next section.
+
+\begin{audience}[Audience question]
+  \emph{Don't you also need an ``execute'' tool?}
+
+  Strictly, no.  But in practice the first thing an agent given
+  only \emph{read} and \emph{write} will do is rewrite its own
+  source code so that an \emph{execute} tool exists.  ``You only
+  need read and write,'' but only as a starting point: the agent
+  promotes itself to bash access in short order.
+\end{audience}
+
+\subsection{Walking through a real implementation}
+
+A canonical reference implementation in roughly $100$ lines of
+Python is given in
+Appendix~\ref{sec:appendix-agent}; we walk through the pieces
+in lecture.  Key features one sees there:
+
+\begin{itemize}
+  \item A \emph{tools array}: a list of JSON objects, one per
+    tool, with name, description, and input schema.
+  \item A \emph{system prompt}: a short paragraph telling the
+    agent what it is, what tools it has, and the conventions it
+    should follow (e.g.\ \emph{``preserve the loop and tool
+    plumbing in this script''}).
+  \item A \emph{tool dispatcher}: a function \texttt{run\_tool(name,
+    args)} that looks up the named tool and executes it,
+    returning either the result or an error.
+  \item A \emph{message log}: a list of objects with \texttt{role}
+    (\texttt{"user"}, \texttt{"assistant"}, \texttt{"tool"}) and
+    \texttt{content}, which is exactly the conversational history
+    that gets re-fed into the function on every turn.
+  \item A \emph{loop}: ``up to $N$ turns, call the LLM, parse and
+    execute tool calls, append, repeat.''
+\end{itemize}
+
+The roles in the message log---\texttt{user},
+\texttt{assistant}, \texttt{tool}---matter.  They are not just
+cosmetic.
+
+\begin{intuition}[Why the role labels are not optional]
+  Recall that the LLM is predicting the next token given the
+  context.  If a long history is fed in without indicating who
+  said what, the model has to \emph{guess} from contextual cues
+  whether each utterance was its own or the user's.  It is good
+  at guessing, but the labels save a great deal of energy and
+  reduce the chance of confusion.  The vendors have trained
+  their models specifically on the \texttt{role}/\texttt{content}
+  format; deviating from it leads to garbage in, garbage out.
+\end{intuition}
+
+\subsection{Tutorials and references}
+
+\begin{greybox}[Suggested reading]
+  \begin{itemize}
+    \item Thorsten Ball, \emph{How to Build an Agent}
+      (\url{https://ampcode.com})~\cite{ball2025agent}.  Probably
+      the most influential tutorial in this genre; the article
+      that triggered the cohort of agents we have today.
+    \item Anthropic, \emph{Tool use overview}~\cite{anthropictools}
+      and \emph{Model Context Protocol}~\cite{mcp2024}.
+    \item OpenAI, \emph{Function calling guide}~\cite{openaitools}.
+    \item Andrej Karpathy, \emph{nanoGPT}~\cite{karpathynano},
+      and Jay Alammar's \emph{Illustrated Transformer}.
+  \end{itemize}
+\end{greybox}
+
+\begin{historical}[The Claude Code source leak]
+  In early 2026 the source code of Anthropic's Claude Code agent
+  was inadvertently leaked.  To the disappointment of those
+  expecting alchemy, what was found was, broadly, exactly the
+  loop above, with a careful tool inventory and a substantial
+  but unmagical system prompt.  The reaction in the community
+  was: of course.  No-one writes a cleverer loop because there
+  is no cleverer loop to write.
+\end{historical}
+
+\subsection{Bootstrapping yourself in}
+
+You do not need to write the agent from scratch.  The
+canonical recipe, which I recommend, is:
+
+\begin{enumerate}[(1)]
+  \item Open a chat client (any modern model will do).
+  \item Ask: \emph{``give me a basic Python script for a coding
+    agent with read-file and write-file tools, that can improve
+    itself.''}
+  \item Paste the resulting script into a file, install the
+    vendor's SDK, set an API key.
+  \item Run it.  First instruction: \emph{``read your own source
+    code and improve it.''}
+  \item Watch.
+\end{enumerate}
+
+The cost is real but modest---five to twenty euros of API
+credits to develop a full sense of the dynamics.
+
+\begin{remark}[On API access]
+  Claude Code with a personal subscription is convenient but
+  closed: the subscription does not provide raw API access, so
+  you cannot run \emph{your own} code against it; for that you
+  need an API key, which is a separate billing item.  This is
+  a deliberate product decision and it is worth understanding
+  the difference.  Google and OpenAI offer modest free tiers via
+  academic trials, sufficient for the experiments suggested
+  here.
+\end{remark}

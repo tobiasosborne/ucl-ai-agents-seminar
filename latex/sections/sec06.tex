@@ -1,0 +1,119 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 6 — Part II opener: Recap and the Question of Agency
+% ──────────────────────────────────────────────────────────────
+
+\bigskip
+\begin{center}
+  {\Large\sffamily\bfseries\color{cgblue} Part II \;---\; Anatomy of an Agent}\\[0.4em]
+  \textit{(Second seminar in the series)}
+\end{center}
+\bigskip
+
+\section{Recap and the question of agency}\label{sec:recap-agency}
+
+\subsection{Where we left off}
+
+Before we proceed it is worth stating, once more, the picture we
+arrived at in the first seminar (\S\ref{sec:what-is-llm}--%
+\S\ref{sec:chat-illusion}).
+
+\begin{greybox}[Recap of Seminar~I]
+  An LLM is a stateless, nondeterministic function
+  $f : \Str \to \Str$.  It has no memory of any prior call and
+  responds by sampling from a learned distribution over the next token.
+  The phenomenon of ``chat'' is an \emph{illusion} maintained on the
+  client side: every turn, the client re-sends the entire conversation
+  history---the \emph{context window}---back to the function.  The
+  function never remembers; the client remembers \emph{for} it.
+\end{greybox}
+
+The mental model worth holding onto is---\emph{highly motivated but
+not trusted}.  The system you are talking to has read the entire
+internet and will, with great confidence and articulacy, attempt
+anything you ask of it; whether the answer is correct is a separate
+question.
+
+\subsection{From oracle to actor}
+
+So far the LLM is an oracle: you supply context, it emits text.  The
+\emph{only} thing the function can do, in a literal sense, is put
+words on your screen.  This is the agency it has when used as a
+plain chatbot:
+
+\begin{center}
+\begin{tikzpicture}[node distance=1.4cm]
+  \node[sysbox fill] (chat) {Chat UI};
+  \node[sysbox fill, right=4cm of chat] (llm) {LLM \;{\scriptsize $f(s)\to s$}};
+  \draw[sysarrow] (chat.east) -- (llm.west)
+    node[midway, above, font=\scriptsize] {prompt};
+  \draw[sysarrow] (llm.west) ++(0,-0.55) -- ($(chat.east)+(0,-0.55)$)
+    node[midway, below, font=\scriptsize] {tokens};
+\end{tikzpicture}
+\end{center}
+
+We now want to build a programme that turns the function \emph{into
+something that does things}---reads files, writes files, runs code,
+queries the network.  The great surprise of 2024--2025 is that this
+extension is essentially trivial in concept and that, once one
+crosses this conceptual line, an enormous range of behaviour
+becomes accessible.
+
+\begin{definition}[Agency, in the present sense]\label{def:agency}
+  We grant an LLM \emph{agency} when we wrap its single-call
+  interface in a programme that interprets some of the function's
+  output as \emph{requests for action}, performs those actions on
+  the LLM's behalf, and feeds the results back into the next call.
+  This wrapping programme is variously called the \emph{harness},
+  the \emph{client}, or the \emph{scaffolding}.  Every coding agent
+  in production today is exactly this: a harness around the function~$f$.
+\end{definition}
+
+\begin{keyresult}[Two facts about agency]
+  \begin{enumerate}[(i)]
+    \item The LLM never \emph{itself} executes anything.  It only
+      emits tokens.  All effects on the outside world are produced
+      by the harness, by virtue of the harness choosing to
+      interpret some of the LLM's tokens as a request to act.
+    \item Whether a particular LLM is \emph{good} at this depends
+      on whether it has been \emph{trained} to.  Older models---
+      \texttt{GPT-4o} of mid-2024, for example---understand
+      English perfectly well but have not been taught a stable
+      vocabulary for tool requests; modern models have, and the
+      vendors have largely converged on a shared schema
+      (cf.~\S\ref{sec:agent-loop}).
+  \end{enumerate}
+\end{keyresult}
+
+\begin{intuition}[The harness is the hands]
+  Think of the LLM as a brilliant but disembodied advisor on the
+  far end of a phone line.  It can talk you through what to do
+  but cannot, by itself, lift a finger.  The harness is the body:
+  it has hands, eyes, a network connection, a file system.  When
+  the advisor says ``read this file,'' the body reads it; when it
+  says ``run this code,'' the body runs it; and the result is
+  reported back over the phone line.
+\end{intuition}
+
+\subsection{Today's goal}
+
+By the end of this lecture the following should be true.
+
+\begin{enumerate}[(1)]
+  \item You can describe the architecture of a coding agent
+    in pseudocode---all of it---without omitting anything
+    essential.
+  \item You can write your own, in any language, in roughly
+    a hundred lines.
+  \item You have begun the deeper work of \emph{calibrating
+    your expectations}: developing personal benchmarks that
+    track what these systems can and cannot do, so that you
+    are neither caught off guard nor swept along by hype.
+  \item You begin to think about the science you might
+    attempt with such tools, particularly at scales of
+    ambition that were impossible for small groups before.
+\end{enumerate}
+
+\noindent The third and fourth points are, in my view, where
+the real work of the seminar lies.  The first two are
+prerequisites.

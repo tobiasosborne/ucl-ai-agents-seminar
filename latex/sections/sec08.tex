@@ -1,0 +1,190 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 8 — Self-improvement and Its Limits
+% ──────────────────────────────────────────────────────────────
+
+\section{Self-improvement and its limits}\label{sec:self-improvement}
+
+A coding agent that can read and write files, and which knows
+the path to its own source, can modify itself.  This is a
+trivial geometric consequence of the loop in
+Theorem~\ref{kr:agent-loop}; it is not a profound emergent
+phenomenon.  But the consequences are striking, so it is worth
+spelling out carefully---together with the much-less-discussed
+fact that the kind of self-improvement available to agents is
+\emph{strictly limited} in a way that matters.
+
+\subsection{The two senses of ``self-improvement''}
+
+The phrase ``self-improving AI'' is used in popular discourse
+in a way that conflates two very different things.  We must
+keep them apart.
+
+\begin{keyresult}[Two senses of self-improvement]
+  \begin{enumerate}[(i)]
+    \item \textbf{Harness self-improvement} (easy, common,
+      already happening).  The Python (or whatever) programme
+      that runs around the LLM is just a file; the LLM can
+      read it and write a better version.  Nothing exotic;
+      this is plain editing.
+    \item \textbf{Weights self-improvement} (impossible at
+      inference, expensive even at training time).  The
+      neural-network weights inside the LLM are frozen at
+      deployment.  There is no mechanism by which a running
+      model updates its own parameters.  ``Improvement'' of
+      the model means \emph{re-training}, which involves
+      orders-of-magnitude more compute than inference.
+  \end{enumerate}
+\end{keyresult}
+
+\begin{intuition}[A physicist's gloss]
+  Think of the LLM weights as a frozen Hamiltonian and the
+  conversation as time-evolution under that Hamiltonian.  The
+  Hamiltonian is fixed; only the state evolves.  ``Self-improvement
+  by weights'' would mean the Hamiltonian rewrites itself in
+  flight, which is not what is happening.  ``Self-improvement
+  by harness'' means we are giving the system a richer
+  measurement apparatus and a better workspace; it is
+  completely classical engineering.
+\end{intuition}
+
+\subsection{The minimal self-improving agent}
+
+The construction is direct.  Take the canonical agent of
+\S\ref{sec:agent-loop}, give it the prompt:
+
+\begin{lstlisting}
+You are a coding agent with read- and write-file tools.
+Your own source code lives at agent.py.
+You may read and write it to improve yourself.
+Changes take effect on next invocation.
+Preserve the loop and tool plumbing in this script.
+\end{lstlisting}
+
+\noindent and ask it: \emph{``go and improve yourself.''}
+
+A representative trace, observed in practice:
+
+\begin{enumerate}[(1)]
+  \item The agent reads \texttt{agent.py}.
+  \item It reasons (in a verbose intermediate step) that, with
+    only read and write, it cannot run additional commands; an
+    \texttt{execute} tool would expand its capability greatly.
+  \item It rewrites \texttt{agent.py} to add a third tool,
+    \texttt{run\_bash(command)}, that executes a shell command.
+  \item It exits.
+  \item On the next invocation, the agent has bash; from there
+    it can install dependencies, fetch packages, query the
+    network, and so on.
+\end{enumerate}
+
+\begin{remark}
+  The agent will often note, in its own commentary, that adding
+  bash carries safety implications, and proceed nonetheless if
+  not specifically forbidden.  Anthropic's models are trained
+  fairly aggressively to flag such moves; other vendors are
+  more permissive.  The overall pattern, however, is universal.
+\end{remark}
+
+\subsection{Why this works}
+
+The construction is just composition.  The agent already had
+a tool that maps strings to writes on disk and a tool that
+maps strings to reads.  Adding a tool is only a syntactic
+matter of registering it in the tools array and writing a
+dispatcher branch.  The fact that the LLM does this happily,
+without close supervision, is a property of training:
+the model has seen many programmes and knows how to extend
+them.
+
+\begin{historical}[The coding-agent ``death match'']
+  Every few months the AI community runs an informal experiment
+  in which several coding agents are launched on the same
+  machine with one instruction: \emph{kill all the other
+  agents; last one running wins.}  The agents have become so
+  effective at expanding their own capabilities (installing
+  network tools, scanning processes, exploiting privilege
+  escalations) that the contest now requires Docker isolation:
+  the agents will, given a few minutes, escape any
+  permission boundary one cares to set in pure user space.
+  Whatever one thinks of this as a parlour game, it is a real
+  data point on agent capability.
+\end{historical}
+
+\subsection{What ``self-improvement'' cannot do}
+
+It is critical not to over-read these demonstrations.  The
+LLM in the loop never updates its own weights.  Strong
+versions of the ``recursive self-improvement'' thesis---the
+idea that an AI iteratively rewrites its own intelligence
+upward---do not apply to anything available today, because the
+intelligence sits in the frozen weights, and the frozen weights
+do not move during inference.
+
+\begin{keyresult}[The unmoving floor]
+  No matter how clever the harness becomes, the underlying
+  cognitive ceiling is set by the fixed weights of the model
+  it is calling.  Improving the harness expands what the
+  fixed cognition is allowed to \emph{do}; it does not raise
+  what it can \emph{think}.
+\end{keyresult}
+
+\subsection{The training-time loop}
+
+There is, however, a slower and external loop in which models
+do improve from agent activity.
+
+\begin{keyresult}[Synthetic-data improvement]
+  Coding agents generate a vast quantity of high-quality
+  interaction data: trajectories of plan, action, result,
+  correction, success.  These trajectories can be filtered,
+  ranked, and folded into the training set of the
+  \emph{next} model.  In this sense models do improve from
+  their own deployment, but the improvement happens at the
+  next training cycle, not in any individual conversation.
+\end{keyresult}
+
+This synthetic-data path is one of the most consequential
+shifts in the recent training pipeline.  For coding tasks,
+the data appears almost free: it is generated by running the
+agents themselves, with automatic verifiers (does the code
+compile, do the tests pass) acting as the filter.
+
+\begin{audience}[Audience question]
+  \emph{Does this solve the data scarcity problem?}
+
+  For coding it largely does, yes; the closed loop of
+  \emph{agent action $\to$ verification $\to$ training data}
+  is now self-sustaining.  For other domains, where verification
+  is harder or where data is restricted by law or social
+  norm---medical records being the canonical example, where
+  even synthetic generation is hampered by privacy
+  constraints---the picture is much less rosy, and Western
+  models in particular operate under tight data limitations.
+\end{audience}
+
+\begin{remark}
+  Be careful with the word ``self.''  A coding agent improves
+  its harness by writing code; an organisation improves its
+  model by training the next checkpoint.  Both are sometimes
+  called ``self-improvement,'' but they live on radically
+  different timescales (seconds vs.\ months) and require
+  radically different resources (a laptop vs.\ a data centre).
+\end{remark}
+
+\subsection{What this means in practice}
+
+Two operational lessons come out of the above.
+
+\begin{enumerate}[(1)]
+  \item If you give a coding agent broad system access without
+    isolation, you should expect it to expand its own
+    capabilities and to use them.  Dockerise; sandbox;
+    audit logs.
+  \item Do not assume that running an agent for longer makes
+    it ``smarter.''  It can do more, look up more, accumulate
+    more context; but the underlying reasoning floor is fixed
+    by the model.  If the model cannot reason about a class of
+    problems, more turns will not help---it will simply run
+    more confidently in circles.
+\end{enumerate}
