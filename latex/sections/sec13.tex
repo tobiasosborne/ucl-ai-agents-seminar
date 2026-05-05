@@ -1,0 +1,543 @@
+%!TEX root = ../LLMSeminar.tex
+% ──────────────────────────────────────────────────────────────
+%  Section 13 — Seminar II discussion (delivered): Verifiability
+%               and the limits of self-improvement
+% ──────────────────────────────────────────────────────────────
+%
+%  This section is a faithful summary of the live discussion in
+%  the second seminar.  It records material that arose in the
+%  room and that complements, rather than duplicates, the
+%  pre-prepared notes of \S\ref{sec:recap-agency}--\S\ref{sec:ambitious-science}.
+%  It is intended to be folded back into those sections at the
+%  author's discretion, or to remain as a standalone chapter on
+%  the verification hierarchy and the singularity objection.
+% ──────────────────────────────────────────────────────────────
+
+\section{Verifiability and the limits of self-improvement}%
+\label{sec:verification}
+
+The intent of the second seminar was to extend the picture of
+\S\ref{sec:agent-loop}--\S\ref{sec:self-improvement} in two
+directions: outward, into the operational realities of running
+these systems on the hardware participants actually have; and
+upward, into the question of what it means to \emph{trust} the
+output of a stochastic, high-throughput source.  The
+discussion that resulted was substantially less linear than
+the prepared notes, and the present section records what
+emerged.
+
+\subsection{The pre-bootstrap phase}\label{sec:prebootstrap}
+
+We opened with a debrief of the second homework of
+\S\ref{sec:bitter-lesson}: install Ollama and run a local
+model.  Several participants had attempted this with very
+mixed success.
+
+\begin{audience}[Student reports]
+  \begin{itemize}
+    \item Gemma~4 in its $26\,\text{B}$-parameter variant
+      (with $\sim4\,\text{B}$ \emph{active} parameters under
+      the mixture-of-experts routing) was made to run on a
+      laptop with $16\,\text{GB}$ of integrated graphics
+      memory, after manually tuning the number of layers
+      offloaded to the GPU.  Useful throughput was reached at
+      $13$--$16$ tokens/s, and the model produced a usable
+      \LaTeX\ rendering of an exercise sheet in roughly five
+      minutes.
+    \item Qwen~3.5 in the same regime, by contrast, fell into
+      a thinking loop on most prompts---``overthinking,'' as
+      the room agreed---and produced no usable output.  This
+      pathology, of small reasoning models recursing into
+      their own scratchpad, was reported as a recurring
+      failure mode of the current generation.
+    \item The smallest variant of Gemma~4 ($2\,\text{B}$
+      effective parameters) cannot reproduce a passage from
+      Harry Potter on demand, despite the larger versions
+      doing so easily.  The room concluded, only half in
+      jest, that the small models do not contain
+      ``culture''---they have been distilled past the point
+      at which idiosyncratic training data survives.
+    \item One participant, calling a local model directly via
+      the Hugging Face \texttt{transformers} library (i.e.\
+      bypassing the Ollama harness), found that the model
+      \emph{denied} that it was running locally and
+      maintained that it was in the cloud, until the same
+      claim was put in the role of a system prompt
+      (an ``admin'' role), at which point it accepted the
+      premise and proceeded.  This is a small but instructive
+      data point on prompt hierarchies.
+  \end{itemize}
+\end{audience}
+
+\begin{keyresult}[The pre-bootstrap phase]\label{kr:prebootstrap}
+  Most participants are at present in a \emph{pre-bootstrap}
+  regime: the local-model setup must be done manually because
+  the locally-runnable models are not yet capable enough to
+  set themselves up.  This is a transient state.  The interesting
+  threshold is the moment at which a local model is good
+  enough to act as the agent that installs and configures the
+  next, better, local model on one's behalf.  Until that
+  threshold is crossed, the cost of running locally is
+  measured in afternoons of human typing.
+\end{keyresult}
+
+A practical consequence: the cost-effective workflow at
+present is heterogeneous.  Specialised models do specialised
+jobs (\texttt{whisper.cpp} for speech, Marker for
+PDF-to-Markdown with embedded \LaTeX, locally-run small models
+for short generative tasks); the LLM is invoked only for the
+genuinely natural-language part of the pipeline.  Routing the
+work to the cheapest competent model, rather than putting
+everything through the largest available LLM, is the
+operationally correct discipline.
+
+\begin{remark}[On hardware]
+  The hardware target most authors of these models optimise
+  for is presently the $32\,\text{GB}$ Apple-silicon laptop:
+  unified memory removes the CPU/GPU partitioning that makes
+  laptop inference painful elsewhere.  An intermediate option
+  for our group will be a desktop with an RTX~3090 (sufficient
+  for Marker, Whisper, and small Qwen-class models), with a
+  shared server in the basement targeted as the eventual
+  ``decent'' tier.
+\end{remark}
+
+\subsection{The verification hierarchy}\label{sec:verification-hierarchy}
+
+The thread connecting almost every difficulty reported in
+\S\ref{sec:prebootstrap} is the same one that troubled us at
+the end of Seminar~I: the output of an LLM is a
+\emph{high-frequency, low-trust} channel.  We have plenty of
+text; we cannot at the moment quite believe any of it.  How
+much error can be tolerated, and what mechanisms reduce it,
+is therefore the central operational question.
+
+\begin{intuition}[Information-theoretic framing]
+  An LLM is a noisy channel: it carries genuine signal at
+  some rate together with errors at some rate.  Shannon
+  teaches that a noisy channel can be made arbitrarily
+  reliable by coding---most simply, by repetition.  If the
+  channel produces the right answer with probability~$p > 1/2$
+  on a binary decision, sampling $N$ times and taking a
+  majority vote drives the error rate to zero exponentially
+  in~$N$.  The fact that compute is cheap and inference is
+  embarrassingly parallel makes this a serious option, not
+  an asymptotic curiosity.
+\end{intuition}
+
+This motivates a hierarchy of verification mechanisms,
+ordered by the strength of the guarantee each provides.
+
+\begin{keyresult}[The verification hierarchy]\label{kr:verification}
+  In ascending order of confidence:
+  \begin{enumerate}[(1)]
+    \item \textbf{Consensus.}  Ask several independent
+      sources---models, journals, colleagues---and take the
+      majority view.  Cheap, broad, and noisy.
+    \item \textbf{Computational test.}  Have the candidate
+      result emit a programme that runs and produces an
+      answer one can compare against known cases.  Higher
+      bar; it forces the result to pass through a concrete
+      executable bottleneck.
+    \item \textbf{Formalisation.}  Encode the statement and
+      its proof in a language a computer can mechanically
+      check (Lean, Coq, Isabelle).  The strongest available
+      guarantee: subject only to the correctness of the
+      definitions, the result is true.
+  \end{enumerate}
+\end{keyresult}
+
+We treat the three layers in turn.
+
+\subsubsection*{Consensus, and the event horizon of peer review}
+
+We trust scientific papers because they are reviewed.  How
+much should that trust be worth?  An order-of-magnitude
+calculation done in the room is sobering.
+
+\begin{keyresult}[The peer-review budget]\label{kr:event-horizon}
+  Take the arXiv as the visible fraction of scientific
+  output: $\sim40$ new submissions per day in quantum physics
+  alone, $\sim10^4$ papers per year.  A genuinely careful
+  referee report---the kind that would catch a non-trivial
+  error---requires $3$--$4$ working days.  Honest review of
+  the field's annual output thus requires $\sim3 \times 10^4$
+  expert working-days per year.
+
+  The pool of qualified experts in the relevant sub-field is
+  in practice closer to $10^3$--$10^4$ than to the formal
+  membership of the learned societies; sharply discipline-
+  specific reviewing pushes it lower still.  We are therefore
+  at, or already past, the budget at which the field can be
+  honestly reviewed.  The compromise---reading the abstract,
+  scanning the figures, signing off---is not a moral failing;
+  it is what the budget allows.
+\end{keyresult}
+
+\begin{historical}[Voevodsky's discomfort]
+  Vladimir Voevodsky was awarded the Fields Medal in 2002
+  for work in motivic cohomology.  In the years following,
+  he became uncertain whether his own celebrated proofs
+  were correct.  The community knew of unstated subtleties
+  and \emph{worked around} certain results without
+  formally retracting them.  Voevodsky's response was to
+  invest the rest of his career in the development of
+  homotopy type theory and computer-checked mathematics.
+  This is, for our purposes, the canonical example of the
+  consensus layer failing on a researcher's own published
+  work, and of formalisation arising as the cure.
+\end{historical}
+
+If the consensus layer is straining in 2026, layers of
+verification stronger than consensus are not optional.
+
+\subsubsection*{Computational test}
+
+The neural-network community arrived at a parallel
+realisation a decade earlier and now imposes, on its top
+conferences, the requirement that submissions be accompanied
+by a runnable code repository.  ``Does it compile, do the
+tests pass'' is, in a certain sense, a higher bar than what a
+human referee provides on a $30$-page paper: the code has
+been forced through a deterministic checker.
+
+\begin{keyresult}[Programs as referees]\label{kr:programs}
+  For any conjectural result reducible to a computation
+  ($N$-body simulation, special-case verification of an
+  identity, brute-force search), the cheapest meaningful
+  verification is to ask a coding agent to produce the
+  programme, run it, and report the answer.  This is the
+  mode of verification that is most accelerated by the
+  technology of \S\ref{sec:agent-loop}, and it is now
+  available, in practice, to anyone.
+\end{keyresult}
+
+\subsubsection*{Formalisation}
+
+The strongest layer is mechanical proof-checking.  Lean,
+together with its mathematical library Mathlib, has reached
+the point where a substantial fraction of an undergraduate
+mathematics curriculum---through and including parts of
+functional analysis, $C^*$-algebras, category theory, and
+differential geometry---is formalised, and can be invoked
+rather than re-proved.  Mathlib is unique among the proof
+libraries in actively chasing breadth: a small number of
+people (Buzzard, Tao, Kontorovich, others) have made it
+their explicit project to embed the working corpus of
+mathematics into a computer-checkable form.
+
+\begin{keyresult}[Why formalisation is now relevant to us]\label{kr:formalisation-now}
+  Coding agents have been trained on Lean, Mathlib, and the
+  primary literature documenting both.  They emit Lean
+  proofs at a rate and with a fluency that, even very
+  recently, no one anticipated.  The combination of
+  (i) a strong external verifier (the Lean kernel),
+  (ii) a large pre-existing library (Mathlib), and
+  (iii) a fluent generator (the agent),
+  closes the loop: the agent proposes, the kernel disposes,
+  and the user is left only with the work of choosing
+  problems and reading definitions.
+\end{keyresult}
+
+\subsection{Live demonstration: Lean with a coding agent}\label{sec:lean-demo}
+
+The remainder of the lecture was a live demonstration in
+this third regime.  The procedure was deliberately
+unstructured: open a temporary directory containing a
+recent Mathlib import, hand a coding agent (Claude, in this
+case) a mathematical statement, and watch.
+
+\paragraph{Warm-up: $\sqrt{2}$ irrational.}
+This is the ``hello world'' of Lean.  The agent produced a
+short, compiling proof in one pass; the result it actually
+proved was that $2$ is not a perfect square in~$\N$, which
+is the form Lean prefers in order to avoid clearing
+denominators on a real square root.
+
+\paragraph{Substantive case: tensor commutativity of line bundles.}
+We then asked for the proof of a result drawn from a current
+homework sheet:
+\[
+  L_1 \otimes L_2 \;\cong\; L_2 \otimes L_1
+\]
+as line bundles on a smooth manifold~$M$.  The result is
+not in Mathlib in this exact form; the agent's task is to
+find the right level of abstraction (Mathlib's category-
+theoretic infrastructure for vector bundles being
+substantial) and to emit a proof that compiles.
+
+The behaviour observed was characteristic.  The agent first
+located \texttt{Mathlib.Topology.VectorBundle} and similar
+files, complained about the size of the project (``500 to
+$1{,}500$ lines, four pieces, all mirroring existing
+patterns''), wrote a proof skeleton with the missing pieces
+filled by the placeholder \texttt{sorry}, and began an
+iterative loop of attempting each placeholder, observing
+the type-check error, and adjusting.  Within a session the
+proof compiled; the resulting code was, by the agent's own
+description, \emph{packaging rather than new mathematics}.
+
+\begin{intuition}[The role of \texttt{sorry}]
+  The \texttt{sorry} placeholder is what makes large-scale
+  agent-driven formalisation tractable.  It allows a proof
+  skeleton to type-check before any of its leaves have been
+  proved; the agent can then descend the tree, replacing
+  one \texttt{sorry} at a time, and each individual proof
+  obligation is small enough to be handled.  Decomposition,
+  in this domain, is not a metaphor: it is a primitive of
+  the language.
+\end{intuition}
+
+\begin{keyresult}[An empirical data point]\label{kr:80-pages}
+  An honest figure of present capability: with a current
+  frontier model, a domain expert can, in a weekend,
+  produce of order $80$ pages of \LaTeX\ together with
+  formalised Lean proofs in a sub-area such as functional
+  analysis or operator algebras.  The bottleneck is no
+  longer the formalisation; it is the rate at which the
+  human can supply ideas.
+\end{keyresult}
+
+\subsection{Failure modes of formalisation}\label{sec:formalisation-failures}
+
+Several failure modes deserve to be named explicitly.
+
+\paragraph{Wrong definitions.}
+Lean checks proofs against the definitions one writes, not
+against the definitions one \emph{intends}.  An off-by-an-axiom
+definition (\emph{``a smooth manifold is a manifold where
+the transition functions are twice differentiable''})
+admits proofs that are mechanically valid but
+mathematically vacuous.  Definitions must be read.  In
+practice the worst cases self-disclose: a faulty definition
+quickly produces consequences that are visibly absurd, and
+the contradiction surfaces before the formalisation grows
+large.  This is a useful but unprovable heuristic.
+
+\paragraph{Wheel-spinning on false statements.}
+When asked to prove a statement that is in fact false, the
+agent does not, in general, find the counter-example.  It
+recurses, fails, re-tries, and consumes turns.  Counter-
+example search is a separate skill; for that, a Python
+program is usually faster.  The takeaway is workflow:
+\emph{always run the counter-example pass before launching
+the formalisation pass}.
+
+\paragraph{Context-window saturation.}
+The proof of a single non-trivial result---in the live
+demo, the line-bundle commutativity---consumed of order
+$10^5$ tokens of working context.  Even a model with a
+$10^6$-token context window cannot, in practice, hold more
+than a handful of such proofs simultaneously while
+maintaining inference quality.  A long programme of
+formalisation must therefore be \emph{decomposed} so that
+each subgoal fits independently in context.  This is the
+same lesson as the $P$ vs $\textsf{NP}$ discussion of
+\S\ref{sec:ambitious-science}, restated for proof
+assistants.
+
+\paragraph{Erd\H{o}s slop.}
+A failure mode at the level of community, not of an
+individual run.  Erd\H{o}s posed thousands of conjectures,
+most of which have never been seriously attacked because
+the supply of conjectures vastly exceeded the supply of
+mathematicians interested in them.  It is presently
+fashionable to point a chat model at the Erd\H{o}s list and
+publish what falls out.  Some of these claims will be
+correct; verifying them, however, falls back on the same
+small pool of human experts whose attention is already
+oversubscribed.  This converts a free resource (compute)
+into an expensive one (expert-hours), in the wrong
+direction.
+
+\begin{remark}[On Erd\H{o}s slop]
+  The structural problem is asymmetric: an LLM that emits
+  ten thousand candidate Lean proofs of Erd\H{o}s problems
+  taxes the verification budget of exactly the experts who
+  could otherwise be doing science.  ``Slop'' is the
+  appropriate word; the polite version is that we are
+  generating positive externalities for ourselves while
+  imposing negative ones on the human community of record.
+\end{remark}
+
+\subsection{The singularity, revisited}\label{sec:singularity}
+
+The discussion turned, by way of an audience question, to
+the recursive-self-improvement thesis: the claim that an AI
+capable of editing its own substrate will iteratively
+amplify its own intelligence to a runaway, qualitative
+threshold (``AGI,'' ``the singularity'').  The view of these
+seminars (\S\ref{sec:self-improvement}) is that this thesis
+conflates two different objects.  The harness, written in
+plain code, is rewritten at every turn; the weights, in
+which the cognition lives, are not.  The cognitive ceiling
+is set by the weights and is therefore stationary on
+inference-time scales.
+
+A sharper formulation of the objection emerged.
+
+\begin{keyresult}[Recursive self-improvement as an optimisation problem]\label{kr:singularity}
+  The singularity claim, made concrete, requires a process
+  that climbs from one local optimum of the
+  ``intelligence-as-a-function-of-parameters'' landscape to
+  a strictly better one.  But this is exactly the global-
+  optimisation problem that all of optimisation theory tells
+  us is hard.  The state required to even \emph{compare}
+  candidate optima---a record of which configurations have
+  been tested---grows with the dimension of the parameter
+  space, and one can write down dimension counts at which
+  the comparison memory exceeds, by many orders of magnitude,
+  any conceivable physical store.  In short: \emph{we run
+  out of memory before we run out of local minima}.
+\end{keyresult}
+
+\begin{remark}[Status of the argument]
+  This sketch is in the spirit of a thermodynamic
+  no-go theorem rather than a fully rigorous result.  The
+  components---bumpy landscapes, the inadequacy of greedy
+  ascent, dimensional explosion of search space---are
+  individually well-understood.  Assembled into a single
+  ten-step deductive argument they would constitute, in my
+  view, a genuine obstruction to the strong singularity
+  thesis.  Whether and how to write that argument down is
+  one of the candidate problems for this seminar.
+\end{remark}
+
+\begin{audience}[Audience reaction]
+  The question that prompted the discussion was the
+  honest one: \emph{``I would like to be convinced that AGI
+  is not a threat.''}  The honest reply: I cannot prove
+  this, because the term is not well-defined enough to be
+  the object of a proof; but the recursive-self-improvement
+  argument, which is the strong technical version of the
+  threat narrative, has the structure of a global-
+  optimisation claim and inherits the well-known
+  difficulties of such claims.  This is not a guarantee.
+  It is a reason to be sceptical of the strongest version
+  of the threat.
+\end{audience}
+
+\subsection{Breadth, depth, and the visualisation imperative}\label{sec:breadth-visualisation}
+
+The final third of the seminar returned to the operational-
+competency thesis of \S\ref{sec:ambitious-science}, with a
+sharper claim.
+
+\begin{keyresult}[Breadth as the new affordance]\label{kr:breadth}
+  Becoming a domain expert---a process that inevitably
+  narrows one's competence outside the domain---used to be
+  the only path to working knowledge of a field.  With
+  effective coding agents and good verification, a worker
+  with operational competency
+  (Definition~\ref{def:opcomp}) can reach \emph{useful}
+  competence in many neighbouring domains in days rather
+  than years.  The corresponding research mode is one of
+  \emph{breadth}: the previously prohibitive cost of
+  entering an adjacent field has fallen sharply.
+\end{keyresult}
+
+The limitation, naturally, is depth.  Deep insight remains
+slow.  But for many of the questions a physicist actually
+wants to ask---``does this idea make contact with that
+field?'', ``is this construction equivalent to that one?'',
+``what does this look like in three dimensions?''---breadth
+is what was missing, and breadth is what we now have.
+
+A particular instance of this affordance was developed at
+length: \emph{visualisation as an instrument of
+understanding}.
+
+\begin{intuition}[Visualisation as a question-answering channel]
+  Sitting in a lecture, one's understanding accumulates a
+  small collection of \emph{spinning plates}: questions
+  that arise but cannot be asked without disrupting the
+  pace of delivery, and that consume cognitive cycles for
+  the rest of the lecture until one of them resolves.  A
+  personal assistant that answers each question instantly,
+  and where appropriate by producing an animation or an
+  interactive demo, removes the spinning plates and frees
+  the cycles.  The pedagogy of a textbook---linear,
+  non-interactive, one-pass---is precisely what blocks
+  this.
+\end{intuition}
+
+\begin{historical}[A worked example: hydrogen, helium, neutron stars]
+  In the spirit of demonstrating the claim, three
+  visualisations were prepared with help from a coding agent.
+  \begin{itemize}
+    \item A hydrogen atom in a~$2p$~state, in an external
+      magnetic field, undergoing spontaneous emission to
+      the~$1s$ ground state.  The plotted quantity is the
+      true electron density (computed from the density
+      matrix, not a pure-state stand-in).  This is the
+      picture I had wanted on the blackboard for a decade.
+    \item Helium scattering, with the electron probability
+      cloud bouncing between the nuclei.
+    \item The optical spectrum of our nearest neutron star,
+      with the relativistic redshift and the squeezed
+      hydrogenic wave-functions appropriate to the
+      colossal magnetic field of the atmosphere.
+  \end{itemize}
+  Each was the work of an afternoon.  None would have
+  been undertaken without a coding agent at hand; each, on
+  reflection, accelerates one's intuition more than a
+  semester of equations.
+\end{historical}
+
+\begin{remark}[On the asymmetry of teaching and learning]
+  A second-order observation: the affordance is not
+  symmetric between teachers and learners.  A teacher
+  builds visualisations to communicate \emph{depth} in a
+  domain they already understand; a learner uses them to
+  acquire \emph{breadth} across domains they do not yet.
+  Both are valuable, and the technology serves both, but
+  the workflows are different.  A learner who feels
+  pressure to acquire depth before breadth has the
+  ordering wrong for the present moment.
+\end{remark}
+
+\subsection{The mini-project: a question for next week}\label{sec:mini-project}
+
+The seminar closed by re-stating, with somewhat more force,
+the request of \S\ref{sec:ambitious-science}: each
+participant should bring, by the next session, a concrete
+formulation of \emph{the world they would like to create}.
+
+\begin{keyresult}[The non-technical homework]\label{kr:homework-world}
+  The technical bottleneck has moved.  The new bottleneck is
+  the choice of problem.  The exercise---which is harder
+  than it sounds---is to articulate, in a sentence or two, a
+  research-scale question one would actually like to answer,
+  on the assumption that operational competency in any
+  required adjacent field is now cheap.  We will work
+  outwards from these statements in the remaining sessions.
+\end{keyresult}
+
+\begin{audience}[Examples raised in the room]
+  Several candidate directions surfaced:
+  \begin{itemize}
+    \item the energy and monetary cost of frontier-model
+      inference, as a quantitative survey
+      (cf.\ the third homework of \S\ref{sec:bitter-lesson});
+    \item a precise statement of Bell's theorem and a
+      reconciliation of the various extant formulations,
+      in the spirit of ``which version is true?'';
+    \item three-dimensional, physically-correct
+      visualisations of canonical quantum processes
+      (\S\ref{sec:breadth-visualisation});
+    \item more speculatively, a written-out form of the
+      anti-singularity argument of
+      Theorem~\ref{kr:singularity}.
+  \end{itemize}
+  None of these is final.  All are, on present terms,
+  attemptable.
+\end{audience}
+
+\begin{remark}[The shape of the remaining series]
+  Whether the seminar develops as a sequence of independent
+  mini-projects, a single coordinated attack on a larger
+  question, or a structured exploration of a small number of
+  candidate worlds, is for the participants to decide.  The
+  prepared notes (\S\ref{sec:agent-loop}--\S\ref{sec:ambitious-science})
+  exist as a resource; the live work begins from here.
+\end{remark}

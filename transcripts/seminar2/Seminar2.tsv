@@ -1,0 +1,1023 @@
+start	end	text
+480	4960	Good, I hear some interesting discussions already as I come into the room.
+4960	9840	From these discussions, I gather that you are trying out local models.
+9840	16480	Yes, we're trying our best to not have to pay for something online.
+16480	19160	You'll see where this goes, I think, I fear.
+19160	21760	But yeah, I'm curious to hear your experiences.
+21760	26320	You've tried things, so maybe not all of us have tried these things, so maybe some of
+26320	31120	you can give an introduction to what you tried.
+31120	38160	I can, because mine was the worst experience, but it was also the first, so we can build
+38160	45280	up on top of that, because what I did is I installed Olama just on a CPU, 8 gigabytes of RAM, and
+45280	48080	then I tried to run Gemma 4.
+48080	50160	Okay, how many parameters is that?
+50160	55120	The smallest one, it has like, oh, they do some magic where they have effective parameters.
+55120	60320	I think you should say first, Gemma 4 comes in four different variants.
+60320	64400	2 billion, 4 billion, 26 billion, and 31 billion.
+64400	69920	And the 26 billion has only 4 billion active and the others passive, whatever that means.
+69920	74000	But the same for the E2B, because that's also like the effective 2 billion,
+75280	77200	that's why it says that what's the E?
+77200	79440	But that doesn't have passive parameters.
+79440	83920	It doesn't, but they do some magic where they hide some layers, I don't know.
+83920	84480	Yeah.
+84480	90240	Because also there, 2 billion parameters are way larger than the Quen models, for example.
+91680	94960	And that's why those didn't run on my PC at all.
+95600	96960	I don't have enough RAM.
+96960	101120	Then we started to run it on Otis computer.
+101120	106560	You have 16 gigabytes of VRAM, so we managed, supposedly, what?
+107360	114720	I mean, it's sort of fake because it's an integrated GPU and it can share the RAM with
+115280	119040	the CPU and it can share up to 60 megabytes.
+119040	121680	So 16 gigabyte models fit.
+122560	134880	And then I chose, technically, the Gemma 431D should also fit in some quantizations, possibly.
+135920	143280	The annoying thing is that it takes some experimentation to make these models work on the laptop, because
+145440	149920	first of all, you need RAM reserved for your operating system and to run the graphical environment.
+150560	158000	So you can't just put all of your, you can't just put the model in the complete GPU VRAM,
+158800	160000	and because then nothing works.
+160880	168720	So you have to manually experiment how many layers of the model you want to load off to the GPU.
+168720	173440	And that's, it's not trivial, I guess.
+175280	187280	But I made it work with the 26 gigabyte model, the 26 billion parameter model, which is 15.6 gigabytes required.
+188000	197040	It just fits, but I can't put the whole model in, into the GPU because then everything crashes.
+197040	199040	So I still have to select some layers.
+199920	206800	And then it runs at about 16 to 13 tokens per second.
+207600	208720	That's very good.
+208720	209760	Which is okay.
+210640	216880	I just tried converting one of Henrik's exercise sheets into types.
+216880	220800	And it worked with minor corrections.
+221920	226480	And it didn't understand exactly how types work.
+226480	233680	But it put, I now have a PDF of the exercise sheets again, which is not completely ugly.
+233680	238640	So that was sort of, is that the final types version?
+238640	240320	Yes, that is the types version.
+240320	242880	I mean, you can show it around, looks like this.
+244960	245520	Okay.
+245520	246080	It's okay.
+246080	246800	Yeah.
+246800	247840	And it didn't take too long.
+247840	253280	It took about four minutes, almost five minutes.
+253280	254480	Interesting.
+254480	258560	Which is for a local model, better than I've seen before.
+258560	261760	And how long would it take you to type the same document?
+265120	266560	Probably more than five minutes.
+266560	267040	Okay.
+269840	271040	Maybe not much more.
+271040	271520	Yes.
+271520	272880	Maybe about 15 minutes.
+272880	273680	Yeah.
+273680	275040	I presume.
+275600	276800	And I have to do corrections.
+276800	277360	Yeah.
+277360	279280	But because it doesn't get everything right.
+279280	279600	Yeah.
+280560	281680	But it's also not an agent.
+281680	284720	If it was an agent, then maybe it could have corrected itself.
+284720	289120	And I'm just trying to get the image recognition to work.
+289120	291840	Because that was just from the text of the PDF.
+291840	292320	I saw it.
+292320	295360	So only had the text as context, not the images.
+295360	299280	So I didn't exactly know how the old document layout looked.
+300400	305440	And for some reason, I can't put images into the input prompt right now.
+305440	307200	So I'll see how to fix that.
+308400	308880	Interesting.
+308880	309440	Interesting.
+309920	313920	What I would suggest in that particular instance is that you
+315280	315680	use a...
+316800	320000	If you want to convert images to LaTeX, there is a model.
+320000	321040	It's not an LLM.
+321040	321600	It's a...
+321600	323440	My screen is that again.
+324400	324720	Okay.
+324720	325600	I'll fix that in a second.
+327280	341310	I will recommend a OCR technology neural network.
+341950	343230	I think it's developed by Facebook.
+344270	345310	It's called the Marker.
+345310	346350	Oh, I've tried that before.
+346350	346830	Yeah.
+346830	348110	It was very slow.
+348830	352270	It's very slow, but there are various models you can use.
+352270	353550	You don't have to use the stock one.
+354910	361790	So I use Marker all the time now because I don't want to use an LLM to do image to text
+362510	364910	when a more specialized model works.
+364910	366830	And so I have a GPU.
+366830	369070	So it's...
+370190	372910	But no, I've actually been using Marker on CPU as well occasionally.
+373870	380030	And if you hand it a PDF as a scan, it can convert it to LaTeX, not types, but you know,
+380030	381150	maybe as an intermediate step.
+382110	385630	So this works extremely, extremely well and recognizes equations.
+385630	391390	So what I've done is I have a workflow now where, for example, I might have a transcript
+392190	393470	from a conversation.
+393470	397070	We may have some handwritten notes and we send those through specialized models.
+397070	398190	We don't send them through LLMs.
+398190	403550	I send them through a local model, Whisper to do the transcripts, Marker to do the notes.
+404110	406430	It gets a first-class LaTeX.
+407310	407710	I don't use times.
+407710	408910	So it converts handwritten notes.
+408910	415070	It converts handwritten notes as well into Markdown, basically.
+415070	416030	That's what Marker does.
+417150	419150	And Markdown with LaTeX in line.
+419150	421390	So it's the worst of every whatever.
+421390	423150	I mean, but you've got something, right?
+423150	428030	And then from this something, you've got a text of the discussion
+428030	432510	and a first pass at the text and equations.
+433150	436990	And then you can ask a local model then to combine these sources
+436990	440990	and create a best types or best LaTeX or whatever version.
+441550	445070	And that way, you focus the compute where you can, right?
+445070	448910	So the idea here is that you use Marker to do the Marker job,
+449630	453710	Whisper to do the Whisper job, LLM to do the natural language job.
+453710	457790	And so it's pretty tricky on laptops.
+457790	460590	You're all running into this, this kind of like hard barrier
+460590	463070	that you're about one generation of technology behind.
+465140	468740	What we'd all ideally ideal scenario is I believe
+468740	475300	to order some and you have Apple devices where you can probably run local models
+475300	476900	pretty well because of the shared memory.
+476900	477460	Is that right?
+477460	478500	But I did not try it.
+478500	479540	You did not try it yet.
+481300	483300	How much RAM do you have in your laptops?
+483300	484820	5 to 16.
+484820	485300	16.
+485300	487220	Oh, it's a lot of the status.
+487220	488500	Ah, okay, yeah.
+488500	491380	The ideal hardware to have, which we don't have
+491380	496340	because it's impossible to buy anymore, is 32 gigabytes Apple laptops.
+496340	498020	All the models are just optimized for this.
+498980	504580	So you can run them real fast on that hardware.
+505300	507380	But hey, we can do what we got to do.
+507380	509780	We do what we can do and then as we say, we're setting it up.
+509780	512580	It's just such a painful progress for this server down in the basement,
+512580	513300	but it is happening.
+514740	520340	But what we will have soon is a decent graphics card 3090 in a desktop here.
+520980	522660	So that'll be an intermediate level.
+522660	525860	And that runs Marker, Whisper, local models like Quinn.
+525860	528820	Pretty happily there's no agentic models.
+529380	532900	So within a couple of weeks maybe we'll have that ready for you
+532900	534900	and then you can experiment on better hardware.
+534900	540660	But I think it's actually very good to really painfully experience it the way I did.
+541780	546180	So that when you transition to other models, you can use all these tricks you develop
+546180	548500	in order to get the most out of the crappy models.
+554110	556830	Okay, so is this kind of the end of the experience?
+556830	560670	I mean, it's doing useful work for you though in one sense, right?
+561390	565710	I've yet to try longer conversations.
+567630	569950	Of course, the context window isn't maxed out
+569950	582430	and I haven't tried many things yet, but it works and it doesn't just spit out trash like
+583310	588670	those first model and like Quinn 3.5, which was this nonsense.
+588670	591310	So Quinn 3.5, it just didn't...
+592110	595950	It just circled around and around and didn't output anything usable.
+595950	600030	And did you Google that as a problem? Like do people complain about this?
+600030	602270	I probably don't have enough context size.
+602270	606590	That's my suspicion because whenever it starts reasoning, it kind of loops.
+606590	608510	It gets caught in, it's overthinking.
+608510	614430	Yeah, it's overthinking, it gets caught in a loop and it reiterates on stuff that it already decided on.
+616030	618910	It's funny, this conversation, I've had it like three or four times
+618910	622350	with completely different groups of people that their local models are overthinking
+622350	625790	and I haven't looked into this for a while, so I'll have to look into this.
+626750	630670	Because I didn't have the chain of thought tokens when I experimented with local models.
+630670	633070	It's a kind of new thing. I mean, you can turn thinking off.
+635150	643070	Yeah, when I do that, it kind of does the job, but for me, it doesn't do anything useful at all.
+643070	645230	It's just a happy thing to play around with.
+645230	646510	It's a happy thing to play around with.
+646510	655710	So I tried the intermediate model, 4 billion. First, I tried if it can recitate Harry Potter,
+655710	661230	because in larger models, this is just in the weights, but the smaller one wasn't able to.
+661950	670030	So it refused when I said, give me page something of Harry Potter,
+670030	677070	cause a copyright, and I became able to speed talk it into doing it. But when I gave it the first few
+677070	686670	sentences, I tried something, but it was completely off. So the smaller models don't contain culture,
+686670	694830	apparently. And also, I tried some more technical stuff. It was able to define me a Hilbert's base
+694830	705710	in the C-star algebra, but it wasn't able to prove me that a state that states on a sub-algebra extend
+705710	711310	to states on the whole algebra. It wasn't able to do that or even state that that's correct.
+711310	712350	Okay. Yeah.
+715150	716270	Any other experiences?
+716270	722030	Any other experiences, I tried to load it into Python with the Transformers
+722030	729630	library, also the same model I believe for E4B. Yeah, it works. I find that interesting too.
+729630	735790	So like it's a bit more raw and I'm not yet to reach the chat mode. I can
+735790	745390	send one input and then it gives me the output. And what I tried is to get it to write me some kind of
+745390	752590	web search tool prompt or something and it refused that and it refused to believe that it was
+752590	758990	running in python it always said no i'm in the cloud but maybe you have another one
+758990	765710	and but then when i used an admin prompt it worked okay so like you have this low user
+765710	771310	prompt and this low admin prompt and so you didn't believe the user but it believes the
+771310	776990	admin that's very interesting i didn't know about that actually yeah i'm not sure if it's actually
+776990	782750	called yeah but this is a thing we write down we learned that this happens and then maybe it's
+782750	790190	useful in the future yeah interesting interesting um so i'm very i think you know one of the core
+790190	796110	goals is that you experiment with these things uh and then the second and then learn stuff and share
+796110	801230	this learning right you know a little little comment about admin prompts or might be useful for us
+801310	806510	later on you know a comment about this works that doesn't work this can be all useful as as the
+806510	813950	seminar progresses oh i've got something to share yes you said that uh language models as an output
+813950	823710	they generate json yes right yes because uh and i've tried that i set up an api where like locally call
+823710	832030	my own api yeah and then it does return those exact json strings yes as an answer but i found them very
+832030	839710	confusing to read yes because they like the keys they use are different for every message that i send
+840510	846830	so i wanted to ask you if you maybe know how how this actually works in practice because uh now we get
+846830	854910	into this this is scaffolding discussion so it's what happens around the output of an llm um all i can say
+854910	862590	is you can make it pretty by using jq this command it makes it slightly more readable the output uh more
+862590	870030	i don't really know about the outputs of these models okay yeah but maybe you do yeah actually i was a bit
+870030	875710	uh confused because it didn't output in json for me maybe it's a library that affected the way but
+875710	884110	is your question it has some some tokens yeah it has a tool token or it has a role token and so on
+884110	890750	but i maybe i'm not i'm not sure if i am below the json lawyer or above i think you might be below it
+890750	896590	right okay i think you're really you're really putting numbers through matrices yeah yeah and so the api
+896590	902110	which is different from the llm right the llm is this function is a mathematical function
+902110	906270	yes and that just emits tokens and there's no jasons coming out of that it's just
+906270	913150	strings of stuff oh it's not it can emit json it just doesn't yeah but then that's just json
+913150	918270	represented as tokens that's right yeah it's not really json the model doesn't really know about json
+919070	924110	what it does is it emits tokens and there's a textual representation of those tokens and that's
+924110	931070	always when you see these angular brackets with type characters and then there's it says like tool
+931070	939230	or something or prompt yeah and then you can what your api does or what chat gpt the interface does or
+939230	948750	llama or olama they just transform that representation of tokens into a json exactly object because you can
+948750	954270	send it over the network and read it with every programming language so but there's no the model
+954270	959950	doesn't know about json no because i understood you in a way that screen the actual screen oh okay sorry
+959950	966990	yeah that was unclear yeah by the llm that that's the json yeah depending on your harness it is it's like
+966990	971310	how do you wrap this where do you cut the function and say what's the output and what's the harness
+972430	974830	so at the level you're doing it with a transformers library
+975790	981470	you're really evaluating a mathematical function outcomes tokens and then the python around it
+981470	986270	already starts to wrap these tokens in this json and so what's the function and where's that not
+986270	991310	the function so there's this kind of gray area around the transformer which is the thing that's really just
+991310	997710	emitting tokens and that the stuff you get from the api which is json wrapped but yeah you have yeah i was
+997710	1004670	wondering is there some kind of standard how to translate these tones into json um not that i'm
+1004670	1010590	aware of but there's probably i mean there must be uh is a quicker answer if you ask your model
+1011230	1016350	it might know um there must be a python library that is doing it somewhere like in the transformers
+1016350	1024510	library yeah so it's more like do all models have the same token standard and the same mostly i mean
+1024510	1030350	it's a wild west so people are creating models that don't obey any rules um and people you know create
+1030350	1034590	models where they have standards so that everyone can talk to each other i you know you know about
+1034590	1040830	this place right yeah i don't know if i mentioned that in any previous seminars but if you want to
+1040830	1049410	download a model this is the place to find it so what we're in is the pre-bootstrap phase of your
+1049410	1054210	of your learning so what do i mean by that you're having to do everything manually you're having to
+1054210	1060210	kind of coax these things onto your system and then you spend lots of typing time to get them to work
+1060210	1065090	and then they do kind of work and then and then they're not useful and you can't pipe them into other
+1065090	1070530	things where you want to get to is the point and i don't know if you i just don't know if local
+1070530	1076130	models can get you to this point but we want to get to this point where the model itself helps you
+1076130	1082610	do this work so instead of you having to write python in using the transformers library you just say
+1082610	1091200	to an agent write me a python that will get this model running locally and then it the agent goes
+1091200	1096320	off does that for you and now you have it running locally you know freeing yourself from this stuff
+1096320	1101520	that you're having to do at the moment that's coming but it will need that we can give you access to
+1101520	1107920	better agents right at the moment the agents you can get on for absolutely zero pennies as you've
+1107920	1114960	experienced not super great um so the homework that wasn't the homework but it's very interesting
+1114960	1119840	and i'm happy to hear every week about these discoveries uh but the homework was to read one essay
+1120880	1122400	did you read it it's one page
+1122400	1131360	i forgot but maybe someone here can summarize it their experience with reading it and what they
+1131360	1139360	think about it yep i mean okay so the the core idea so the essay was called the bitter lesson i believe
+1139360	1147200	yes yeah the bitter lesson and what is the bitter lesson it's the fact that um we as humans when we try
+1147200	1153280	to build a computer that's specifically tasked to do one thing for example building a chess robot that
+1153280	1160080	we as humans are not that good at like hard implementing the steps we need to that we need
+1160080	1165680	to computer to solve in order to play chess because what we assume is whenever we build a computer is
+1165680	1172720	that or we build an algorithm is that like we as human we can teach it to like think the way a human
+1172720	1180000	would think so we hard code like oh if there's a rook there then take it or whatever but instead like
+1180000	1186560	the most effective thing we can do as researchers building a robot is to just like throw computational
+1186560	1192400	power at it let it learn by itself and just use like this deep learning or the way i don't know how
+1192400	1202000	it was called there but like just using uh a neural network to to to learn how to play chess itself
+1202000	1208640	instead of us trying to teach it because that's that's like the the most intuitive step for us
+1208640	1213360	would be to like oh we need a robot to solve this problem well we teach the robot how to solve this
+1213360	1218880	problem if it's if it's chess or what else was in the text they also had like speech recognition
+1218880	1225680	computer vision and so on and so forth so the best thing you can do for example for computer vision is
+1225680	1232480	to not teach the the computer how to recognize patterns or anything because that's the initial
+1232480	1238800	approach by us humans was to like teach it how to to discover edges and shapes and whatever but no
+1238800	1244880	instead the best we can do is just like let the computer learn by itself use the neural network just
+1244880	1251040	throw computational power at it and the computer kind of teaches itself how to to solve that problem
+1251040	1257120	yep i i think that's more or less my take-home message from it as well does anyone add anything
+1257120	1266370	to that story um uh it was anyone are you happy with this no yeah you shouldn't be happy with this
+1266370	1271330	right what's there's something very wrong with this right we're kind of building black boxes where we
+1271330	1278370	don't know how they work yep i would love for chess computer to at least know there is a person who
+1278370	1283730	understands how it works but the way it is right now it's like no one knows how they work it's a black
+1283730	1293410	box yes exactly that so they do the task but you don't know how or why or both of how and why uh
+1293410	1298210	it's a pretty powerful essay for someone like myself because i followed this stuff since the year 2000 or
+1298210	1304210	so and you know i've really seen the whole research field do this make this mistake over and over and
+1304210	1308690	over and over again like it's not just it does it once the whole research field makes this mistake
+1308690	1314130	every single time um and that is you you have some new computational power and the first thing you
+1314130	1319490	think of doing is oh we as humans know how to solve this problem let's teach it that let's hard code that
+1319490	1325650	in as you said and then it'll be better as a consequence and the thing we don't want to do is just
+1325650	1332610	throw more compute at the problem uh without understanding and somehow this second strategy always wins
+1332610	1337970	and i've seen it happen i haven't seen it happen once or twice i mean i've had to see it happen tens
+1337970	1343490	and twenty times right you know uh so it's a powerful thing to have just witnessed over the years that
+1343490	1349090	this seems to just be true um i don't know if that'll continue to be true but it seems to be
+1349810	1354290	experimentally true that if you have a complicated problem throw compute at it not understanding
+1355810	1360370	and that's something that we're going to have to tackle in in this seminar because i think the
+1360370	1366290	the interesting direction here is to do research with computing power uh and sutton's better lesson
+1366290	1372450	tells us what it tells us that our understanding of science itself if we extrapolate is probably not
+1372450	1378690	useful rather through compute at it and let the computer work out how to do scientific research
+1379890	1387890	that's a bit more out there as a prediction but we we gotta understand this you gotta you gotta accept
+1387890	1394050	this is the way these things work but it'll take some time okay that was the homework uh and today i
+1394050	1401730	wanna i think the last thing that i can tell you before i don't know anything more is about verifiability
+1403090	1413650	so the most important thing with an untrusted source of information is that you can verify so the you know
+1413650	1417810	i told you in the first seminar and we've spoken about the second and you've seen it yourself
+1418370	1424210	you cannot trust the output of these things they will tell you about states and algebras and then they
+1424210	1430770	will claim that you can't extend a subalgebra state on a subalgebra or whatever right they they
+1430770	1437250	have useful knowledge in there but they also have wrong information in there and the
+1437250	1443890	more but what do they offer so they offer high frequency of output so they can continually output
+1443890	1451010	stuff all day long uh but it's not trusted so is this a useful resource or not that's the question
+1451570	1457890	that we shouldn't think about is it a useful resource to have something do things for you
+1458770	1466100	in an automated fashion where there's a probability of error and i would claim the answer is yes it's and
+1466100	1472980	there's a very easy way to to exploit or improve the quality of the output and that is with verifiability
+1473700	1478100	so if you have a string of information where there's some rate of error what you should do
+1478100	1485300	is code against the error you can turn a noisy channel into a perfect channel by using encryption
+1485300	1491940	encryption but not in the sense of like spy codes but in the sense of you're coding against errors it's
+1491940	1499140	an information theory problem what we want to do is we want to minimize these errors by exploiting
+1500580	1505780	repetition that's the best form of communication over a noisy channel so if you're in a noisy channel
+1505780	1509860	you know there's some rate of error what should you send the message three times and take a majority vote
+1511060	1521330	all of a sudden you've reduced the error by a factor of three and so you if you've got infinite compute
+1521330	1528450	thanks to richard sutton uh what should we do well ideally we should ask a thousand llms the same
+1528450	1535730	question and take a majority vote that's the ideal way of doing this uh you know why not a million llms
+1536930	1544050	ask them take a majority vote uh if you know that there that there is a probability of generating the
+1544050	1553970	correct answer already majority votes will reduce the error of bad faulty outputs it sounds obscene but
+1553970	1558930	it's maybe not that obscene we're going to do very soon i think claire at least was volunteering to look
+1558930	1565330	into the cost of using an llm you can already see the cost of inference on your laptop so your battery
+1565330	1567970	goes down at a certain rate you can work out how much money that cost you
+1567970	1577020	uh and if you can sample a million llms for a reasonable cost and get an incredibly high quality
+1577020	1584300	answer the zero cost to you then why not right so that's one thing i wanted to just to stress is the
+1584300	1591420	cost of of of repetition versus the cost of correction versus the cost of the actual cost
+1593340	1598380	so i want to talk today about verification how do we verify stuff from llms that's that's the question
+1598380	1603100	for today and i'm going to show you how uh three or four levels of verification i've already told you
+1603100	1609580	one just repetition like literally repetition can get you higher quality answers uh ask chat gpt ask
+1609580	1616460	claude ask gemini and then take a majority vote of the three three answers it's already better it's
+1616460	1622140	actually it's still possibly wrong but it's probably less wrong and you can get them to check each other's
+1622140	1633300	work and so uh that also increases the probability of of a correct answer so simple uh consensus is the
+1633300	1642260	first way to gain um uh confidence in an unverified source of information so let's talk about consensus
+1642260	1648500	for a bit that's the lowest level so when you publish a paper do you trust it in a scientific journal
+1648500	1653860	i'm going to start with that do you if you read a scientific paper you're trusting what you're
+1653860	1661540	reading why do you trust it because we assume it's reviewed okay how does the review process work
+1662100	1671220	i'm not sure if i should explain this but uh but it's even your idea of the reviewer process my idea is
+1671220	1680180	that uh the journal sends it to some other people who stay anonymous yes and they look at it and uh
+1682260	1693460	they determine whether the scientific methods have been are correct or if there are biases or
+1696210	1704450	any grave errors in these in these publications it's about right um you send a paper after publication
+1704450	1710690	the journal editor decides they're going to at least send it for review they send it to some anonymous
+1710690	1719970	reviewers who read it for correctness and maybe novelty often novelty is a criteria and then uh depending
+1719970	1724450	on the journal there may be one two or three reviewers that sell them more very rare that you'd
+1724450	1730930	have more than three reviewers for a paper and the reviewers write their report send it to the editor
+1730930	1737090	and then the editor makes a decision based on the report whether to accept or review revise or reject
+1737090	1744750	and so when you have a paper in a journal what what's how much level of confidence is there in
+1744750	1752820	that right you know how much information has been truly verified it depends i think is the correct
+1752820	1760260	answer it depends on what the reviewers did do you know how long the average referee report is
+1763170	1769410	if you're lucky it's about a page so if you send in a 30 page paper to a journal and you get the
+1769410	1774290	review i don't know you guys contradict me here but i'm not sure i've ever seen a referee report
+1774290	1779570	longer than a page or two well i once saw a three or four page i've not submitted it i mean i think
+1779570	1785810	math journals are quite they're pretty pretty hard yeah they're pretty hard but in physics sometimes
+1785810	1793250	paragraph two you're lucky if you get a page yeah so you've submitted a 30 page paper
+1793250	1801410	and you get half a page at best maybe a page of commentary back from the reviewer who's a human
+1801410	1810800	or was a human at least um and uh it makes some statement about the correctness of the paper but
+1812800	1819810	is that enough like does that mean that the paper is correct most of the times i guess
+1821090	1826370	maybe i mean i would put it in the kind of maybe it's correct category actually i don't think it's a very
+1826370	1831970	good method to be honest the math community has its own culture and they're a little bit more rigorous
+1831970	1836370	like they the reviewer tends to read through the whole paper but they won't read arrival the
+1836370	1841010	equations or anything like that often they'll skip steps because it's too hard it takes too long
+1841810	1846690	it's just that it's just that it's just a it's a it's a numbers game right if you've got x researchers
+1846690	1853250	producing a a papers per year let's say one paper per year you've got x new papers per year
+1853250	1863790	uh and they have to be reviewed by experts you have to then send a papers to experts at least every
+1863790	1869390	review every person producing a paper has to review a paper and if they're going to invest energy in
+1869390	1873390	reading it properly they're going to probably have to spend well not the same time as it took to write
+1873390	1881070	the paper but some proportion of their time to to review correctly right and that would be a non-trivial
+1881070	1885710	amount of time let's say it takes i don't know a week to fully review a paper like to the highest
+1885710	1893630	levels of high high high rigor that's okay that's if you've got x people producing eight papers a year
+1893630	1900190	that's x b everyone gets one per year that's not what happens is it so actually people produce uh
+1901150	1905310	more than one paper per year and so you have a
+1905310	1912030	a collection of x experts and they have to review more than one paper per year typically
+1912670	1920110	at least in my inbox i get once every week at least one or two requests to review a paper
+1920670	1924830	i don't know guys does that correlate with your experience you might get less requests but you have
+1924830	1932580	to review right yeah and the week for a paper what do you reckon if you spent every day properly going
+1932580	1941460	through the paper checking everything no no no i mean but it's a paper you know pretty well i don't
+1941460	1948660	know maybe um a weekend plus a couple days extra i don't know something like this so three or four
+1948660	1954660	work days yeah something like that yeah three or four work days so how often do you say yes zero i no
+1954660	1961460	longer accept papers to review uh because that's it's past the the event horizon i cannot actually review
+1961460	1967360	the papers that come into my inbox any longer and also i put into a problem here that i tell every
+1967360	1974720	editor now which is that we can't verify the science has been produced it's no longer possible
+1975920	1981760	we can verify some proportion of it but not really and i'm not the first to say actually this problem has
+1981760	1986960	been known in the math community for decades there are well-known results in the math community by
+1986960	1993840	fields metal awarded people that are wrong everyone knows that they're wrong they tell
+1993840	1998720	each other that these results are wrong and everyone avoids these results and they don't they carefully
+1998720	2003760	don't refer to them in the wrong form but they actually everyone knows that the correct way of
+2003760	2010460	doing it is like this but nobody ever writes this down and it came to the point where one person
+2010460	2019420	guy called the vetsky had concerns about his own proof he did he was no longer convinced that his own proof
+2019420	2026620	of a fields medal award winning result was correct he was just not sure so he was one of the first people
+2026620	2031820	to seriously invest time and energy in automated verification of mathematical results and that's where we're
+2031820	2039340	going today uh he was just so unhappy with the status of his results and whether or not they are true
+2039340	2044060	that he wanted to formalize them and this is the key word that i want to get to today formalization
+2044860	2050540	we've come from consensus based uh verification all the way to the what i consider the highest level
+2051260	2056940	verification which is formalization we'll get to that in a second but i this this story you know has
+2056940	2063500	started to get much more momentum recently uh scientific results are getting harder and harder to verify
+2063500	2069100	because there's more and more of them coming and we're in a crisis where there are more papers
+2069100	2073820	being produced and there are people to review them uh if you want to do a proper review so now we're
+2073820	2081180	down to gut field reviews so you see the paper you go looks okay looks good to me um that's how papers
+2081180	2087760	get reviewed this is just a fact but if you don't believe me just do the numbers just look on the
+2087760	2093760	archive every day there's a whole bunch of papers how many today i don't know a lot um let's see
+2093760	2102140	do this occasionally today there were 94 entries but 41 new submissions so okay it's only 40 today
+2103100	2107420	so if you think that the college of experts in this field of quantum physics how many experts are there
+2107420	2111820	in the world it's probably i don't know you can start working out numbers right just count all the
+2111820	2120060	universities in the world um that's claude while i'm talking um and then we work out how long
+2120700	2126460	or whether or not we're past or built up ahead or behind the event horizon crisis here
+2127020	2134850	so how many um people in quantum physics
+2136690	2145600	in academia and just it doesn't have to be a correct number it just has to be within a couple
+2145600	2149680	of orders of magnitude because the calculation we're going to do won't even matter about the exact numbers
+2151280	2157600	what proportion of those 40 papers do you think is ai generated i don't know anymore actually i think
+2157600	2161200	it's a surprisingly low number that's the thing that's why it's very shocking because i talked to all
+2161200	2167840	my colleagues who were obviously i asked them how are you using ai and it's a shocking number just use
+2167840	2176240	chat gpt just to to talk about ideas with and then they still write the papers here we go that's um
+2177040	2184480	there's a number let's say 30 000 academia quantum people um and then there's a broad broader set which
+2184480	2193600	is yeah kind of maybe um yeah yeah not my kind of work um so let's say if we just took the number of
+2193600	2199840	100 000 active reviewers in the world 100 000 these are the people this is the corpus of people we could
+2199840	2207200	call on to review a paper and so we have 40 per day so we may not be past the event horizon yet but let's
+2207200	2218020	let's let's work it out so we got 40 per day so 40 pages per day times by what is those 250 archive
+2218020	2227220	days in the year roughly speaking so it's 10 000 papers per year now how long did i say did we agree
+2227220	2233700	to do a proper review it was like three or four working days right so let's say three hard working
+2233700	2240500	days it's 30 000 working days need to be invested per year to review all the science that's coming out
+2240500	2254660	at the moment the college of experts is a hundred thousand so yeah it's fine right that's if the
+2254660	2260260	college of experts is a hundred thousand but i fear that the reality is the people that you can call on
+2260260	2266780	for refereeing work is more than in the ten thousand category because a lot of these people here i don't
+2266780	2272300	know where this number of 100 that feels a bit over i mean the total number of members in the dfg is
+2272300	2279980	the dpg is 200 000 something but actually employ people who will do refereeing is closer to about
+2279980	2286620	10 000 would have been my first first number but i'm getting wrong so at least you know we don't seem
+2286620	2292060	to be at the crisis yet but we the problem is we are at the crisis because the actual people who are
+2292060	2296620	qualified enough to referee these papers is much much lower that's the problem these people have
+2296620	2302620	a phd in quantum physics but do you want someone with a phd in statistics to referee your paper on
+2302620	2310580	operator algebras yeah when you get to the the the the the tighter definition then all of a sudden
+2310580	2315620	the college of experts goes from maybe 10 000 to a thousand and then 30 000 starts to be a really
+2315620	2323600	painful number and that's it the pre-ai situation in if you look in neural networks this the study of
+2323600	2330560	neural networks the the numbers are strongly inverted um they have conferences with thousands and
+2330560	2333680	thousands and thousands of thousands of submissions it's just insane the number of papers that are
+2333680	2339600	generated per day in in ai and they can't be refereed anymore and they had this crisis a couple of
+2339600	2346720	years ago so uh and they dropped their standards actually the standard is now every paper has to have
+2346720	2354770	a github repository and the code has to compile i'm joking this is a standard for publication um but
+2354770	2359890	that brings us to our second level of what what it means to verify if you have a program that you can
+2359890	2366370	run then having it run is a pretty good way to check of the correctness of something you know the correct
+2366370	2371490	the program compiles it gives the you give it some inputs it gives you some outputs they match the tests
+2371490	2377890	that you set up that's a fairly high bar for com for for verification and i would put it to you that
+2378530	2383730	that's a fairly high bar it's actually higher in some sense than than referring a paper but that's not
+2383730	2389250	quite where we want to although this is the most effective way to do uh agentic science now is to
+2389250	2394290	get it to write a python program for you to do whatever it is you want to do that's an extremely rapid
+2394290	2400370	way to check something works it's amazing it works really fast you pick a problem in any homework sheet in
+2400370	2410210	any uh lecture in this in the physics institute institute and then ask chat gpt how to solve it
+2410210	2416690	probably it'll write a python program to to test it out this problem you know won't be able to give you
+2416690	2422690	a proof maybe if it's a theoretical result but it'll certainly test some special cases with python programs
+2424050	2430130	you've probably seen this happen right but that's a level of verification that you it's higher level right
+2430130	2436610	we go from college of experts consensus to a program that represents somehow the content runs
+2437810	2442290	but maybe there are edge cases maybe there's examples that can't cover but at least you've
+2442290	2446610	got some signal now that this result is correct or false and this actually works amazingly well for
+2446610	2453490	all kinds of formulas if you guess a formula for something um or even conjecture formula based on some
+2453490	2457970	hints then the first thing you should do is put in the special cases right up to as far as you can go and
+2457970	2463330	if the formula matches for the first 110 cases that you can calculate then you start to think this is
+2463330	2473300	probably correct so that's a level of verification above consensus you go from consensus to writing a
+2473300	2479380	program that kind of does the the happy path the basic examples and then you might want to ascend to
+2479380	2484340	a higher level of verification you know wouldn't it be wonderful to have something that was just correct
+2484340	2491940	and you didn't have to ever have any concerns ever that this result was false as long as the definitions
+2491940	2508060	were correct and there is a way to do it and that's using um uh that is not what i wanted there is a way to
+2508060	2520100	now use uh there is now a way to formalize mathematics in a language which can be computer verified i can show you
+2520100	2526100	one instance of this programming language there are several out there this is probably the the most
+2526100	2530740	actively developed one right now it has the biggest library um we're going to talk about this a bit
+2530740	2536660	today so this is a programming language called lean um how many of you have heard of this
+2538340	2544580	and how many of you played with it wow you belong to a very small community of people
+2544580	2557020	have you ever got the type checker to accept anything i think i used it in years ago yeah a few years ago
+2557020	2563020	okay yeah okay so you've at least heard of it and you've tried it so you you kind of have a sense of what it's like
+2563020	2569020	look it's the most rigorous uh way of representing math that that i think humans have invented it's
+2569020	2577020	as a consequence it's very very boilerplate uh you could spend a long time proving that one plus one equals two
+2577020	2583500	it is possible you can express a proof in this language of the statement and the n plus one is
+2583500	2591340	one plus n and things like that so you start with primitives and then you build up uh lemmas and you
+2591340	2596220	build up a library of true mathematical statements that are formally provably correct and then you can
+2596220	2599340	build on them and build on them and build on them and express mathematics in this language
+2600780	2606540	uh by itself the language is very small it has only a few number of primitives but people have
+2606540	2615100	worked very hard uh and they now have developed a library of formalizations of results in math
+2615900	2621500	and this library started to get good a couple of years ago and by good you've got a large amount of
+2621500	2627580	undergraduate math in there now and not just boring stuff like you know functional analysis is in
+2627580	2633660	there they've got the definition of c star algebra in there they've got uh normal states they've got
+2633660	2640380	uh combinatorics in there geometry they've got it's it's a massive massive massive library of stuff
+2640940	2647580	lots of number theories in there so many many things that you may need to a formal proof of is in this
+2647580	2656940	library you don't have to recreate it and in fact i recommend you don't um and uh and it's being added to all
+2656940	2664060	the time all the time by a small group of really insane people who've made it their life's mission to
+2664060	2669900	turn mathematics into this language you may have even heard of some of them terence towers one of
+2669900	2675580	the kevin buzzard there's a couple of other people kantorovich there's some mathematicians who just
+2675580	2679660	decided this is the most important thing they could be doing right now is formalizing mathematical results
+2680220	2688620	and they're adding to this library and it's it's a huge library and it's useful now so you don't have
+2688620	2696220	to go right back to piano in order to to prove your statement about um operator algebras you can just call
+2696220	2703420	this library and then you have an example a formalized result which is formally proven correct
+2703420	2708620	and the library like it's i'm not going to explain the syntax i'm not going to explain anything about
+2708620	2711500	the language i'm just going to leave it out there that this is a thing that exists
+2712860	2717260	and many many results are in there lemmas about subgroups so anything you might find in an
+2717260	2722540	undergraduate math textbook should at least be uh written in this library not maybe with a missing
+2722540	2727980	proof but it often with a proof so it's pretty extraordinary the amount of stuff that's in there
+2728700	2736140	now why would we talk about that in a in an ai course well because coding agents are trained on the
+2736140	2745230	internet and they know this language they know how to write programs in lean uh and uh how well let's
+2745230	2750270	find out i haven't done this in a while um so what we're going to do is while we're talking i'm going
+2750270	2759980	to ask claude to create a proof of a mathematical statement i'll try and build i hope my mathlib the
+2759980	2767900	mathlib is horrifically large it takes about half an hour to download on it on a hard on an ethernet
+2767900	2774860	connection so i hope i've got a reasonably up-to-date one um so what we'll do is do i have a temp directory
+2777330	2786540	um i'm just gonna ask claude to write me a lean program that proves a mathematical statement that's
+2786540	2793100	kind of hard one that you might be familiar with at the sort of the fourth fifth sixth semester level
+2793100	2799020	i don't know if there are any candidate theorems and proofs that you think are pretty hard but
+2810740	2813540	oh well that'll be interesting what i'll do actually i'll do i'll ask it um
+2814900	2832910	okay i'll tell it that it's in a repo where it has mathlib okay um okay let's get it warmed up so um
+2839280	2843280	so what i'm going to do is this is the kind of hello world of leaves proves that square root
+2843280	2847920	two is irrational which is non-trivial it's actually there's quite a few steps to it
+2847920	2852000	um but what i want to do is get it warmed up so it knows where everything is
+2852880	2861580	because it may already crash out that'll be a bit of a bummer if it doesn't know i already found it
+2864860	2870380	all right okay uh but that's good at least it tested the compiles i i do i wasn't sure if i had it
+2870380	2880080	there but i do okay i'm going to show it you now where did it say it was it said it was under
+2880080	2889180	uh square root two is irrational okay this is what it looks like this is what um this this horrific
+2889180	2894060	programming language looks like now it's very beautiful in many ways um there's this extraordinary
+2894060	2899180	deep connection between type theory category theory and proof theory they're all the same thing
+2899820	2904460	um and lean expresses that so if you want to get it down into that rabbit hole you can and you will
+2904460	2910460	never leave it um okay so this is what uh lean looks like you have theorems go to is irrational
+2910460	2918060	um you have some arguments uh the argument is the number square root two and it's of types blah blah
+2918060	2925660	blah and then you you build up the result in the way that you might uh build it up classically right
+2926300	2935420	so you you might uh assume that uh the number namely square root two is is rational uh so we've got to say
+2935420	2943980	what it is n times n equals two um so your hypothesis you have a hypothesis and then uh you check some cases
+2944540	2949180	and then uh you derive a contradiction it's the kind of standard proof that you might have a square of
+2949180	2956380	two is a russian and it says natural not rational it's natural doesn't it oh that's because it's looking
+2956380	2967020	at the square of it um what have we got here by read write intro the natural number n yeah it's trying
+2967020	2975260	to find a natural yeah okay it's clearing the denominators and working over them um so that's
+2975260	2984720	not a very good theorem what's going on with that one two is not a perfect square okay it's not proving
+2984720	2991820	through two is irrational it's proving that two is not a perfect square uh but that's that's a typical
+2991820	2997260	example of some of some lean code it's if you can read it you can read it if you can't then don't
+2997260	3003180	worry don't try it we're not our objective today isn't to try it but our objective is to see that we
+3003180	3010700	don't have to read it to some extent um here we go we think it's found it compiles cleanly very good
+3010700	3017500	so now let's take on a more difficult task uh you have a candidate i've got one from differential
+3017500	3022700	geometry okay on my current homework sheet yes sorry i'm kind of cheating here um we've got a smooth
+3022700	3036060	manifold m yep please prove for smooth manifold m and on there we have two um line bundles
+3038460	3042940	i'm not sure this may this may not be in the method but let's see i'm curious i don't know actually
+3042940	3053020	uh and uh let's denote them l1 and l2 yep l1 and l2 and we need to show that the tensor product line
+3053020	3063300	bundle or the tensor product bundle l1 tensor l2 i don't have to get it correct yep is isomorphic to l2
+3063300	3072430	tensor l1 so we can they are isomorphic under like reordering all right the tensor product um
+3074780	3083500	is this in mathlib if it's not in mathlib we're kind of cooked uh uh if not uh how far away are we
+3085260	3088620	it might be that they have line bundles they have manifolds and everything they just haven't got this
+3088620	3095340	particular result in there um what is the gap and so i'm curious what it says i actually don't know but
+3095340	3100620	this is the kind of thing where is this is the edge of mathlib right now i'm pretty sure smooth
+3100620	3108320	manifolds in there pretty sure line bundles in there not sure about this result okay it's looking
+3108320	3115360	for it so uh oh yeah it's found topology vector bundles so there is something in mathlib about this
+3115360	3124670	i'm not so good on differential geometry and lean and what might happen is it might a find the theorem
+3124670	3131790	itself in there uh it might say oh no we're very far from it or it might say yeah we need to prove a
+3131790	3143060	couple of lemmas and then we have it and so what but the while it's thinking about it the message
+3143060	3150100	here is i hope becoming clear if you have an llm produce something you've got various ways to to get
+3150100	3154580	confident that the answer is correct you can ask other llms is it correct ask the same question from
+3154580	3160500	other llms take a majority vote ask them to critique each other's work you can get them to write a
+3160500	3167540	program for you to check special cases or you can say formalize this result in this programming language
+3167540	3175220	and all of this can be done in an automated way so where i'm going with this is the the non-human part
+3176820	3182260	they can't do the creative part somehow yet everyone i know tries this out but nobody has
+3182820	3187460	come to me and said oh yes it could come up with good ideas i've never had this yet but
+3189220	3196180	recently some days ago there was some person who played with jgbt and handed it over to someone and
+3196180	3202340	who handed it over to terence town that was a new this is the early result yeah yeah um yeah there is
+3202340	3207860	a lot of and this is a i would say this is not a great signal by the way um that that that press release
+3208660	3215380	because what actually happened is everyone's just throwing chat gpt at erdish problems so you know what
+3215380	3221460	erdish is right mathematician came up with many conjectures and he became famous because he offered
+3221460	3227300	rewards if people could prove these conjectures but the guy was really prolific like he came up with
+3227300	3231940	thousands and thousands of conjectures in fact more conjectures than there are really people interested in
+3231940	3238260	them if i'm brutally honest right lots of erdish problems are not that interesting for other people who
+3238260	3249250	aren't okay it's um it's taken this one serious compiles the file is that summary is it in method no
+3249970	3255330	how far away 500 to one and a half thousand lines of code the work decomposes into four pieces all of
+3255330	3261570	which mirror existing patterns which is good the shortcut line what you can do today for free the fiberwise
+3261570	3281170	argument is the algebraic content go do the results i'm just gonna let it thrash away for this the rest of
+3281170	3287970	the time we're together and so because i want to just leave it there running so you can see the way it
+3287970	3301970	attacks these problems oh erdish problems oh erdish problems yeah um and so what people have just
+3301970	3305650	done is they've done the natural thing is oh i've got a whole list of problems that someone said were
+3305650	3311410	important i'll throw an llm at it and since there are more problems than mathematicians interested in
+3311410	3315890	them there's lots of problems that have kind of not been explored even by simple methods that have
+3315890	3322450	been developed in the past 50 years and yeah you're going to get a hit every so often i'll be honest
+3322450	3327170	without about to go a fully general intensive product is 500 lines yeah you said that already don't
+3327170	3337010	complain um what come on um it's complaining about the the the far beyond what's prudent in one session
+3337730	3352770	um if you don't finish um we can pick up in another session so uh it's this is a the late the
+3352770	3358690	latest clawed model actually complains a lot about things being added too hard and there's a good
+3358690	3365810	reason for doing this actually because the previous call model was pretty aggressive uh it would just
+3365810	3371570	take on any problem no matter how hard and then go for it and you know sometimes it kind of
+3371570	3376930	overestimated its abilities and led to kind of nonsense uh and so they've obviously sort of trained
+3376930	3384370	the next model to be a bit more cautious uh and so it always does this thing now where it's like oh
+3384370	3393710	this may be a bit too much so uh this is going to happen a lot now there's thousands of these urge
+3393710	3397790	problems uh people are just going to throw chat gpt at it because it costs them nothing and then
+3397790	3403230	eventually you're going to get a hit and this in my opinion is the worst possible outcome because
+3403230	3409710	because it still relies on experts to evaluate the results and that means it's sucking the that very
+3409710	3415390	little energy that experts have away from good science to now deal with this flood of ai slop it's
+3415390	3422750	a very different kind of slop but it's yeah it's and the thing is people will create these lean proofs
+3422750	3426990	of these others problems that's how they will present them like that and it's a good thing but still lean
+3426990	3433150	proofs need reading uh why because the definitions could be wrong so that's the failure mode of formalization
+3433950	3439470	i've seen it happen many times by the way in a formalization in lean you formalize it say
+3439470	3443310	woohoo i've done it uh and then you look and then you've got one of the definitions wrong
+3443870	3449150	so it said you know a smooth manifold is a manifold where the functions are twice differentiable
+3449150	3454750	and you're like what no this is not a smooth manifold you know that that's the kind of
+3454750	3458910	error that can happen and so as if you get the definition wrong you can prove things right
+3458910	3468590	and so humans still need to read the definitions so uh all of the inline definitions or just some at
+3468590	3476270	the beginning uh any definition is subject to failure yeah you can introduce um errors in any
+3476270	3483650	definition because it's a definition right you can't argue with it the consequences fine you don't have
+3483650	3491310	to read those you know that's that's that's the way you should operate actually so what it's trying to do
+3491310	3496030	now it's going to build up the skeleton of a proof and then instead of giving you the proof itself
+3496030	3502110	it replaces the proof with something called sorry and sorry in the lean language means proof not there
+3503070	3507070	but it type checks still so it's it's an acceptable proof but it's not a proof
+3507950	3513630	it's a placeholder and that way you can build together very powerful proofs like with lots and
+3513630	3520380	lots of statements without having the proofs there yet and so lots of theorems of theorems they're well
+3520380	3525340	known um you can trust them it's just that you haven't formalized the proof and you want to see
+3525340	3531740	where it goes so sorry allows you to do that you don't trust it it's not a proof but it's it allows
+3531740	3540240	you to build up bigger bigger proofs build the construction so that's what it's doing now so it's
+3540240	3546880	it's going to do that for the probably the next whatever hour whatever we let it do um and you can do
+3546880	3555040	that and i've tried this a lot in the past months i take results and i build math uh lean proofs with
+3555040	3562400	claude for various things uh and and if you give it enough time it will do all those hundreds of lines
+3562400	3570720	that it complains about um and it appears to be correct so how much can you produce with claude
+3570720	3580320	claude in a weekend you can produce about 80 pages of latex with lean proofs subject area
+3580320	3585840	functional analysis so operator algeism that's realistic that's an actual number that i can
+3585840	3592240	give you as a data point uh it can do quantum computing stuff in lean it it can do yeah i haven't
+3592240	3598780	found anything it can't do but you have to have the idea first like it you have to have the proof
+3598780	3604380	assembled if you have no proof you know if you just write down that green manzilla hypothesis or
+3604380	3610060	something it'll just it'll thrash around have no idea how to get a proof you have to have you have
+3610060	3620000	to kind of have the proof already how long does it take you to so you said you have to verify that
+3620000	3626880	the definitions are correct right how long does it take you to verify that like for an 80 page long
+3626880	3632400	honestly uh uh an infinite time i haven't really checked the definitions uh because there's another
+3632400	3638640	way so it's not proof proof right because the definitions could be wrong but there's this thing
+3638640	3642480	that if you get definitions wrong and you derive consequences then you get contradictions very
+3642480	3648480	quickly this is this is some there's some kind of robust structure in math that if you if you get
+3648480	3653440	the definitions wrong then pretty soon somewhere down the line you'll derive a consequence that somehow
+3653440	3659040	gets crazier and crazier and crazier like the mistakes get amplified so i there are subtle bugs that could
+3659040	3668580	be there yeah there are subtle bugs that could be in the proof absolutely uh and i haven't read all
+3668580	3675620	the definitions but uh because there were no kind of crazy contradictions i'm fairly confident if it
+3675620	3681780	mattered enough to me i would read the definitions though does lean check that definitions are like
+3682740	3692340	consistent within other definitions uh not directly so the definition can exist in lean code and contradict
+3692340	3701980	literally contradict another definition it can literally contradict another definition and you
+3701980	3707420	wouldn't know to begin with like it's only when you start deriving consequences that all of a sudden
+3707420	3713440	you start deriving results that seem weirder and weirder and then at some point they'll be
+3713440	3721250	hopefully a hard contradiction so this is the kind of this is the last stuff i can share with you that
+3721250	3725490	called these coding agents are really actually really good at this lean code like it complains
+3725490	3730130	that 500 is too much for it's not yeah i think i actually think it can do this in one session
+3730130	3737020	i've seen it do this kind of thing and what it's doing is it does this gradual iteration process where
+3737020	3741340	it fills it out with these sorries and then it'll attempt to prove and it'll fail and it'll attempt to
+3741340	3746300	prove and it'll fail and it gets the feedback is fast so it sees ah that didn't work i'll try this
+3746300	3755340	and so the proof quickly accelerates um towards correctness i i know some lean experts and they
+3755340	3760140	tell me that the code that it generates is ugly i can't judge i'm not an expert but
+3761900	3774930	but is truth beautiful so uh that's more or less the last amount of stuff i could share with you beyond
+3774930	3781410	all the weird crazy that i collected over the past months um in the last seminar we discussed what i
+3781410	3788450	think is a vision which is coordinated action to do science uh today we discuss what is truth
+3788450	3795330	effectively or verification like how can you verify something and give a signal back to an agent and
+3796290	3801970	we discuss these various layers and lean is kind of like this highest level but there's still we need
+3801970	3805570	to check the definitions isn't you can get other agents to check the definitions but do you trust
+3805570	3814930	that yeah at some point the human has to look at it and now i would propose that for the rest of the
+3814930	3819250	series we start with some kind of mini project and see where we can go with that
+3821090	3828930	yep wouldn't it be easier to state the final theorem in lean code and then just ask it to fill out the
+3828930	3834850	lemmata to prove it uh you can try that because then you wouldn't need to check definitions because
+3834850	3840450	you put in the necessary open the theorem itself will refer to objects right yeah but those might
+3840450	3844450	be in the standard library and if they're in the standard library you're golden yeah it's only when
+3844450	3847890	there's something that you need that isn't in the standard library then you're kind of in this
+3848530	3853410	so i misstated actually so the definitions that i'm talking about are ones that aren't in the standard
+3853410	3858610	library already in this case it doesn't know what a tensor product is or what's the problem it does
+3858610	3863330	it's just that there's so many versions of tensor product in the in the mathlib it's it doesn't know
+3863330	3869330	which level of abstraction to rise to so it has category theory it's actually mathlib is an excellent
+3869330	3874450	category theory coverage because proof theory is category theory so it's actually the first thing
+3874450	3879810	that got done and they're you know tensor products are a concept in category theory but are they the
+3879810	3884450	same tensor product as the one you want you have to get yourself into the right category that's what's
+3884450	3894880	going on here what you have no so what three uh automatically yields what's left assemble the
+3894880	3905620	coast cycle into that blah blah connect to the literal file so the construction decision is a real
+3905620	3912610	bundle level proof the gaps are packaging not new math so apparently it's it's proved it
+3913970	3919970	but using mathlib it's relying on definitions and lemmas already in mathlib and it may not be the
+3919970	3924530	proof you want it to be right because what it might do is it might take the most general category theory
+3924530	3929570	statement and specialize it down to what you have and that's probably not what's going to get you
+3929570	3935970	the grade on the assignment no you know if you go in there saying you know let let c be a fibered
+3935970	3942850	category you know um you can try i mean it's don't think you're going to get the grade you want um
+3942850	3951810	um so but i i'm now suspecting it's probably correct because it's just seems to have used mathlib stuff
+3951810	3957170	so that that was pretty quick right now imagine that you're doing research on a problem and you're
+3957170	3961730	like i don't know is this conjecture correct i have an idea here's the idea of the proof here's the
+3961730	3967490	theorem is it a mathlib no it's not a mathlib um what's missing oh 50 lines of code go on claude just try
+3967490	3974610	it out so now when the llm spits out the answer you are like 99 sure right definitions are in mathlib
+3975490	3978290	the lean code is there maybe it introduced the definition you go to check
+3979570	3988400	and you didn't have to do that at all you automated that so even though there was the content it
+3988400	4001060	produces is random noisy has error rates you can increase that error rate to almost zero so that's
+4003440	4011390	i've done this and it does work in fact the slow thing now is me i just don't generate ideas quicker
+4011390	4016750	it sounds funny but it's actually sort of true so you use it for real research problems you had and
+4017630	4024190	proved them the problem is what's gonna what happens next so you have an idea and 99 of the time is
+4024190	4034110	wrong or at least my success rate with ideas is low uh so good this is the kind of tool but it spins
+4034110	4040910	its wheels when it's wrong like it clawed lean it doesn't just come out and say something's wrong
+4040910	4048260	it'll just say i don't know how to prove this and so you've gotten where have you gotten right what
+4048260	4052420	what signal have you gained from this a bit maybe you kind of know it's not tributally correct
+4053140	4057060	can you say find a contradiction you can do that and that works yeah
+4058900	4063620	so you can find contradictions pretty easily if they're to be found it often finds them which is
+4063620	4071620	just by writing a python program actually that's the quickest way that finds most of them and but
+4071620	4077300	if it's true and you don't know the proof it'll spin its wheels forever if it's true and you know
+4077300	4081380	the proof but you can't be bothered with the details that's the power that's the accelerator right
+4081380	4084660	there because then you can say the proof is going to be this this and this can make it formal
+4085780	4093540	and then it will really go uh if it's untrue um but the the counter example is hard to find
+4093540	4103900	yeah you're lost so yeah it's it's an accelerator but in certain ways and it can't stack together ideas
+4104620	4110780	so you you know a big interesting proof is full of different ideas that are drawn together in a
+4110780	4116380	complex web and then they come together to imply the final statement it's it's use case because of the
+4116380	4122300	context windows even with a million tokens we used for that proof we used a hundred thousand tokens for that
+4122300	4132320	proof um so it can hold about 10 of those in its context to give you a sense of and then but its
+4132320	4137360	inference power is going down with the context so realistically you can hold about three of these
+4137360	4142160	in its context before the quality goes down which is interesting right you know if you can break
+4142160	4148320	your task down into vector bundle tensor product level things and you need implications of three or four
+4148320	4158740	at a time then yeah i can hold that in context so what i want from you now is ideas i just told you
+4158740	4168080	i can't come up with ideas quick enough um but one more question yeah and if you're reading if you
+4168080	4174400	if you're getting the output and it's the lean document yes do you read the actual document or i don't like
+4174400	4181760	to but yeah i can okay to do because then it's giving you a proof but you don't know the proof yet right
+4181760	4188000	exactly yeah it's a black box okay you know it's true but it's a black box so then before you
+4188560	4192720	before you publish a paper about it to be honest i haven't published a single paper since i got into
+4192720	4202720	the ai things yeah so we come to an interesting point yeah so but claude writes this code without
+4202720	4208000	like running it in lean so you still know you have to run it it's been running it in lean the whole time
+4208000	4214720	okay yeah and it what it showed you was lean programs running it erred it said oh it has an
+4214720	4219360	error i got to change it it was doing it over and over and over in the loop actually yep and it has
+4219360	4227200	these handoff files there yes um that's a standard sort of llm thing a handoff is a document that
+4227920	4232960	an agent will write so the next agent that you bring to the project can read this short summary
+4232960	4242880	and it knows what to do the question and i'll show you what a handoff looks like uh what was
+4242880	4247600	done in this session it looks like this i didn't ask for it but it it writes things like this you know
+4248160	4256640	i did this i did this and it tells the next action what to do and so and then it draws these little
+4256640	4263680	pictures and it's all very satisfying you know that it does it uh you can see the agents they come
+4263680	4268320	into existence they do their work and then and then they hand off the work and they have a picture for
+4268320	4273920	the next agent of what the work is meant to be and you can you know you have like 10 agents in a day
+4273920	4285780	picking up one after the other the work that's so yeah i think the the effective way we have some
+4285780	4290180	priorities in the center one is this environmental cost thing um as i said i think clara was going to
+4290180	4297140	pick up that in i think i signed up for that oh did you sign up for that yeah okay uh because there's
+4297140	4302820	lots of information being leaked about the frontier models like how many weights they have um how much
+4303780	4310500	had some hard time finding infos about for example opos for certain i saw on hacker news there was a
+4310500	4315860	leak on the number of weights there's a study people like ai researchers try and infer this information
+4315860	4321620	from from the from claude or from chat gpt they have all these tricks and they've estimated claude has
+4321620	4330100	1.1 trillion weights and chat gpt 5.4 has about 1.4 trillion so it's the information is being exposed
+4330100	4338340	through various ways so that's like a multiple of the open source models which are yes 32 or something
+4338340	4342020	yeah they're in the billions although the first trillion weight models have been released haven't
+4342020	4350080	they recently recently i'm not sure that that means that the online ones are like 100 times larger than
+4350080	4359120	yes the downloadable ones yeah how good the measure is this i don't know okay but uh
+4360640	4366160	i don't know is the quick answer there's something different intrinsically different between a trillion
+4366160	4373020	weight model and a hundred thousand weight model uh sorry 100 right there's something just really
+4373020	4381260	the the behavior of opus is just different to that of sonnet i can't explain it except through lots
+4381260	4388610	of experience it seems to have an understanding where other models don't yeah so somehow like
+4388610	4394690	if you have one billion models can we assume that they are roughly on the same level or more
+4394690	4400610	i mean they can be a little bit different but they tend to be comparable because you you
+4400610	4404930	given the number of make weights that you have you optimize these certain benchmarks that everyone
+4404930	4410610	tries to gain um sweet bench there's all these like these targets that they optimize when they're
+4410610	4416130	training these models and everyone's aiming at the same plots so if you've got a billion weights to
+4416130	4422210	optimize then you'll optimize it for those plots and therefore it'll perform roughly comparably to every
+4422210	4429570	other billion weight model so then what's the reason that they don't upscale it to 100 trillion or so
+4429570	4435570	well now you just ask the important question um that there is no reason except compute
+4437330	4443330	it turns out that if you go to uh 10 trillion that's more compute than there is in the world
+4444130	4449490	and 100 trillion is more than we can ever build um we're getting into those kinds of numbers now
+4450050	4452050	so how does it fail badly
+4452050	4459890	yeah i mean the training costs alone just get go up much more than the number of weights
+4461330	4467170	so uh we if you believe the ceos of these companies then they're talking about having
+4467170	4473410	bought all the data centers in the world for the next models and i i think it's roughly believable um
+4474290	4481840	they've hired all the compute in the world for the training of the next models and they're all playing
+4481840	4486640	a game right the game is what happens if i extrapolate this line because people have put that there's
+4486640	4495120	this famous inter line in yeah so you're talking about money cost i think uh so i signed up for
+4495120	4504620	environmental cost yeah yeah that's a different cost yeah although it's probably correlated yeah
+4505500	4511660	uh yeah if you put all the models on this curve maybe i can find it um then you can see just
+4511660	4517660	by extrapolating compute you're going somewhere pretty amazing um what is the it's the karpati curve i
+4517660	4546380	think karpati curve llms maybe it's this one well and wait so they there's there's a scaling law that
+4546380	4570370	people started to notice there is a scaling law that i wanted to show you that convinced everyone to invest
+4570370	4578380	in compute and people started putting llms it was gpt one two three on this this law
+4579260	4583900	and they saw that if they just extrapolated this with a line because why wouldn't you extrapolate
+4583900	4591820	with a line um then if you could invest uh in like to 10 trillion to 100 trillion weight models you
+4591820	4595820	would reach some something you would pass some threshold and i can't tell you anything more
+4595820	4599180	than these vibes but that's what people saw this curve and then they're like oh
+4599180	4603260	shit all we need to do now is invest money no new ideas are needed
+4603260	4609580	and so that's why everyone went nuts in silicon valley they all realized that just by putting money
+4609580	4613820	into the problem they could scale their way up to something called agi which no one knows
+4615780	4622980	can you scroll one centimeter up like here yeah i know that the upper half of the image
+4624660	4631300	oh because you can't see it i imagine i was just thinking about this curve because it makes me very
+4631300	4640100	skeptical that this is the right scaling law for these data points they they don't have many data points in
+4640100	4646580	the in the top range and then they just cut it off yeah but this is how it works in this game that was
+4646580	4653140	very scummy in my opinion yeah this is people do this all the time you don't have to believe it i would
+4653140	4665310	encourage you to be skeptical because in my or as far as i have read um small models with the same number
+4665310	4674830	of parameters got better mostly because the training data got better um and because that's true you just
+4674830	4681070	had more time to train since the inception of large language models if you keep on training and fine
+4681070	4687230	tuning then of course your model gets better even if the parameter count doesn't change and also the
+4687230	4691710	parameter count doesn't tell you anything about the architecture of the model these are all true
+4691710	4702110	statements so you can't really say oh okay every three billion parameter models performs bad in the same
+4702110	4708030	way i think just keeping training isn't making it necessarily better because you can do overfitting
+4708670	4714830	that's true but if you have the training data to keep training then that's okay because fine tuning
+4714830	4724830	means you add training data and uh keep on training on that new data which was in the original set so
+4726670	4733230	but one would imagine that at some point you've extracted all the gains you can out of your parameters
+4733230	4742110	yeah your weights i mean of course there's a limit to how good you can fit anything with n parameters
+4742110	4748430	yeah uh and so i'm expressing you so i can't answer the questions with any concrete answers but only
+4748430	4752830	with the general feelings that are in the community and the general feelings are more parameters equals
+4752830	4760750	better at the moment um and is it's it's easier not cheaper to say it's easier to throw more parameters
+4760750	4768510	at the problem than it is to throw more computers at a smaller problem at a smaller model although i have
+4768510	4776590	to say that the parameters i could run on my computers have been constant for the last couple of yeah years
+4776590	4784750	and now the the models are much better than they were before so there is evolution happening without
+4784750	4789870	increasing parameter size yeah i mean you say that for sure yeah that is definitely happening you're
+4789870	4796830	right i'm before it's just much much better than i don't know lama 2 yes this is legitimately they are
+4796830	4807790	comparatively in the same the same order of magnitude of parameters so um i don't i don't know uh whether
+4807790	4814110	or not we could keep pushing it it would be kind of cool if you could take i mean the ai researchers
+4814110	4818750	i'm talking to actually believes that you can get a lot more out of the out of these smaller models and
+4820190	4826590	than what is already there because people still aren't really trying hard it might be that they
+4826590	4833680	and there's this mixture of experts model that you've actually experienced yourselves where
+4833680	4838960	problems get pre-routed to smaller models that's when they talked about active 2 billion or something
+4838960	4844720	like that or active what's actually happening is there's a little architecturally the problem gets
+4844720	4850240	pre-sorted to a smaller transformer which you can operate actively and then get your answer back out
+4851200	4855840	and there's a lot of active deep seekers the ones who uh pioneered this to make it practical
+4856560	4862960	and their performance can be pretty close to to bigger uh bigger models and the model the
+4862960	4866800	transformer architecture itself hasn't really been optimized people just it's the first thing that
+4866800	4871760	works and that they can scale and parallelize so people are just way hard like that but it could be
+4871760	4875600	that you could look at neural networks that aren't just a classic neural network where you multiply
+4875600	4881280	in floating point numbers but multiply binary numbers these exist and they're harder to train and they should have
+4881280	4886720	theoretically the same capability and people are looking into these questions but the priority
+4888320	4893120	the incentive isn't there at the moment and that brings us back to the paper we yeah we read because
+4895040	4901600	we already we also know that Moore's law might not continue as it did so i don't know if the statement
+4901600	4908880	from the from the essay remains true yeah i saw Moore's law die mostly was more about speed right because
+4910000	4917520	of course we can still scale money and buy more compute but that's it still makes research into
+4918320	4924800	the smaller models useful because ordinary people like us can run them without access to
+4924800	4932960	huge amounts of compute in the cloud i think this is i mean this is for me a key priority imagine you
+4932960	4940160	could run a model that's of jama but on your phone theoretically you can because neural networks are
+4940160	4946320	binary uh operations you know these things called perceptrons they take in a binary and they output a
+4946320	4952960	binary the thing you do in the middle is you you do some floating point multiplications you can replace
+4952960	4960240	every neural network with a pure binary uh network which is a hundred times more efficient to evaluate
+4961040	4965600	the problem is is we don't know how to efficiently take one of these floating point neural networks to
+4965600	4971540	one of these binary neural networks there's no efficient way of doing that yet it's possible it
+4971540	4979870	exists but the problem you have to solve is very very hard it's an optimization problem so that there
+4979870	4986750	there is a potential that we could have sonnet gemma level stuff on on on phones locally run
+4989970	4995940	but that you have to solve an optimization problem that's so hard that nobody's ever managed it
+4995940	5001220	i think the two billion gemma four version is targeted at phones at least at least yeah i mean
+5001220	5006100	it can if a chat things are okay right if you're not doing types then maybe
+5006100	5012660	maybe maybe it's you in this case spits out perfectly fine latex when you want types
+5014820	5019620	even types was okayish yeah but in the large version the smaller version yeah okay no chance
+5021780	5028340	so i'm as i said i'm interested in ideas right so what we need a plan we need to go somewhere so now
+5028340	5033380	we could just come every week and talk about cool we've seen or not right that's one thing
+5033380	5041920	or you could start to bring your agendas to the table like why are you even here and we can work
+5041920	5049780	on your agenda like i've got my agenda whatever and that depends on you thinking about what you want
+5052420	5056820	and i gave you this this exercise last week come up with a problem that you'd be impressed by you
+5056820	5060820	had some very interesting answers um i don't propose that we investigate any of those
+5062100	5068100	um well i looked into the signal one though and um you could do it turns out but then you'd have to
+5068100	5072100	port you'd have to have your own port of the signal client that every time it updates you have
+5072100	5076340	to re re-implement it and then no one else would have it so you would be able to see latex
+5076340	5081780	in your signal but no one else would see it in theirs i was very sad by this but well what about
+5081780	5087620	this is this is where we are um so we could do that but i think the interesting thing is like
+5088260	5095220	you're the generation coming to inherit this stuff i'm the older generation i'm not the right
+5095220	5102100	generation here to ask these questions any longer what is the world you want to create right this is
+5102100	5108100	the question that i want you to start thinking about and then what other steps that can get you there and
+5108100	5115300	the world you want to create is probably a an amazing dream that we won't ever reach in one's
+5115300	5121300	lifetimes but going in the right direction can create interesting things so there's various ways to
+5121300	5126980	do this we could come up with a mini project that people work on we could define a larger goal and
+5126980	5132900	then make steps along the way we could uh uh investigate just a random 10 side projects and
+5132900	5139460	see what comes out of that you don't have to answer me now this is not the point the point is by next
+5139460	5144260	week please think about what is it what's the world that you want to create what is it that you
+5144260	5149700	want to actually do and if you're willing to share it you know you might be able to convince other
+5149700	5154180	people that help you in that way and then this seminar is if it's in a scientific direction and
+5154180	5160100	i kind of hope that it is then you can use the seminar as a forum to start exchanging knowledge
+5160100	5168610	or get that work done i don't have anything else prepared this is the end of my content for the
+5168610	5173810	seminar so if you want something to happen next week you better start coming with your own ideas yep
+5173810	5179730	yeah it's not quite the direction you want to go in but uh any direction is better than no direction
+5179730	5186530	i i would like to be convinced that agi is not a threat you'd like to be convinced agi is not a threat
+5186530	5191570	uh so like i think one of your blogs you have this argument where you say thermodynamics and such
+5191570	5198530	oh that one um yeah yeah so i i think i would be happy if i can go out of this seminar and say oh
+5198530	5207650	yeah that's not that right i mean maybe that is the right thing to focus on um like i'm convinced
+5207650	5212610	so no i'm not convinced about agi uh i can't prove anything about agi because that's not a well-defined
+5212610	5220130	term but yeah so like singularity yeah i don't believe in these singularity uh arguments this idea of
+5220130	5227010	recursive self-improvement because every time you make that uh concrete as an optimization problem
+5227010	5232050	you are effectively saying i can solve for global optima you know landscape with many local optima
+5233570	5239010	so if you know what those words mean then you already see the seed of the answer right if you if
+5239010	5246050	there is something you can optimize and it's a very bumpy optimal uh landscape you're going to get
+5246050	5252210	stuck in local minima the idea of recursive self-improvement is the man it's a magical spell
+5252210	5257970	that takes you out of a local minima to a better local minima or you're into a global minima so this
+5257970	5262690	is the and once you identify that that's the magic spell that people are talking about then you ask what
+5262690	5268930	is the cost of getting from a local minima to another local minima in an optimization landscape and then
+5268930	5274850	you start to write down numbers and you start to write down that you have to write down every parameter
+5274850	5280210	that you've tried in order to to verify that one local minima is better than another and then we can
+5280210	5287250	talk about dimension there is an argument it takes 10 deductive steps i would say uh to prove that we
+5287250	5295580	run out of memory before we run out of before we get anywhere close to this magical thing is this
+5295580	5302300	somehow published somewhere no but it's you can string it together from a bunch of moments it's
+5302300	5308700	uh and the thing is i'll convince maybe you maybe two or three people in this room and then other
+5308700	5313980	people will be like no no i don't believe you uh you didn't think about this and then we'll add in
+5313980	5318860	that factor have a new argument and then no i've seen these narratives go along before in various fields
+5318860	5325660	of scientific endeavor uh just disproving one version of the statement just encourages people to come up
+5325660	5330620	with new with new versions of the statement and that carries the discussion away from where it should
+5330620	5339390	be so we can formalize it and you know it's this still might be the right place to do this but yeah
+5339390	5344910	and so like from your personal view it's something that it's it it's a concern for you and maybe that
+5344910	5353600	i should listen to that and you know as a signal but um actually maybe the right time to ask the
+5353600	5359040	question you are all what level are you now masters bachelors so i mean some of you are in all of them
+5359040	5367040	are in the same semester but me i'm one semester high okay right so you've all kind of done your
+5367040	5375120	bachelor projects right so you've done your bachelor and you're now thinking about masters or doing
+5375120	5382000	masters right and then you're all thinking about doing something after masters because this might be
+5382000	5386880	the right moment to have this discussion right what is your your direct general directions you're in
+5386880	5394560	the theoretical physics institute all of you i think i've seen all of you right yeah not yeah i'm uh
+5394560	5399760	might go into energy workshop okay well maybe yeah that's maybe it's a good place to go
+5403900	5412610	and phds are a thought in your heads or not maybe if you go to energy you still do a phd there you know
+5412610	5419090	um why am i asking this because you're probably thinking about academic things then researching
+5419090	5432050	things right you know what what do you want to create then something in the physics domain so the
+5432050	5439490	problem i find interesting at the moment is uh really understanding that's theorem and which version
+5439490	5445090	of it is true but that's a problem about understanding not about having a proof that's but that's an
+5445090	5451010	interesting take home here really understanding maybe because if we collect questions like this
+5451970	5457970	we might see that we can use ai tools to help in in the more abstract task of really understanding it
+5457970	5465890	right now but so i had uh quantum physics with mr werner four years ago and since then i tried to really get
+5465890	5474050	to the ground of it but and have various versions of it but i never managed to really say okay yeah
+5474050	5482210	that's true and this version is the one that's correct interesting so but you would it but you would
+5482210	5489010	know the moment you really understand would you i hope no but you you must have a sense like you
+5489010	5493330	know i would really understand it if i really understood so there there's a thing that uh
+5493330	5499410	philosophers say yeah okay we are clearly non-local and there's nothing about classicality here and
+5499410	5505490	verna says no those are two different assumptions yes and i want to get to a point where i can say okay
+5506130	5513490	those argument is correct and i believe okay those party this party okay that's a that's a big goal
+5514210	5520530	i think it's achievable um and maybe ai tools can help you yeah we've been talking about this a bit
+5520530	5527170	the difference between you and us yes because we our main goal is to learn stuff and your goal
+5528290	5534770	is to teach and maybe to publish so you already have an idea of something you want to you want to
+5534770	5540690	prove you want to show and then you can use ai to formalize that for you and for us it's it's like it's
+5540690	5545890	a little more a little bit more different because our main goal is to understand and as you've already
+5545890	5554930	said we cannot trust ai to to teach us something so that's a bit of a problem right yeah so when we
+5554930	5563730	before talked about this chess a chess computer black box so are there people that are interested
+5563730	5571010	to understand what this like forces do to like try to find new ways to yeah it's called explainable ai
+5571010	5577810	it's um it's a field of research but i i think um i can come back to that in a second but you both
+5577810	5583730	actually asked a similar question i think yeah i think you just asked the question which is it seems
+5583730	5587890	that i'm about teaching and you're about understanding yeah exactly but actually what you didn't notice is
+5587890	5594130	that got flipped uh i'm now far more interested in understanding than i am in teaching um because
+5594130	5601840	i suddenly realized i can understand a lot more you when you become a domain expert the world the walls
+5601840	5607040	close in i don't know how to explain this you get better and better at a certain sub area but at the
+5607040	5615680	expense of operational competency in other areas does that make sense yeah sure yeah um so i may know
+5615680	5620560	very very very very much about tensor networks but i don't even know very much about multicolor
+5620560	5625760	methods which are literally an adjacent area of studying and the walls close in you spend more
+5625760	5631360	energy on getting better at your domain and less energy on even just the neighboring domain and i know
+5632000	5636640	little to nothing about nuclear physics like you probably know more nuclear physics than i do
+5641970	5646130	maybe maybe not but it's it's you pick something else and you will know something more than me
+5646850	5654690	the walls close in as a domain expert uh and with ai i've suddenly realized you can reach operational
+5654690	5661970	competency in far more many areas very rapidly so you can develop a breadth of understanding instead of
+5661970	5668450	a depth of understanding so you don't understand nuclear physics okay learn nuclear physics you don't
+5668450	5672130	trust necessarily the output of an llm but you start to learn how to verify the output
+5672130	5677090	and now all of a sudden you do know about nuclear physics because it teaches you the basic models
+5677090	5683570	in the language that you know and that you can verify with little demonstration the uh examples
+5683570	5684850	tailored to the way you think
+5684850	5691810	of the way you think but when i asked gemma for to explain me what a hilbert space is or to define it
+5691810	5698850	it it was correct but it was slightly off so yeah it took some properties split them in half combined
+5698850	5708770	others and so i think that's it's not outputting the uh it in a way we should think about it and maybe
+5708770	5715330	that i think that's a model problem rather than yeah okay than a llm problem okay because i think if
+5715330	5719010	you had the experience if you ask opus 4.7 you would get a different experience
+5720930	5726690	in opus 4.5 so this is a problem you know the good answers come only when you pay for them
+5726690	5737020	and i don't know a solution to this problem but i thought hilbert space is maybe enough on the bottom
+5737020	5745100	level that it could do that even if it can't define me for normal algebra right yeah but it was kind
+5745100	5750220	of bad it's disappointing that you know i would have hoped for just a bit better yeah to be honest
+5751580	5757340	but as i said i hope we can start with our 3090 gpu that you can access and then you can start with
+5757340	5762140	maybe some pretty good models and then the server we can finally get running and then you get some
+5762140	5767340	really decent models and then at some point well maybe we get credits from one of the labs and then
+5767340	5777330	let us use them so i would claim that uh teaching that understanding is the goal yes actually i i have
+5777330	5782530	that as a shared goal i mean we're not yet publishers right or not even like researchers
+5782530	5789570	at least from from my understanding so there's not really like something i want i want to investigate
+5789570	5795650	right but you're curious about things right yeah sure but i don't know how you think about this but like
+5796530	5802290	for me currently i'm i'm attending lectures i'm i'm trying to follow the stuff that the professor says
+5802290	5808450	yes i'm trying to to understand it so that's currently my main goal again in a couple of years
+5808450	5814130	maybe i do my phd and then i'm a researcher yeah so i put it to you that i don't know much more than
+5814130	5821150	you in some domains already and that that that you don't need to know much more to start stringing
+5821150	5830340	things together it's a new idea i think the idea is you get breadth of understanding instead of depth
+5830340	5834660	of understanding and that there's this used to be too expensive it used to be too expensive to get
+5834660	5840900	breadth of understanding because you'd have to do a bachelor in in in nuclear physics and sorry a master's
+5840900	5845140	thesis in nuclear physics and master's thesis in quantum optics you know so you have to do 10
+5845140	5849380	master's theses in order to get this breadth of understanding but now you can you can get there
+5849380	5859860	very much quicker so that's some yep would you say has changed so like the ability to ask yes yeah
+5861140	5867920	because if you you know what stops you from understanding a thing when you're sitting in the
+5867920	5875840	lectures just that yeah but also like this is this is impedance mismatch right so the lecturer is
+5875840	5882160	saying something on the board and you're writing it down and it's building up and and your understanding
+5882160	5887600	builds in a non-linear fashion it doesn't really build linearly it's this network effect thing and then
+5887600	5891200	there's these things you get stuck on really quickly like what why is this why do they keep
+5891200	5896480	defining this thing and i don't understand why they're defining this thing and your brain is losing
+5896480	5903360	cycles just with these these questions in every in every lecture like why is it that they're going
+5903360	5907600	on with this letter a i don't understand there's a but i'll write it down anyway and then so you know
+5907600	5911440	at the end of the lecture you have three four five i don't know how many things you've collected
+5911440	5917040	where you're you're spinning you're spinning on this and then eventually you you'll land them and
+5917040	5922320	you'll be like oh okay i see now why why they but if you could ask a question for every one of
+5922320	5928800	those things spinning in your head straight away and say why is it that people define that give me an
+5928800	5936240	answer give me a picture give me a animation give me a you know stop the spinning plates in your head
+5936800	5944480	by immediately asking for feedback then you with a bit of practice you can learn this much much faster
+5946500	5950340	because you'll think the things that keep you slow you down don't slow other people down and vice versa
+5954400	5959680	and a linear medium like video is a linear or a lecture like you can ask a question in a lecture
+5959680	5968350	right and occasionally you do but you don't right you don't ask all your questions because you wouldn't
+5968350	5973310	because then you'd be the annoying person who's stopping the lecture from working right but if you had
+5975150	5979070	if you had a personal assistant who will answer every question for you
+5980510	5984910	as soon as you have them and give you a little illustration or an animation or an interactive demo
+5985710	5990430	then it stops those wheels there's plates spinning in your head and then you can you can learn much
+5990430	5993230	faster it's the the interactive proof
+5998190	6002270	yes and you can ask any question you don't have to be embarrassed and you won't disturb anyone else
+6007680	6014320	i do i actually do um because there's stuff that these uh humans are still better interacting with
+6014320	6024820	humans i think even despite what i just said but we'll see maybe more do you keep this information
+6024820	6030820	as long as if you had it earned in a harder way earned it in a harder way i think so like i think i
+6030820	6035780	understand scattering theory much better now yeah because i have these little demos that i made where
+6035780	6041620	like wave packets come onto the onto the uh the atom and they scatter off and i can actually see the
+6041620	6045780	detectives five because a textbook doesn't give you that a blackboard doesn't give you that an animation
+6045780	6051860	from cern doesn't give you that but the thing that i was missing was connecting the packet coming
+6051860	6059940	in scattering off the nucleus versus this p s wave expansion from taylor's book on scattering theory
+6061060	6064900	and for me i now understand it far better than the hard way
+6065620	6070820	how do you even visualize uh so this is a bit tangential but no i think this is the good way
+6070820	6078580	yeah this is a good direction so how do you even visualize a red packet that's an interesting
+6078580	6082180	question right what would be satisfying for you i actually came up with an answer for this
+6082180	6094960	that satisfied me we can plug the the modulus and color in the face yeah but that's still just pure
+6094960	6106110	state so why is it just pure states well the phase is right maybe um but do you need the phase
+6106110	6110990	information maybe you can get information just from the probability distribution maybe that's enough
+6110990	6117150	to help you understand something so i i did a thing right i'm going to show you because i was
+6117150	6125150	this blew my mind i didn't think this was possible and then it was um i what i think is awesome are
+6125150	6129070	these 3d movies that you see on these cosmology channels on youtube right they show you this or that
+6129070	6133470	phenomena and you can like see the black holes merge or whatever and i was wondering couldn't we just
+6133470	6138590	visualize quantum processes at the microscopics level in three dimensions like what's stopping
+6138590	6143470	us right shouldn't we just shouldn't this be possible now like isn't this software to do 3d
+6143470	6150830	animations and the answer is of course there's software to do 3d animations um so you make it
+6150830	6155310	yourself you just ask claude to write you a 3d visualizer and it doesn't take that long
+6155310	6164430	um you can get a 3d visualization happening in about an afternoon with claude so what do i do here this
+6164430	6171790	is the picture i always wanted to have in um in teaching the hydrogen atom you have the hydrogen atom
+6171790	6176990	the electron is in a p orbital it's in a magnetic field it's spinning around in the magnetic field
+6177790	6182670	and then it's spontaneously emitting into the electromagnetic background field
+6182670	6190430	uh so it collapses down to the 1s state uh and um it's physically correct so this is not the
+6190430	6196830	i'm plotting here the electron density uh not the phase the phase information i can't plot this way
+6196830	6204350	but the actual electron density cloud in three dimensions uh and it's physically correct and it's
+6204350	6211870	using a density matrix not some stupid pure state garbage uh and you think it up and then it becomes
+6211870	6219060	possible that's the kind of thing that where i think you can supercharge your understanding like
+6219060	6225780	this i've written down these orbitals and on blackboards for years and like no it's the moment
+6225780	6232580	right you're in the quantum theory lecture you know laguerre polynomials exponentials you've lost you
+6232580	6243360	don't understand anything but you can visualize it so yeah okay but this image is on wikipedia
+6244160	6252320	is it uh not spinning but uh exactly i looked for this image yeah uh i don't didn't find it anywhere
+6252320	6256400	but it doesn't stop with that one i can now generate any image i want like hydrogen okay what happens if
+6256400	6262080	i have a helium you know how does the the electron bounce between the nuclei you know this is this is
+6262080	6268400	these questions i could just ask and it's a trivial corollary now of the code there's nothing stopping and
+6268400	6277760	then i've used this to to generate um scattering movies i also wanted to render the what the black
+6277760	6284720	hole looks like when you get up close to it but with the physically correct permissive thermal gas
+6284720	6290240	around it rather than the stupid fake stuff things so you if you can think of the question then all of
+6290240	6294480	a sudden you should ask her right and that's how you can supercharge your understanding is if you can see
+6294480	6299360	it you can touch it you can feel it you can ask questions you can get feedback all the things you
+6299360	6307120	can't get in a lecture and that gives you the breadth of understanding that you don't otherwise get
+6307120	6319490	i don't know about depth i mean depth is still kind of hard work but talking about breadth here so yeah
+6319490	6327490	my homework for you is kind of simple which is start asking yourself what your goal is what you want
+6327490	6331650	and if your goal is understanding bell's theorem then we should start wondering how can we visualize
+6331650	6337570	learn understand that in a way that accelerates your understanding and if your goal is to understand
+6337570	6344880	this or that is fine that's a goal because probably if your goal is to understand something
+6344880	6348640	and you'll build stuff to get you there and that stuff that you build will be interesting for someone
+6348640	6357790	else that's the that's what i think unlocks the kind of interesting questions and by the way if you
+6357790	6363710	want to know what a neutron star looks like i also wanted i really really annoyed me that i didn't i
+6363710	6371230	want to visualize a real neutron star so i can't stop it at the right moment but there is one of
+6371230	6381260	these frames is the the optical emission spectra of our nearest neutron star with the relativistic
+6381260	6385900	corrections and the gas there's a gas there's an atmosphere around neutron stars of hydrogen atoms
+6385900	6390780	and these hydrogen atoms in such a ginormous magnetic field that their wave functions are squished
+6390780	6395660	and so they don't behave like normal hydrogen atoms and so they have a different emission
+6398860	6411950	but that's a different frequency so yeah good okay so uh yeah is it clear what the homework is come
+6411950	6417550	back with something you want to do and then if you want to start preparing some initial research in
+6417550	6425260	the environmental costs elements that this discussion can go on many times good so it shouldn't be a full
+6425260	6431820	seminar talk but yeah okay look it's better if it's like 10 minutes yeah if you just say i investigated
+6431820	6436780	this model and found that it cost that much but to train it or whatever i don't know it starts a
+6436780	6469300	discussion right i don't want the full answer so i signed you're registered now is that right uh i will do that
+6469300	6477230	okay

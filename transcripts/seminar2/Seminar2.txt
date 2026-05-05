@@ -1,0 +1,1022 @@
+Good, I hear some interesting discussions already as I come into the room.
+From these discussions, I gather that you are trying out local models.
+Yes, we're trying our best to not have to pay for something online.
+You'll see where this goes, I think, I fear.
+But yeah, I'm curious to hear your experiences.
+You've tried things, so maybe not all of us have tried these things, so maybe some of
+you can give an introduction to what you tried.
+I can, because mine was the worst experience, but it was also the first, so we can build
+up on top of that, because what I did is I installed Olama just on a CPU, 8 gigabytes of RAM, and
+then I tried to run Gemma 4.
+Okay, how many parameters is that?
+The smallest one, it has like, oh, they do some magic where they have effective parameters.
+I think you should say first, Gemma 4 comes in four different variants.
+2 billion, 4 billion, 26 billion, and 31 billion.
+And the 26 billion has only 4 billion active and the others passive, whatever that means.
+But the same for the E2B, because that's also like the effective 2 billion,
+that's why it says that what's the E?
+But that doesn't have passive parameters.
+It doesn't, but they do some magic where they hide some layers, I don't know.
+Yeah.
+Because also there, 2 billion parameters are way larger than the Quen models, for example.
+And that's why those didn't run on my PC at all.
+I don't have enough RAM.
+Then we started to run it on Otis computer.
+You have 16 gigabytes of VRAM, so we managed, supposedly, what?
+I mean, it's sort of fake because it's an integrated GPU and it can share the RAM with
+the CPU and it can share up to 60 megabytes.
+So 16 gigabyte models fit.
+And then I chose, technically, the Gemma 431D should also fit in some quantizations, possibly.
+The annoying thing is that it takes some experimentation to make these models work on the laptop, because
+first of all, you need RAM reserved for your operating system and to run the graphical environment.
+So you can't just put all of your, you can't just put the model in the complete GPU VRAM,
+and because then nothing works.
+So you have to manually experiment how many layers of the model you want to load off to the GPU.
+And that's, it's not trivial, I guess.
+But I made it work with the 26 gigabyte model, the 26 billion parameter model, which is 15.6 gigabytes required.
+It just fits, but I can't put the whole model in, into the GPU because then everything crashes.
+So I still have to select some layers.
+And then it runs at about 16 to 13 tokens per second.
+That's very good.
+Which is okay.
+I just tried converting one of Henrik's exercise sheets into types.
+And it worked with minor corrections.
+And it didn't understand exactly how types work.
+But it put, I now have a PDF of the exercise sheets again, which is not completely ugly.
+So that was sort of, is that the final types version?
+Yes, that is the types version.
+I mean, you can show it around, looks like this.
+Okay.
+It's okay.
+Yeah.
+And it didn't take too long.
+It took about four minutes, almost five minutes.
+Interesting.
+Which is for a local model, better than I've seen before.
+And how long would it take you to type the same document?
+Probably more than five minutes.
+Okay.
+Maybe not much more.
+Yes.
+Maybe about 15 minutes.
+Yeah.
+I presume.
+And I have to do corrections.
+Yeah.
+But because it doesn't get everything right.
+Yeah.
+But it's also not an agent.
+If it was an agent, then maybe it could have corrected itself.
+And I'm just trying to get the image recognition to work.
+Because that was just from the text of the PDF.
+I saw it.
+So only had the text as context, not the images.
+So I didn't exactly know how the old document layout looked.
+And for some reason, I can't put images into the input prompt right now.
+So I'll see how to fix that.
+Interesting.
+Interesting.
+What I would suggest in that particular instance is that you
+use a...
+If you want to convert images to LaTeX, there is a model.
+It's not an LLM.
+It's a...
+My screen is that again.
+Okay.
+I'll fix that in a second.
+I will recommend a OCR technology neural network.
+I think it's developed by Facebook.
+It's called the Marker.
+Oh, I've tried that before.
+Yeah.
+It was very slow.
+It's very slow, but there are various models you can use.
+You don't have to use the stock one.
+So I use Marker all the time now because I don't want to use an LLM to do image to text
+when a more specialized model works.
+And so I have a GPU.
+So it's...
+But no, I've actually been using Marker on CPU as well occasionally.
+And if you hand it a PDF as a scan, it can convert it to LaTeX, not types, but you know,
+maybe as an intermediate step.
+So this works extremely, extremely well and recognizes equations.
+So what I've done is I have a workflow now where, for example, I might have a transcript
+from a conversation.
+We may have some handwritten notes and we send those through specialized models.
+We don't send them through LLMs.
+I send them through a local model, Whisper to do the transcripts, Marker to do the notes.
+It gets a first-class LaTeX.
+I don't use times.
+So it converts handwritten notes.
+It converts handwritten notes as well into Markdown, basically.
+That's what Marker does.
+And Markdown with LaTeX in line.
+So it's the worst of every whatever.
+I mean, but you've got something, right?
+And then from this something, you've got a text of the discussion
+and a first pass at the text and equations.
+And then you can ask a local model then to combine these sources
+and create a best types or best LaTeX or whatever version.
+And that way, you focus the compute where you can, right?
+So the idea here is that you use Marker to do the Marker job,
+Whisper to do the Whisper job, LLM to do the natural language job.
+And so it's pretty tricky on laptops.
+You're all running into this, this kind of like hard barrier
+that you're about one generation of technology behind.
+What we'd all ideally ideal scenario is I believe
+to order some and you have Apple devices where you can probably run local models
+pretty well because of the shared memory.
+Is that right?
+But I did not try it.
+You did not try it yet.
+How much RAM do you have in your laptops?
+5 to 16.
+16.
+Oh, it's a lot of the status.
+Ah, okay, yeah.
+The ideal hardware to have, which we don't have
+because it's impossible to buy anymore, is 32 gigabytes Apple laptops.
+All the models are just optimized for this.
+So you can run them real fast on that hardware.
+But hey, we can do what we got to do.
+We do what we can do and then as we say, we're setting it up.
+It's just such a painful progress for this server down in the basement,
+but it is happening.
+But what we will have soon is a decent graphics card 3090 in a desktop here.
+So that'll be an intermediate level.
+And that runs Marker, Whisper, local models like Quinn.
+Pretty happily there's no agentic models.
+So within a couple of weeks maybe we'll have that ready for you
+and then you can experiment on better hardware.
+But I think it's actually very good to really painfully experience it the way I did.
+So that when you transition to other models, you can use all these tricks you develop
+in order to get the most out of the crappy models.
+Okay, so is this kind of the end of the experience?
+I mean, it's doing useful work for you though in one sense, right?
+I've yet to try longer conversations.
+Of course, the context window isn't maxed out
+and I haven't tried many things yet, but it works and it doesn't just spit out trash like
+those first model and like Quinn 3.5, which was this nonsense.
+So Quinn 3.5, it just didn't...
+It just circled around and around and didn't output anything usable.
+And did you Google that as a problem? Like do people complain about this?
+I probably don't have enough context size.
+That's my suspicion because whenever it starts reasoning, it kind of loops.
+It gets caught in, it's overthinking.
+Yeah, it's overthinking, it gets caught in a loop and it reiterates on stuff that it already decided on.
+It's funny, this conversation, I've had it like three or four times
+with completely different groups of people that their local models are overthinking
+and I haven't looked into this for a while, so I'll have to look into this.
+Because I didn't have the chain of thought tokens when I experimented with local models.
+It's a kind of new thing. I mean, you can turn thinking off.
+Yeah, when I do that, it kind of does the job, but for me, it doesn't do anything useful at all.
+It's just a happy thing to play around with.
+It's a happy thing to play around with.
+So I tried the intermediate model, 4 billion. First, I tried if it can recitate Harry Potter,
+because in larger models, this is just in the weights, but the smaller one wasn't able to.
+So it refused when I said, give me page something of Harry Potter,
+cause a copyright, and I became able to speed talk it into doing it. But when I gave it the first few
+sentences, I tried something, but it was completely off. So the smaller models don't contain culture,
+apparently. And also, I tried some more technical stuff. It was able to define me a Hilbert's base
+in the C-star algebra, but it wasn't able to prove me that a state that states on a sub-algebra extend
+to states on the whole algebra. It wasn't able to do that or even state that that's correct.
+Okay. Yeah.
+Any other experiences?
+Any other experiences, I tried to load it into Python with the Transformers
+library, also the same model I believe for E4B. Yeah, it works. I find that interesting too.
+So like it's a bit more raw and I'm not yet to reach the chat mode. I can
+send one input and then it gives me the output. And what I tried is to get it to write me some kind of
+web search tool prompt or something and it refused that and it refused to believe that it was
+running in python it always said no i'm in the cloud but maybe you have another one
+and but then when i used an admin prompt it worked okay so like you have this low user
+prompt and this low admin prompt and so you didn't believe the user but it believes the
+admin that's very interesting i didn't know about that actually yeah i'm not sure if it's actually
+called yeah but this is a thing we write down we learned that this happens and then maybe it's
+useful in the future yeah interesting interesting um so i'm very i think you know one of the core
+goals is that you experiment with these things uh and then the second and then learn stuff and share
+this learning right you know a little little comment about admin prompts or might be useful for us
+later on you know a comment about this works that doesn't work this can be all useful as as the
+seminar progresses oh i've got something to share yes you said that uh language models as an output
+they generate json yes right yes because uh and i've tried that i set up an api where like locally call
+my own api yeah and then it does return those exact json strings yes as an answer but i found them very
+confusing to read yes because they like the keys they use are different for every message that i send
+so i wanted to ask you if you maybe know how how this actually works in practice because uh now we get
+into this this is scaffolding discussion so it's what happens around the output of an llm um all i can say
+is you can make it pretty by using jq this command it makes it slightly more readable the output uh more
+i don't really know about the outputs of these models okay yeah but maybe you do yeah actually i was a bit
+uh confused because it didn't output in json for me maybe it's a library that affected the way but
+is your question it has some some tokens yeah it has a tool token or it has a role token and so on
+but i maybe i'm not i'm not sure if i am below the json lawyer or above i think you might be below it
+right okay i think you're really you're really putting numbers through matrices yeah yeah and so the api
+which is different from the llm right the llm is this function is a mathematical function
+yes and that just emits tokens and there's no jasons coming out of that it's just
+strings of stuff oh it's not it can emit json it just doesn't yeah but then that's just json
+represented as tokens that's right yeah it's not really json the model doesn't really know about json
+what it does is it emits tokens and there's a textual representation of those tokens and that's
+always when you see these angular brackets with type characters and then there's it says like tool
+or something or prompt yeah and then you can what your api does or what chat gpt the interface does or
+llama or olama they just transform that representation of tokens into a json exactly object because you can
+send it over the network and read it with every programming language so but there's no the model
+doesn't know about json no because i understood you in a way that screen the actual screen oh okay sorry
+yeah that was unclear yeah by the llm that that's the json yeah depending on your harness it is it's like
+how do you wrap this where do you cut the function and say what's the output and what's the harness
+so at the level you're doing it with a transformers library
+you're really evaluating a mathematical function outcomes tokens and then the python around it
+already starts to wrap these tokens in this json and so what's the function and where's that not
+the function so there's this kind of gray area around the transformer which is the thing that's really just
+emitting tokens and that the stuff you get from the api which is json wrapped but yeah you have yeah i was
+wondering is there some kind of standard how to translate these tones into json um not that i'm
+aware of but there's probably i mean there must be uh is a quicker answer if you ask your model
+it might know um there must be a python library that is doing it somewhere like in the transformers
+library yeah so it's more like do all models have the same token standard and the same mostly i mean
+it's a wild west so people are creating models that don't obey any rules um and people you know create
+models where they have standards so that everyone can talk to each other i you know you know about
+this place right yeah i don't know if i mentioned that in any previous seminars but if you want to
+download a model this is the place to find it so what we're in is the pre-bootstrap phase of your
+of your learning so what do i mean by that you're having to do everything manually you're having to
+kind of coax these things onto your system and then you spend lots of typing time to get them to work
+and then they do kind of work and then and then they're not useful and you can't pipe them into other
+things where you want to get to is the point and i don't know if you i just don't know if local
+models can get you to this point but we want to get to this point where the model itself helps you
+do this work so instead of you having to write python in using the transformers library you just say
+to an agent write me a python that will get this model running locally and then it the agent goes
+off does that for you and now you have it running locally you know freeing yourself from this stuff
+that you're having to do at the moment that's coming but it will need that we can give you access to
+better agents right at the moment the agents you can get on for absolutely zero pennies as you've
+experienced not super great um so the homework that wasn't the homework but it's very interesting
+and i'm happy to hear every week about these discoveries uh but the homework was to read one essay
+did you read it it's one page
+i forgot but maybe someone here can summarize it their experience with reading it and what they
+think about it yep i mean okay so the the core idea so the essay was called the bitter lesson i believe
+yes yeah the bitter lesson and what is the bitter lesson it's the fact that um we as humans when we try
+to build a computer that's specifically tasked to do one thing for example building a chess robot that
+we as humans are not that good at like hard implementing the steps we need to that we need
+to computer to solve in order to play chess because what we assume is whenever we build a computer is
+that or we build an algorithm is that like we as human we can teach it to like think the way a human
+would think so we hard code like oh if there's a rook there then take it or whatever but instead like
+the most effective thing we can do as researchers building a robot is to just like throw computational
+power at it let it learn by itself and just use like this deep learning or the way i don't know how
+it was called there but like just using uh a neural network to to to learn how to play chess itself
+instead of us trying to teach it because that's that's like the the most intuitive step for us
+would be to like oh we need a robot to solve this problem well we teach the robot how to solve this
+problem if it's if it's chess or what else was in the text they also had like speech recognition
+computer vision and so on and so forth so the best thing you can do for example for computer vision is
+to not teach the the computer how to recognize patterns or anything because that's the initial
+approach by us humans was to like teach it how to to discover edges and shapes and whatever but no
+instead the best we can do is just like let the computer learn by itself use the neural network just
+throw computational power at it and the computer kind of teaches itself how to to solve that problem
+yep i i think that's more or less my take-home message from it as well does anyone add anything
+to that story um uh it was anyone are you happy with this no yeah you shouldn't be happy with this
+right what's there's something very wrong with this right we're kind of building black boxes where we
+don't know how they work yep i would love for chess computer to at least know there is a person who
+understands how it works but the way it is right now it's like no one knows how they work it's a black
+box yes exactly that so they do the task but you don't know how or why or both of how and why uh
+it's a pretty powerful essay for someone like myself because i followed this stuff since the year 2000 or
+so and you know i've really seen the whole research field do this make this mistake over and over and
+over and over again like it's not just it does it once the whole research field makes this mistake
+every single time um and that is you you have some new computational power and the first thing you
+think of doing is oh we as humans know how to solve this problem let's teach it that let's hard code that
+in as you said and then it'll be better as a consequence and the thing we don't want to do is just
+throw more compute at the problem uh without understanding and somehow this second strategy always wins
+and i've seen it happen i haven't seen it happen once or twice i mean i've had to see it happen tens
+and twenty times right you know uh so it's a powerful thing to have just witnessed over the years that
+this seems to just be true um i don't know if that'll continue to be true but it seems to be
+experimentally true that if you have a complicated problem throw compute at it not understanding
+and that's something that we're going to have to tackle in in this seminar because i think the
+the interesting direction here is to do research with computing power uh and sutton's better lesson
+tells us what it tells us that our understanding of science itself if we extrapolate is probably not
+useful rather through compute at it and let the computer work out how to do scientific research
+that's a bit more out there as a prediction but we we gotta understand this you gotta you gotta accept
+this is the way these things work but it'll take some time okay that was the homework uh and today i
+wanna i think the last thing that i can tell you before i don't know anything more is about verifiability
+so the most important thing with an untrusted source of information is that you can verify so the you know
+i told you in the first seminar and we've spoken about the second and you've seen it yourself
+you cannot trust the output of these things they will tell you about states and algebras and then they
+will claim that you can't extend a subalgebra state on a subalgebra or whatever right they they
+have useful knowledge in there but they also have wrong information in there and the
+more but what do they offer so they offer high frequency of output so they can continually output
+stuff all day long uh but it's not trusted so is this a useful resource or not that's the question
+that we shouldn't think about is it a useful resource to have something do things for you
+in an automated fashion where there's a probability of error and i would claim the answer is yes it's and
+there's a very easy way to to exploit or improve the quality of the output and that is with verifiability
+so if you have a string of information where there's some rate of error what you should do
+is code against the error you can turn a noisy channel into a perfect channel by using encryption
+encryption but not in the sense of like spy codes but in the sense of you're coding against errors it's
+an information theory problem what we want to do is we want to minimize these errors by exploiting
+repetition that's the best form of communication over a noisy channel so if you're in a noisy channel
+you know there's some rate of error what should you send the message three times and take a majority vote
+all of a sudden you've reduced the error by a factor of three and so you if you've got infinite compute
+thanks to richard sutton uh what should we do well ideally we should ask a thousand llms the same
+question and take a majority vote that's the ideal way of doing this uh you know why not a million llms
+ask them take a majority vote uh if you know that there that there is a probability of generating the
+correct answer already majority votes will reduce the error of bad faulty outputs it sounds obscene but
+it's maybe not that obscene we're going to do very soon i think claire at least was volunteering to look
+into the cost of using an llm you can already see the cost of inference on your laptop so your battery
+goes down at a certain rate you can work out how much money that cost you
+uh and if you can sample a million llms for a reasonable cost and get an incredibly high quality
+answer the zero cost to you then why not right so that's one thing i wanted to just to stress is the
+cost of of of repetition versus the cost of correction versus the cost of the actual cost
+so i want to talk today about verification how do we verify stuff from llms that's that's the question
+for today and i'm going to show you how uh three or four levels of verification i've already told you
+one just repetition like literally repetition can get you higher quality answers uh ask chat gpt ask
+claude ask gemini and then take a majority vote of the three three answers it's already better it's
+actually it's still possibly wrong but it's probably less wrong and you can get them to check each other's
+work and so uh that also increases the probability of of a correct answer so simple uh consensus is the
+first way to gain um uh confidence in an unverified source of information so let's talk about consensus
+for a bit that's the lowest level so when you publish a paper do you trust it in a scientific journal
+i'm going to start with that do you if you read a scientific paper you're trusting what you're
+reading why do you trust it because we assume it's reviewed okay how does the review process work
+i'm not sure if i should explain this but uh but it's even your idea of the reviewer process my idea is
+that uh the journal sends it to some other people who stay anonymous yes and they look at it and uh
+they determine whether the scientific methods have been are correct or if there are biases or
+any grave errors in these in these publications it's about right um you send a paper after publication
+the journal editor decides they're going to at least send it for review they send it to some anonymous
+reviewers who read it for correctness and maybe novelty often novelty is a criteria and then uh depending
+on the journal there may be one two or three reviewers that sell them more very rare that you'd
+have more than three reviewers for a paper and the reviewers write their report send it to the editor
+and then the editor makes a decision based on the report whether to accept or review revise or reject
+and so when you have a paper in a journal what what's how much level of confidence is there in
+that right you know how much information has been truly verified it depends i think is the correct
+answer it depends on what the reviewers did do you know how long the average referee report is
+if you're lucky it's about a page so if you send in a 30 page paper to a journal and you get the
+review i don't know you guys contradict me here but i'm not sure i've ever seen a referee report
+longer than a page or two well i once saw a three or four page i've not submitted it i mean i think
+math journals are quite they're pretty pretty hard yeah they're pretty hard but in physics sometimes
+paragraph two you're lucky if you get a page yeah so you've submitted a 30 page paper
+and you get half a page at best maybe a page of commentary back from the reviewer who's a human
+or was a human at least um and uh it makes some statement about the correctness of the paper but
+is that enough like does that mean that the paper is correct most of the times i guess
+maybe i mean i would put it in the kind of maybe it's correct category actually i don't think it's a very
+good method to be honest the math community has its own culture and they're a little bit more rigorous
+like they the reviewer tends to read through the whole paper but they won't read arrival the
+equations or anything like that often they'll skip steps because it's too hard it takes too long
+it's just that it's just that it's just a it's a it's a numbers game right if you've got x researchers
+producing a a papers per year let's say one paper per year you've got x new papers per year
+uh and they have to be reviewed by experts you have to then send a papers to experts at least every
+review every person producing a paper has to review a paper and if they're going to invest energy in
+reading it properly they're going to probably have to spend well not the same time as it took to write
+the paper but some proportion of their time to to review correctly right and that would be a non-trivial
+amount of time let's say it takes i don't know a week to fully review a paper like to the highest
+levels of high high high rigor that's okay that's if you've got x people producing eight papers a year
+that's x b everyone gets one per year that's not what happens is it so actually people produce uh
+more than one paper per year and so you have a
+a collection of x experts and they have to review more than one paper per year typically
+at least in my inbox i get once every week at least one or two requests to review a paper
+i don't know guys does that correlate with your experience you might get less requests but you have
+to review right yeah and the week for a paper what do you reckon if you spent every day properly going
+through the paper checking everything no no no i mean but it's a paper you know pretty well i don't
+know maybe um a weekend plus a couple days extra i don't know something like this so three or four
+work days yeah something like that yeah three or four work days so how often do you say yes zero i no
+longer accept papers to review uh because that's it's past the the event horizon i cannot actually review
+the papers that come into my inbox any longer and also i put into a problem here that i tell every
+editor now which is that we can't verify the science has been produced it's no longer possible
+we can verify some proportion of it but not really and i'm not the first to say actually this problem has
+been known in the math community for decades there are well-known results in the math community by
+fields metal awarded people that are wrong everyone knows that they're wrong they tell
+each other that these results are wrong and everyone avoids these results and they don't they carefully
+don't refer to them in the wrong form but they actually everyone knows that the correct way of
+doing it is like this but nobody ever writes this down and it came to the point where one person
+guy called the vetsky had concerns about his own proof he did he was no longer convinced that his own proof
+of a fields medal award winning result was correct he was just not sure so he was one of the first people
+to seriously invest time and energy in automated verification of mathematical results and that's where we're
+going today uh he was just so unhappy with the status of his results and whether or not they are true
+that he wanted to formalize them and this is the key word that i want to get to today formalization
+we've come from consensus based uh verification all the way to the what i consider the highest level
+verification which is formalization we'll get to that in a second but i this this story you know has
+started to get much more momentum recently uh scientific results are getting harder and harder to verify
+because there's more and more of them coming and we're in a crisis where there are more papers
+being produced and there are people to review them uh if you want to do a proper review so now we're
+down to gut field reviews so you see the paper you go looks okay looks good to me um that's how papers
+get reviewed this is just a fact but if you don't believe me just do the numbers just look on the
+archive every day there's a whole bunch of papers how many today i don't know a lot um let's see
+do this occasionally today there were 94 entries but 41 new submissions so okay it's only 40 today
+so if you think that the college of experts in this field of quantum physics how many experts are there
+in the world it's probably i don't know you can start working out numbers right just count all the
+universities in the world um that's claude while i'm talking um and then we work out how long
+or whether or not we're past or built up ahead or behind the event horizon crisis here
+so how many um people in quantum physics
+in academia and just it doesn't have to be a correct number it just has to be within a couple
+of orders of magnitude because the calculation we're going to do won't even matter about the exact numbers
+what proportion of those 40 papers do you think is ai generated i don't know anymore actually i think
+it's a surprisingly low number that's the thing that's why it's very shocking because i talked to all
+my colleagues who were obviously i asked them how are you using ai and it's a shocking number just use
+chat gpt just to to talk about ideas with and then they still write the papers here we go that's um
+there's a number let's say 30 000 academia quantum people um and then there's a broad broader set which
+is yeah kind of maybe um yeah yeah not my kind of work um so let's say if we just took the number of
+100 000 active reviewers in the world 100 000 these are the people this is the corpus of people we could
+call on to review a paper and so we have 40 per day so we may not be past the event horizon yet but let's
+let's let's work it out so we got 40 per day so 40 pages per day times by what is those 250 archive
+days in the year roughly speaking so it's 10 000 papers per year now how long did i say did we agree
+to do a proper review it was like three or four working days right so let's say three hard working
+days it's 30 000 working days need to be invested per year to review all the science that's coming out
+at the moment the college of experts is a hundred thousand so yeah it's fine right that's if the
+college of experts is a hundred thousand but i fear that the reality is the people that you can call on
+for refereeing work is more than in the ten thousand category because a lot of these people here i don't
+know where this number of 100 that feels a bit over i mean the total number of members in the dfg is
+the dpg is 200 000 something but actually employ people who will do refereeing is closer to about
+10 000 would have been my first first number but i'm getting wrong so at least you know we don't seem
+to be at the crisis yet but we the problem is we are at the crisis because the actual people who are
+qualified enough to referee these papers is much much lower that's the problem these people have
+a phd in quantum physics but do you want someone with a phd in statistics to referee your paper on
+operator algebras yeah when you get to the the the the the tighter definition then all of a sudden
+the college of experts goes from maybe 10 000 to a thousand and then 30 000 starts to be a really
+painful number and that's it the pre-ai situation in if you look in neural networks this the study of
+neural networks the the numbers are strongly inverted um they have conferences with thousands and
+thousands and thousands of thousands of submissions it's just insane the number of papers that are
+generated per day in in ai and they can't be refereed anymore and they had this crisis a couple of
+years ago so uh and they dropped their standards actually the standard is now every paper has to have
+a github repository and the code has to compile i'm joking this is a standard for publication um but
+that brings us to our second level of what what it means to verify if you have a program that you can
+run then having it run is a pretty good way to check of the correctness of something you know the correct
+the program compiles it gives the you give it some inputs it gives you some outputs they match the tests
+that you set up that's a fairly high bar for com for for verification and i would put it to you that
+that's a fairly high bar it's actually higher in some sense than than referring a paper but that's not
+quite where we want to although this is the most effective way to do uh agentic science now is to
+get it to write a python program for you to do whatever it is you want to do that's an extremely rapid
+way to check something works it's amazing it works really fast you pick a problem in any homework sheet in
+any uh lecture in this in the physics institute institute and then ask chat gpt how to solve it
+probably it'll write a python program to to test it out this problem you know won't be able to give you
+a proof maybe if it's a theoretical result but it'll certainly test some special cases with python programs
+you've probably seen this happen right but that's a level of verification that you it's higher level right
+we go from college of experts consensus to a program that represents somehow the content runs
+but maybe there are edge cases maybe there's examples that can't cover but at least you've
+got some signal now that this result is correct or false and this actually works amazingly well for
+all kinds of formulas if you guess a formula for something um or even conjecture formula based on some
+hints then the first thing you should do is put in the special cases right up to as far as you can go and
+if the formula matches for the first 110 cases that you can calculate then you start to think this is
+probably correct so that's a level of verification above consensus you go from consensus to writing a
+program that kind of does the the happy path the basic examples and then you might want to ascend to
+a higher level of verification you know wouldn't it be wonderful to have something that was just correct
+and you didn't have to ever have any concerns ever that this result was false as long as the definitions
+were correct and there is a way to do it and that's using um uh that is not what i wanted there is a way to
+now use uh there is now a way to formalize mathematics in a language which can be computer verified i can show you
+one instance of this programming language there are several out there this is probably the the most
+actively developed one right now it has the biggest library um we're going to talk about this a bit
+today so this is a programming language called lean um how many of you have heard of this
+and how many of you played with it wow you belong to a very small community of people
+have you ever got the type checker to accept anything i think i used it in years ago yeah a few years ago
+okay yeah okay so you've at least heard of it and you've tried it so you you kind of have a sense of what it's like
+look it's the most rigorous uh way of representing math that that i think humans have invented it's
+as a consequence it's very very boilerplate uh you could spend a long time proving that one plus one equals two
+it is possible you can express a proof in this language of the statement and the n plus one is
+one plus n and things like that so you start with primitives and then you build up uh lemmas and you
+build up a library of true mathematical statements that are formally provably correct and then you can
+build on them and build on them and build on them and express mathematics in this language
+uh by itself the language is very small it has only a few number of primitives but people have
+worked very hard uh and they now have developed a library of formalizations of results in math
+and this library started to get good a couple of years ago and by good you've got a large amount of
+undergraduate math in there now and not just boring stuff like you know functional analysis is in
+there they've got the definition of c star algebra in there they've got uh normal states they've got
+uh combinatorics in there geometry they've got it's it's a massive massive massive library of stuff
+lots of number theories in there so many many things that you may need to a formal proof of is in this
+library you don't have to recreate it and in fact i recommend you don't um and uh and it's being added to all
+the time all the time by a small group of really insane people who've made it their life's mission to
+turn mathematics into this language you may have even heard of some of them terence towers one of
+the kevin buzzard there's a couple of other people kantorovich there's some mathematicians who just
+decided this is the most important thing they could be doing right now is formalizing mathematical results
+and they're adding to this library and it's it's a huge library and it's useful now so you don't have
+to go right back to piano in order to to prove your statement about um operator algebras you can just call
+this library and then you have an example a formalized result which is formally proven correct
+and the library like it's i'm not going to explain the syntax i'm not going to explain anything about
+the language i'm just going to leave it out there that this is a thing that exists
+and many many results are in there lemmas about subgroups so anything you might find in an
+undergraduate math textbook should at least be uh written in this library not maybe with a missing
+proof but it often with a proof so it's pretty extraordinary the amount of stuff that's in there
+now why would we talk about that in a in an ai course well because coding agents are trained on the
+internet and they know this language they know how to write programs in lean uh and uh how well let's
+find out i haven't done this in a while um so what we're going to do is while we're talking i'm going
+to ask claude to create a proof of a mathematical statement i'll try and build i hope my mathlib the
+mathlib is horrifically large it takes about half an hour to download on it on a hard on an ethernet
+connection so i hope i've got a reasonably up-to-date one um so what we'll do is do i have a temp directory
+um i'm just gonna ask claude to write me a lean program that proves a mathematical statement that's
+kind of hard one that you might be familiar with at the sort of the fourth fifth sixth semester level
+i don't know if there are any candidate theorems and proofs that you think are pretty hard but
+oh well that'll be interesting what i'll do actually i'll do i'll ask it um
+okay i'll tell it that it's in a repo where it has mathlib okay um okay let's get it warmed up so um
+so what i'm going to do is this is the kind of hello world of leaves proves that square root
+two is irrational which is non-trivial it's actually there's quite a few steps to it
+um but what i want to do is get it warmed up so it knows where everything is
+because it may already crash out that'll be a bit of a bummer if it doesn't know i already found it
+all right okay uh but that's good at least it tested the compiles i i do i wasn't sure if i had it
+there but i do okay i'm going to show it you now where did it say it was it said it was under
+uh square root two is irrational okay this is what it looks like this is what um this this horrific
+programming language looks like now it's very beautiful in many ways um there's this extraordinary
+deep connection between type theory category theory and proof theory they're all the same thing
+um and lean expresses that so if you want to get it down into that rabbit hole you can and you will
+never leave it um okay so this is what uh lean looks like you have theorems go to is irrational
+um you have some arguments uh the argument is the number square root two and it's of types blah blah
+blah and then you you build up the result in the way that you might uh build it up classically right
+so you you might uh assume that uh the number namely square root two is is rational uh so we've got to say
+what it is n times n equals two um so your hypothesis you have a hypothesis and then uh you check some cases
+and then uh you derive a contradiction it's the kind of standard proof that you might have a square of
+two is a russian and it says natural not rational it's natural doesn't it oh that's because it's looking
+at the square of it um what have we got here by read write intro the natural number n yeah it's trying
+to find a natural yeah okay it's clearing the denominators and working over them um so that's
+not a very good theorem what's going on with that one two is not a perfect square okay it's not proving
+through two is irrational it's proving that two is not a perfect square uh but that's that's a typical
+example of some of some lean code it's if you can read it you can read it if you can't then don't
+worry don't try it we're not our objective today isn't to try it but our objective is to see that we
+don't have to read it to some extent um here we go we think it's found it compiles cleanly very good
+so now let's take on a more difficult task uh you have a candidate i've got one from differential
+geometry okay on my current homework sheet yes sorry i'm kind of cheating here um we've got a smooth
+manifold m yep please prove for smooth manifold m and on there we have two um line bundles
+i'm not sure this may this may not be in the method but let's see i'm curious i don't know actually
+uh and uh let's denote them l1 and l2 yep l1 and l2 and we need to show that the tensor product line
+bundle or the tensor product bundle l1 tensor l2 i don't have to get it correct yep is isomorphic to l2
+tensor l1 so we can they are isomorphic under like reordering all right the tensor product um
+is this in mathlib if it's not in mathlib we're kind of cooked uh uh if not uh how far away are we
+it might be that they have line bundles they have manifolds and everything they just haven't got this
+particular result in there um what is the gap and so i'm curious what it says i actually don't know but
+this is the kind of thing where is this is the edge of mathlib right now i'm pretty sure smooth
+manifolds in there pretty sure line bundles in there not sure about this result okay it's looking
+for it so uh oh yeah it's found topology vector bundles so there is something in mathlib about this
+i'm not so good on differential geometry and lean and what might happen is it might a find the theorem
+itself in there uh it might say oh no we're very far from it or it might say yeah we need to prove a
+couple of lemmas and then we have it and so what but the while it's thinking about it the message
+here is i hope becoming clear if you have an llm produce something you've got various ways to to get
+confident that the answer is correct you can ask other llms is it correct ask the same question from
+other llms take a majority vote ask them to critique each other's work you can get them to write a
+program for you to check special cases or you can say formalize this result in this programming language
+and all of this can be done in an automated way so where i'm going with this is the the non-human part
+they can't do the creative part somehow yet everyone i know tries this out but nobody has
+come to me and said oh yes it could come up with good ideas i've never had this yet but
+recently some days ago there was some person who played with jgbt and handed it over to someone and
+who handed it over to terence town that was a new this is the early result yeah yeah um yeah there is
+a lot of and this is a i would say this is not a great signal by the way um that that that press release
+because what actually happened is everyone's just throwing chat gpt at erdish problems so you know what
+erdish is right mathematician came up with many conjectures and he became famous because he offered
+rewards if people could prove these conjectures but the guy was really prolific like he came up with
+thousands and thousands of conjectures in fact more conjectures than there are really people interested in
+them if i'm brutally honest right lots of erdish problems are not that interesting for other people who
+aren't okay it's um it's taken this one serious compiles the file is that summary is it in method no
+how far away 500 to one and a half thousand lines of code the work decomposes into four pieces all of
+which mirror existing patterns which is good the shortcut line what you can do today for free the fiberwise
+argument is the algebraic content go do the results i'm just gonna let it thrash away for this the rest of
+the time we're together and so because i want to just leave it there running so you can see the way it
+attacks these problems oh erdish problems oh erdish problems yeah um and so what people have just
+done is they've done the natural thing is oh i've got a whole list of problems that someone said were
+important i'll throw an llm at it and since there are more problems than mathematicians interested in
+them there's lots of problems that have kind of not been explored even by simple methods that have
+been developed in the past 50 years and yeah you're going to get a hit every so often i'll be honest
+without about to go a fully general intensive product is 500 lines yeah you said that already don't
+complain um what come on um it's complaining about the the the far beyond what's prudent in one session
+um if you don't finish um we can pick up in another session so uh it's this is a the late the
+latest clawed model actually complains a lot about things being added too hard and there's a good
+reason for doing this actually because the previous call model was pretty aggressive uh it would just
+take on any problem no matter how hard and then go for it and you know sometimes it kind of
+overestimated its abilities and led to kind of nonsense uh and so they've obviously sort of trained
+the next model to be a bit more cautious uh and so it always does this thing now where it's like oh
+this may be a bit too much so uh this is going to happen a lot now there's thousands of these urge
+problems uh people are just going to throw chat gpt at it because it costs them nothing and then
+eventually you're going to get a hit and this in my opinion is the worst possible outcome because
+because it still relies on experts to evaluate the results and that means it's sucking the that very
+little energy that experts have away from good science to now deal with this flood of ai slop it's
+a very different kind of slop but it's yeah it's and the thing is people will create these lean proofs
+of these others problems that's how they will present them like that and it's a good thing but still lean
+proofs need reading uh why because the definitions could be wrong so that's the failure mode of formalization
+i've seen it happen many times by the way in a formalization in lean you formalize it say
+woohoo i've done it uh and then you look and then you've got one of the definitions wrong
+so it said you know a smooth manifold is a manifold where the functions are twice differentiable
+and you're like what no this is not a smooth manifold you know that that's the kind of
+error that can happen and so as if you get the definition wrong you can prove things right
+and so humans still need to read the definitions so uh all of the inline definitions or just some at
+the beginning uh any definition is subject to failure yeah you can introduce um errors in any
+definition because it's a definition right you can't argue with it the consequences fine you don't have
+to read those you know that's that's that's the way you should operate actually so what it's trying to do
+now it's going to build up the skeleton of a proof and then instead of giving you the proof itself
+it replaces the proof with something called sorry and sorry in the lean language means proof not there
+but it type checks still so it's it's an acceptable proof but it's not a proof
+it's a placeholder and that way you can build together very powerful proofs like with lots and
+lots of statements without having the proofs there yet and so lots of theorems of theorems they're well
+known um you can trust them it's just that you haven't formalized the proof and you want to see
+where it goes so sorry allows you to do that you don't trust it it's not a proof but it's it allows
+you to build up bigger bigger proofs build the construction so that's what it's doing now so it's
+it's going to do that for the probably the next whatever hour whatever we let it do um and you can do
+that and i've tried this a lot in the past months i take results and i build math uh lean proofs with
+claude for various things uh and and if you give it enough time it will do all those hundreds of lines
+that it complains about um and it appears to be correct so how much can you produce with claude
+claude in a weekend you can produce about 80 pages of latex with lean proofs subject area
+functional analysis so operator algeism that's realistic that's an actual number that i can
+give you as a data point uh it can do quantum computing stuff in lean it it can do yeah i haven't
+found anything it can't do but you have to have the idea first like it you have to have the proof
+assembled if you have no proof you know if you just write down that green manzilla hypothesis or
+something it'll just it'll thrash around have no idea how to get a proof you have to have you have
+to kind of have the proof already how long does it take you to so you said you have to verify that
+the definitions are correct right how long does it take you to verify that like for an 80 page long
+honestly uh uh an infinite time i haven't really checked the definitions uh because there's another
+way so it's not proof proof right because the definitions could be wrong but there's this thing
+that if you get definitions wrong and you derive consequences then you get contradictions very
+quickly this is this is some there's some kind of robust structure in math that if you if you get
+the definitions wrong then pretty soon somewhere down the line you'll derive a consequence that somehow
+gets crazier and crazier and crazier like the mistakes get amplified so i there are subtle bugs that could
+be there yeah there are subtle bugs that could be in the proof absolutely uh and i haven't read all
+the definitions but uh because there were no kind of crazy contradictions i'm fairly confident if it
+mattered enough to me i would read the definitions though does lean check that definitions are like
+consistent within other definitions uh not directly so the definition can exist in lean code and contradict
+literally contradict another definition it can literally contradict another definition and you
+wouldn't know to begin with like it's only when you start deriving consequences that all of a sudden
+you start deriving results that seem weirder and weirder and then at some point they'll be
+hopefully a hard contradiction so this is the kind of this is the last stuff i can share with you that
+called these coding agents are really actually really good at this lean code like it complains
+that 500 is too much for it's not yeah i think i actually think it can do this in one session
+i've seen it do this kind of thing and what it's doing is it does this gradual iteration process where
+it fills it out with these sorries and then it'll attempt to prove and it'll fail and it'll attempt to
+prove and it'll fail and it gets the feedback is fast so it sees ah that didn't work i'll try this
+and so the proof quickly accelerates um towards correctness i i know some lean experts and they
+tell me that the code that it generates is ugly i can't judge i'm not an expert but
+but is truth beautiful so uh that's more or less the last amount of stuff i could share with you beyond
+all the weird crazy that i collected over the past months um in the last seminar we discussed what i
+think is a vision which is coordinated action to do science uh today we discuss what is truth
+effectively or verification like how can you verify something and give a signal back to an agent and
+we discuss these various layers and lean is kind of like this highest level but there's still we need
+to check the definitions isn't you can get other agents to check the definitions but do you trust
+that yeah at some point the human has to look at it and now i would propose that for the rest of the
+series we start with some kind of mini project and see where we can go with that
+yep wouldn't it be easier to state the final theorem in lean code and then just ask it to fill out the
+lemmata to prove it uh you can try that because then you wouldn't need to check definitions because
+you put in the necessary open the theorem itself will refer to objects right yeah but those might
+be in the standard library and if they're in the standard library you're golden yeah it's only when
+there's something that you need that isn't in the standard library then you're kind of in this
+so i misstated actually so the definitions that i'm talking about are ones that aren't in the standard
+library already in this case it doesn't know what a tensor product is or what's the problem it does
+it's just that there's so many versions of tensor product in the in the mathlib it's it doesn't know
+which level of abstraction to rise to so it has category theory it's actually mathlib is an excellent
+category theory coverage because proof theory is category theory so it's actually the first thing
+that got done and they're you know tensor products are a concept in category theory but are they the
+same tensor product as the one you want you have to get yourself into the right category that's what's
+going on here what you have no so what three uh automatically yields what's left assemble the
+coast cycle into that blah blah connect to the literal file so the construction decision is a real
+bundle level proof the gaps are packaging not new math so apparently it's it's proved it
+but using mathlib it's relying on definitions and lemmas already in mathlib and it may not be the
+proof you want it to be right because what it might do is it might take the most general category theory
+statement and specialize it down to what you have and that's probably not what's going to get you
+the grade on the assignment no you know if you go in there saying you know let let c be a fibered
+category you know um you can try i mean it's don't think you're going to get the grade you want um
+um so but i i'm now suspecting it's probably correct because it's just seems to have used mathlib stuff
+so that that was pretty quick right now imagine that you're doing research on a problem and you're
+like i don't know is this conjecture correct i have an idea here's the idea of the proof here's the
+theorem is it a mathlib no it's not a mathlib um what's missing oh 50 lines of code go on claude just try
+it out so now when the llm spits out the answer you are like 99 sure right definitions are in mathlib
+the lean code is there maybe it introduced the definition you go to check
+and you didn't have to do that at all you automated that so even though there was the content it
+produces is random noisy has error rates you can increase that error rate to almost zero so that's
+i've done this and it does work in fact the slow thing now is me i just don't generate ideas quicker
+it sounds funny but it's actually sort of true so you use it for real research problems you had and
+proved them the problem is what's gonna what happens next so you have an idea and 99 of the time is
+wrong or at least my success rate with ideas is low uh so good this is the kind of tool but it spins
+its wheels when it's wrong like it clawed lean it doesn't just come out and say something's wrong
+it'll just say i don't know how to prove this and so you've gotten where have you gotten right what
+what signal have you gained from this a bit maybe you kind of know it's not tributally correct
+can you say find a contradiction you can do that and that works yeah
+so you can find contradictions pretty easily if they're to be found it often finds them which is
+just by writing a python program actually that's the quickest way that finds most of them and but
+if it's true and you don't know the proof it'll spin its wheels forever if it's true and you know
+the proof but you can't be bothered with the details that's the power that's the accelerator right
+there because then you can say the proof is going to be this this and this can make it formal
+and then it will really go uh if it's untrue um but the the counter example is hard to find
+yeah you're lost so yeah it's it's an accelerator but in certain ways and it can't stack together ideas
+so you you know a big interesting proof is full of different ideas that are drawn together in a
+complex web and then they come together to imply the final statement it's it's use case because of the
+context windows even with a million tokens we used for that proof we used a hundred thousand tokens for that
+proof um so it can hold about 10 of those in its context to give you a sense of and then but its
+inference power is going down with the context so realistically you can hold about three of these
+in its context before the quality goes down which is interesting right you know if you can break
+your task down into vector bundle tensor product level things and you need implications of three or four
+at a time then yeah i can hold that in context so what i want from you now is ideas i just told you
+i can't come up with ideas quick enough um but one more question yeah and if you're reading if you
+if you're getting the output and it's the lean document yes do you read the actual document or i don't like
+to but yeah i can okay to do because then it's giving you a proof but you don't know the proof yet right
+exactly yeah it's a black box okay you know it's true but it's a black box so then before you
+before you publish a paper about it to be honest i haven't published a single paper since i got into
+the ai things yeah so we come to an interesting point yeah so but claude writes this code without
+like running it in lean so you still know you have to run it it's been running it in lean the whole time
+okay yeah and it what it showed you was lean programs running it erred it said oh it has an
+error i got to change it it was doing it over and over and over in the loop actually yep and it has
+these handoff files there yes um that's a standard sort of llm thing a handoff is a document that
+an agent will write so the next agent that you bring to the project can read this short summary
+and it knows what to do the question and i'll show you what a handoff looks like uh what was
+done in this session it looks like this i didn't ask for it but it it writes things like this you know
+i did this i did this and it tells the next action what to do and so and then it draws these little
+pictures and it's all very satisfying you know that it does it uh you can see the agents they come
+into existence they do their work and then and then they hand off the work and they have a picture for
+the next agent of what the work is meant to be and you can you know you have like 10 agents in a day
+picking up one after the other the work that's so yeah i think the the effective way we have some
+priorities in the center one is this environmental cost thing um as i said i think clara was going to
+pick up that in i think i signed up for that oh did you sign up for that yeah okay uh because there's
+lots of information being leaked about the frontier models like how many weights they have um how much
+had some hard time finding infos about for example opos for certain i saw on hacker news there was a
+leak on the number of weights there's a study people like ai researchers try and infer this information
+from from the from claude or from chat gpt they have all these tricks and they've estimated claude has
+1.1 trillion weights and chat gpt 5.4 has about 1.4 trillion so it's the information is being exposed
+through various ways so that's like a multiple of the open source models which are yes 32 or something
+yeah they're in the billions although the first trillion weight models have been released haven't
+they recently recently i'm not sure that that means that the online ones are like 100 times larger than
+yes the downloadable ones yeah how good the measure is this i don't know okay but uh
+i don't know is the quick answer there's something different intrinsically different between a trillion
+weight model and a hundred thousand weight model uh sorry 100 right there's something just really
+the the behavior of opus is just different to that of sonnet i can't explain it except through lots
+of experience it seems to have an understanding where other models don't yeah so somehow like
+if you have one billion models can we assume that they are roughly on the same level or more
+i mean they can be a little bit different but they tend to be comparable because you you
+given the number of make weights that you have you optimize these certain benchmarks that everyone
+tries to gain um sweet bench there's all these like these targets that they optimize when they're
+training these models and everyone's aiming at the same plots so if you've got a billion weights to
+optimize then you'll optimize it for those plots and therefore it'll perform roughly comparably to every
+other billion weight model so then what's the reason that they don't upscale it to 100 trillion or so
+well now you just ask the important question um that there is no reason except compute
+it turns out that if you go to uh 10 trillion that's more compute than there is in the world
+and 100 trillion is more than we can ever build um we're getting into those kinds of numbers now
+so how does it fail badly
+yeah i mean the training costs alone just get go up much more than the number of weights
+so uh we if you believe the ceos of these companies then they're talking about having
+bought all the data centers in the world for the next models and i i think it's roughly believable um
+they've hired all the compute in the world for the training of the next models and they're all playing
+a game right the game is what happens if i extrapolate this line because people have put that there's
+this famous inter line in yeah so you're talking about money cost i think uh so i signed up for
+environmental cost yeah yeah that's a different cost yeah although it's probably correlated yeah
+uh yeah if you put all the models on this curve maybe i can find it um then you can see just
+by extrapolating compute you're going somewhere pretty amazing um what is the it's the karpati curve i
+think karpati curve llms maybe it's this one well and wait so they there's there's a scaling law that
+people started to notice there is a scaling law that i wanted to show you that convinced everyone to invest
+in compute and people started putting llms it was gpt one two three on this this law
+and they saw that if they just extrapolated this with a line because why wouldn't you extrapolate
+with a line um then if you could invest uh in like to 10 trillion to 100 trillion weight models you
+would reach some something you would pass some threshold and i can't tell you anything more
+than these vibes but that's what people saw this curve and then they're like oh
+shit all we need to do now is invest money no new ideas are needed
+and so that's why everyone went nuts in silicon valley they all realized that just by putting money
+into the problem they could scale their way up to something called agi which no one knows
+can you scroll one centimeter up like here yeah i know that the upper half of the image
+oh because you can't see it i imagine i was just thinking about this curve because it makes me very
+skeptical that this is the right scaling law for these data points they they don't have many data points in
+the in the top range and then they just cut it off yeah but this is how it works in this game that was
+very scummy in my opinion yeah this is people do this all the time you don't have to believe it i would
+encourage you to be skeptical because in my or as far as i have read um small models with the same number
+of parameters got better mostly because the training data got better um and because that's true you just
+had more time to train since the inception of large language models if you keep on training and fine
+tuning then of course your model gets better even if the parameter count doesn't change and also the
+parameter count doesn't tell you anything about the architecture of the model these are all true
+statements so you can't really say oh okay every three billion parameter models performs bad in the same
+way i think just keeping training isn't making it necessarily better because you can do overfitting
+that's true but if you have the training data to keep training then that's okay because fine tuning
+means you add training data and uh keep on training on that new data which was in the original set so
+but one would imagine that at some point you've extracted all the gains you can out of your parameters
+yeah your weights i mean of course there's a limit to how good you can fit anything with n parameters
+yeah uh and so i'm expressing you so i can't answer the questions with any concrete answers but only
+with the general feelings that are in the community and the general feelings are more parameters equals
+better at the moment um and is it's it's easier not cheaper to say it's easier to throw more parameters
+at the problem than it is to throw more computers at a smaller problem at a smaller model although i have
+to say that the parameters i could run on my computers have been constant for the last couple of yeah years
+and now the the models are much better than they were before so there is evolution happening without
+increasing parameter size yeah i mean you say that for sure yeah that is definitely happening you're
+right i'm before it's just much much better than i don't know lama 2 yes this is legitimately they are
+comparatively in the same the same order of magnitude of parameters so um i don't i don't know uh whether
+or not we could keep pushing it it would be kind of cool if you could take i mean the ai researchers
+i'm talking to actually believes that you can get a lot more out of the out of these smaller models and
+than what is already there because people still aren't really trying hard it might be that they
+and there's this mixture of experts model that you've actually experienced yourselves where
+problems get pre-routed to smaller models that's when they talked about active 2 billion or something
+like that or active what's actually happening is there's a little architecturally the problem gets
+pre-sorted to a smaller transformer which you can operate actively and then get your answer back out
+and there's a lot of active deep seekers the ones who uh pioneered this to make it practical
+and their performance can be pretty close to to bigger uh bigger models and the model the
+transformer architecture itself hasn't really been optimized people just it's the first thing that
+works and that they can scale and parallelize so people are just way hard like that but it could be
+that you could look at neural networks that aren't just a classic neural network where you multiply
+in floating point numbers but multiply binary numbers these exist and they're harder to train and they should have
+theoretically the same capability and people are looking into these questions but the priority
+the incentive isn't there at the moment and that brings us back to the paper we yeah we read because
+we already we also know that Moore's law might not continue as it did so i don't know if the statement
+from the from the essay remains true yeah i saw Moore's law die mostly was more about speed right because
+of course we can still scale money and buy more compute but that's it still makes research into
+the smaller models useful because ordinary people like us can run them without access to
+huge amounts of compute in the cloud i think this is i mean this is for me a key priority imagine you
+could run a model that's of jama but on your phone theoretically you can because neural networks are
+binary uh operations you know these things called perceptrons they take in a binary and they output a
+binary the thing you do in the middle is you you do some floating point multiplications you can replace
+every neural network with a pure binary uh network which is a hundred times more efficient to evaluate
+the problem is is we don't know how to efficiently take one of these floating point neural networks to
+one of these binary neural networks there's no efficient way of doing that yet it's possible it
+exists but the problem you have to solve is very very hard it's an optimization problem so that there
+there is a potential that we could have sonnet gemma level stuff on on on phones locally run
+but that you have to solve an optimization problem that's so hard that nobody's ever managed it
+i think the two billion gemma four version is targeted at phones at least at least yeah i mean
+it can if a chat things are okay right if you're not doing types then maybe
+maybe maybe it's you in this case spits out perfectly fine latex when you want types
+even types was okayish yeah but in the large version the smaller version yeah okay no chance
+so i'm as i said i'm interested in ideas right so what we need a plan we need to go somewhere so now
+we could just come every week and talk about cool we've seen or not right that's one thing
+or you could start to bring your agendas to the table like why are you even here and we can work
+on your agenda like i've got my agenda whatever and that depends on you thinking about what you want
+and i gave you this this exercise last week come up with a problem that you'd be impressed by you
+had some very interesting answers um i don't propose that we investigate any of those
+um well i looked into the signal one though and um you could do it turns out but then you'd have to
+port you'd have to have your own port of the signal client that every time it updates you have
+to re re-implement it and then no one else would have it so you would be able to see latex
+in your signal but no one else would see it in theirs i was very sad by this but well what about
+this is this is where we are um so we could do that but i think the interesting thing is like
+you're the generation coming to inherit this stuff i'm the older generation i'm not the right
+generation here to ask these questions any longer what is the world you want to create right this is
+the question that i want you to start thinking about and then what other steps that can get you there and
+the world you want to create is probably a an amazing dream that we won't ever reach in one's
+lifetimes but going in the right direction can create interesting things so there's various ways to
+do this we could come up with a mini project that people work on we could define a larger goal and
+then make steps along the way we could uh uh investigate just a random 10 side projects and
+see what comes out of that you don't have to answer me now this is not the point the point is by next
+week please think about what is it what's the world that you want to create what is it that you
+want to actually do and if you're willing to share it you know you might be able to convince other
+people that help you in that way and then this seminar is if it's in a scientific direction and
+i kind of hope that it is then you can use the seminar as a forum to start exchanging knowledge
+or get that work done i don't have anything else prepared this is the end of my content for the
+seminar so if you want something to happen next week you better start coming with your own ideas yep
+yeah it's not quite the direction you want to go in but uh any direction is better than no direction
+i i would like to be convinced that agi is not a threat you'd like to be convinced agi is not a threat
+uh so like i think one of your blogs you have this argument where you say thermodynamics and such
+oh that one um yeah yeah so i i think i would be happy if i can go out of this seminar and say oh
+yeah that's not that right i mean maybe that is the right thing to focus on um like i'm convinced
+so no i'm not convinced about agi uh i can't prove anything about agi because that's not a well-defined
+term but yeah so like singularity yeah i don't believe in these singularity uh arguments this idea of
+recursive self-improvement because every time you make that uh concrete as an optimization problem
+you are effectively saying i can solve for global optima you know landscape with many local optima
+so if you know what those words mean then you already see the seed of the answer right if you if
+there is something you can optimize and it's a very bumpy optimal uh landscape you're going to get
+stuck in local minima the idea of recursive self-improvement is the man it's a magical spell
+that takes you out of a local minima to a better local minima or you're into a global minima so this
+is the and once you identify that that's the magic spell that people are talking about then you ask what
+is the cost of getting from a local minima to another local minima in an optimization landscape and then
+you start to write down numbers and you start to write down that you have to write down every parameter
+that you've tried in order to to verify that one local minima is better than another and then we can
+talk about dimension there is an argument it takes 10 deductive steps i would say uh to prove that we
+run out of memory before we run out of before we get anywhere close to this magical thing is this
+somehow published somewhere no but it's you can string it together from a bunch of moments it's
+uh and the thing is i'll convince maybe you maybe two or three people in this room and then other
+people will be like no no i don't believe you uh you didn't think about this and then we'll add in
+that factor have a new argument and then no i've seen these narratives go along before in various fields
+of scientific endeavor uh just disproving one version of the statement just encourages people to come up
+with new with new versions of the statement and that carries the discussion away from where it should
+be so we can formalize it and you know it's this still might be the right place to do this but yeah
+and so like from your personal view it's something that it's it it's a concern for you and maybe that
+i should listen to that and you know as a signal but um actually maybe the right time to ask the
+question you are all what level are you now masters bachelors so i mean some of you are in all of them
+are in the same semester but me i'm one semester high okay right so you've all kind of done your
+bachelor projects right so you've done your bachelor and you're now thinking about masters or doing
+masters right and then you're all thinking about doing something after masters because this might be
+the right moment to have this discussion right what is your your direct general directions you're in
+the theoretical physics institute all of you i think i've seen all of you right yeah not yeah i'm uh
+might go into energy workshop okay well maybe yeah that's maybe it's a good place to go
+and phds are a thought in your heads or not maybe if you go to energy you still do a phd there you know
+um why am i asking this because you're probably thinking about academic things then researching
+things right you know what what do you want to create then something in the physics domain so the
+problem i find interesting at the moment is uh really understanding that's theorem and which version
+of it is true but that's a problem about understanding not about having a proof that's but that's an
+interesting take home here really understanding maybe because if we collect questions like this
+we might see that we can use ai tools to help in in the more abstract task of really understanding it
+right now but so i had uh quantum physics with mr werner four years ago and since then i tried to really get
+to the ground of it but and have various versions of it but i never managed to really say okay yeah
+that's true and this version is the one that's correct interesting so but you would it but you would
+know the moment you really understand would you i hope no but you you must have a sense like you
+know i would really understand it if i really understood so there there's a thing that uh
+philosophers say yeah okay we are clearly non-local and there's nothing about classicality here and
+verna says no those are two different assumptions yes and i want to get to a point where i can say okay
+those argument is correct and i believe okay those party this party okay that's a that's a big goal
+i think it's achievable um and maybe ai tools can help you yeah we've been talking about this a bit
+the difference between you and us yes because we our main goal is to learn stuff and your goal
+is to teach and maybe to publish so you already have an idea of something you want to you want to
+prove you want to show and then you can use ai to formalize that for you and for us it's it's like it's
+a little more a little bit more different because our main goal is to understand and as you've already
+said we cannot trust ai to to teach us something so that's a bit of a problem right yeah so when we
+before talked about this chess a chess computer black box so are there people that are interested
+to understand what this like forces do to like try to find new ways to yeah it's called explainable ai
+it's um it's a field of research but i i think um i can come back to that in a second but you both
+actually asked a similar question i think yeah i think you just asked the question which is it seems
+that i'm about teaching and you're about understanding yeah exactly but actually what you didn't notice is
+that got flipped uh i'm now far more interested in understanding than i am in teaching um because
+i suddenly realized i can understand a lot more you when you become a domain expert the world the walls
+close in i don't know how to explain this you get better and better at a certain sub area but at the
+expense of operational competency in other areas does that make sense yeah sure yeah um so i may know
+very very very very much about tensor networks but i don't even know very much about multicolor
+methods which are literally an adjacent area of studying and the walls close in you spend more
+energy on getting better at your domain and less energy on even just the neighboring domain and i know
+little to nothing about nuclear physics like you probably know more nuclear physics than i do
+maybe maybe not but it's it's you pick something else and you will know something more than me
+the walls close in as a domain expert uh and with ai i've suddenly realized you can reach operational
+competency in far more many areas very rapidly so you can develop a breadth of understanding instead of
+a depth of understanding so you don't understand nuclear physics okay learn nuclear physics you don't
+trust necessarily the output of an llm but you start to learn how to verify the output
+and now all of a sudden you do know about nuclear physics because it teaches you the basic models
+in the language that you know and that you can verify with little demonstration the uh examples
+tailored to the way you think
+of the way you think but when i asked gemma for to explain me what a hilbert space is or to define it
+it it was correct but it was slightly off so yeah it took some properties split them in half combined
+others and so i think that's it's not outputting the uh it in a way we should think about it and maybe
+that i think that's a model problem rather than yeah okay than a llm problem okay because i think if
+you had the experience if you ask opus 4.7 you would get a different experience
+in opus 4.5 so this is a problem you know the good answers come only when you pay for them
+and i don't know a solution to this problem but i thought hilbert space is maybe enough on the bottom
+level that it could do that even if it can't define me for normal algebra right yeah but it was kind
+of bad it's disappointing that you know i would have hoped for just a bit better yeah to be honest
+but as i said i hope we can start with our 3090 gpu that you can access and then you can start with
+maybe some pretty good models and then the server we can finally get running and then you get some
+really decent models and then at some point well maybe we get credits from one of the labs and then
+let us use them so i would claim that uh teaching that understanding is the goal yes actually i i have
+that as a shared goal i mean we're not yet publishers right or not even like researchers
+at least from from my understanding so there's not really like something i want i want to investigate
+right but you're curious about things right yeah sure but i don't know how you think about this but like
+for me currently i'm i'm attending lectures i'm i'm trying to follow the stuff that the professor says
+yes i'm trying to to understand it so that's currently my main goal again in a couple of years
+maybe i do my phd and then i'm a researcher yeah so i put it to you that i don't know much more than
+you in some domains already and that that that you don't need to know much more to start stringing
+things together it's a new idea i think the idea is you get breadth of understanding instead of depth
+of understanding and that there's this used to be too expensive it used to be too expensive to get
+breadth of understanding because you'd have to do a bachelor in in in nuclear physics and sorry a master's
+thesis in nuclear physics and master's thesis in quantum optics you know so you have to do 10
+master's theses in order to get this breadth of understanding but now you can you can get there
+very much quicker so that's some yep would you say has changed so like the ability to ask yes yeah
+because if you you know what stops you from understanding a thing when you're sitting in the
+lectures just that yeah but also like this is this is impedance mismatch right so the lecturer is
+saying something on the board and you're writing it down and it's building up and and your understanding
+builds in a non-linear fashion it doesn't really build linearly it's this network effect thing and then
+there's these things you get stuck on really quickly like what why is this why do they keep
+defining this thing and i don't understand why they're defining this thing and your brain is losing
+cycles just with these these questions in every in every lecture like why is it that they're going
+on with this letter a i don't understand there's a but i'll write it down anyway and then so you know
+at the end of the lecture you have three four five i don't know how many things you've collected
+where you're you're spinning you're spinning on this and then eventually you you'll land them and
+you'll be like oh okay i see now why why they but if you could ask a question for every one of
+those things spinning in your head straight away and say why is it that people define that give me an
+answer give me a picture give me a animation give me a you know stop the spinning plates in your head
+by immediately asking for feedback then you with a bit of practice you can learn this much much faster
+because you'll think the things that keep you slow you down don't slow other people down and vice versa
+and a linear medium like video is a linear or a lecture like you can ask a question in a lecture
+right and occasionally you do but you don't right you don't ask all your questions because you wouldn't
+because then you'd be the annoying person who's stopping the lecture from working right but if you had
+if you had a personal assistant who will answer every question for you
+as soon as you have them and give you a little illustration or an animation or an interactive demo
+then it stops those wheels there's plates spinning in your head and then you can you can learn much
+faster it's the the interactive proof
+yes and you can ask any question you don't have to be embarrassed and you won't disturb anyone else
+i do i actually do um because there's stuff that these uh humans are still better interacting with
+humans i think even despite what i just said but we'll see maybe more do you keep this information
+as long as if you had it earned in a harder way earned it in a harder way i think so like i think i
+understand scattering theory much better now yeah because i have these little demos that i made where
+like wave packets come onto the onto the uh the atom and they scatter off and i can actually see the
+detectives five because a textbook doesn't give you that a blackboard doesn't give you that an animation
+from cern doesn't give you that but the thing that i was missing was connecting the packet coming
+in scattering off the nucleus versus this p s wave expansion from taylor's book on scattering theory
+and for me i now understand it far better than the hard way
+how do you even visualize uh so this is a bit tangential but no i think this is the good way
+yeah this is a good direction so how do you even visualize a red packet that's an interesting
+question right what would be satisfying for you i actually came up with an answer for this
+that satisfied me we can plug the the modulus and color in the face yeah but that's still just pure
+state so why is it just pure states well the phase is right maybe um but do you need the phase
+information maybe you can get information just from the probability distribution maybe that's enough
+to help you understand something so i i did a thing right i'm going to show you because i was
+this blew my mind i didn't think this was possible and then it was um i what i think is awesome are
+these 3d movies that you see on these cosmology channels on youtube right they show you this or that
+phenomena and you can like see the black holes merge or whatever and i was wondering couldn't we just
+visualize quantum processes at the microscopics level in three dimensions like what's stopping
+us right shouldn't we just shouldn't this be possible now like isn't this software to do 3d
+animations and the answer is of course there's software to do 3d animations um so you make it
+yourself you just ask claude to write you a 3d visualizer and it doesn't take that long
+um you can get a 3d visualization happening in about an afternoon with claude so what do i do here this
+is the picture i always wanted to have in um in teaching the hydrogen atom you have the hydrogen atom
+the electron is in a p orbital it's in a magnetic field it's spinning around in the magnetic field
+and then it's spontaneously emitting into the electromagnetic background field
+uh so it collapses down to the 1s state uh and um it's physically correct so this is not the
+i'm plotting here the electron density uh not the phase the phase information i can't plot this way
+but the actual electron density cloud in three dimensions uh and it's physically correct and it's
+using a density matrix not some stupid pure state garbage uh and you think it up and then it becomes
+possible that's the kind of thing that where i think you can supercharge your understanding like
+this i've written down these orbitals and on blackboards for years and like no it's the moment
+right you're in the quantum theory lecture you know laguerre polynomials exponentials you've lost you
+don't understand anything but you can visualize it so yeah okay but this image is on wikipedia
+is it uh not spinning but uh exactly i looked for this image yeah uh i don't didn't find it anywhere
+but it doesn't stop with that one i can now generate any image i want like hydrogen okay what happens if
+i have a helium you know how does the the electron bounce between the nuclei you know this is this is
+these questions i could just ask and it's a trivial corollary now of the code there's nothing stopping and
+then i've used this to to generate um scattering movies i also wanted to render the what the black
+hole looks like when you get up close to it but with the physically correct permissive thermal gas
+around it rather than the stupid fake stuff things so you if you can think of the question then all of
+a sudden you should ask her right and that's how you can supercharge your understanding is if you can see
+it you can touch it you can feel it you can ask questions you can get feedback all the things you
+can't get in a lecture and that gives you the breadth of understanding that you don't otherwise get
+i don't know about depth i mean depth is still kind of hard work but talking about breadth here so yeah
+my homework for you is kind of simple which is start asking yourself what your goal is what you want
+and if your goal is understanding bell's theorem then we should start wondering how can we visualize
+learn understand that in a way that accelerates your understanding and if your goal is to understand
+this or that is fine that's a goal because probably if your goal is to understand something
+and you'll build stuff to get you there and that stuff that you build will be interesting for someone
+else that's the that's what i think unlocks the kind of interesting questions and by the way if you
+want to know what a neutron star looks like i also wanted i really really annoyed me that i didn't i
+want to visualize a real neutron star so i can't stop it at the right moment but there is one of
+these frames is the the optical emission spectra of our nearest neutron star with the relativistic
+corrections and the gas there's a gas there's an atmosphere around neutron stars of hydrogen atoms
+and these hydrogen atoms in such a ginormous magnetic field that their wave functions are squished
+and so they don't behave like normal hydrogen atoms and so they have a different emission
+but that's a different frequency so yeah good okay so uh yeah is it clear what the homework is come
+back with something you want to do and then if you want to start preparing some initial research in
+the environmental costs elements that this discussion can go on many times good so it shouldn't be a full
+seminar talk but yeah okay look it's better if it's like 10 minutes yeah if you just say i investigated
+this model and found that it cost that much but to train it or whatever i don't know it starts a
+discussion right i don't want the full answer so i signed you're registered now is that right uh i will do that
+okay
